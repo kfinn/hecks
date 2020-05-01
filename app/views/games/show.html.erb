@@ -1,21 +1,12 @@
 <h1> Game</h1>
 
-<h2>Territories</h2>
-<ul>
-<% @game.territories.order(:id).each do |territory| %>
-    <li><%= territory.id %>: (<%= territory.x %>, <%= territory.y %>) <%= territory.neighboring_territories.size %> neighbors</li>
-<% end %>
-</ul>
+<h2>Rendering test</h2>
 
-<h2>Corners</h2>
-<ul>
-<% @game.corners.each do |corner| %>
-<li>
-    <%= corner.id %>:
-    <ul>
-        <% corner.neighboring_corners.each do |neighboring_corner| %>
-            <li><%= neighboring_corner.id %>
-        <% end %>
-    </ul>
-</li>
-<% end %>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-250 -250 500 500">
+    <% @game.territories.each do |territory| %>
+        <polygon points="<%= territory_polygon_points(territory) %>" fill="white" stroke="black" />
+        <text x="<%= territory_center_x(territory) %>" y="<%= territory_center_y(territory) %>" text-anchor="middle" dominant-baseline="middle" >
+            <%= territory.id %>
+        </text>
+    <% end %>
+</svg>
