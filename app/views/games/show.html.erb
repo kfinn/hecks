@@ -1,0 +1,21 @@
+<h1> Game</h1>
+
+<h2>Territories</h2>
+<ul>
+<% @game.territories.order(:id).each do |territory| %>
+    <li><%= territory.id %>: (<%= territory.distance_from_center %>, <%= territory.offset_from_north %>) <%= territory.neighboring_territories.size %> neighbors</li>
+<% end %>
+</ul>
+
+<h2>Corners</h2>
+<ul>
+<% @game.corners.each do |corner| %>
+<li>
+    <%= corner.id %>:
+    <ul>
+        <% corner.neighboring_corners.each do |neighboring_corner| %>
+            <li><%= neighboring_corner.id %>
+        <% end %>
+    </ul>
+</li>
+<% end %>

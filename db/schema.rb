@@ -10,10 +10,54 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_035152) do
+ActiveRecord::Schema.define(version: 2020_05_01_042800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "adjacencies", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "corner_id"
+    t.bigint "border_id"
+    t.bigint "territory_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["border_id"], name: "index_adjacencies_on_border_id"
+    t.index ["corner_id"], name: "index_adjacencies_on_corner_id"
+    t.index ["game_id"], name: "index_adjacencies_on_game_id"
+    t.index ["territory_id"], name: "index_adjacencies_on_territory_id"
+  end
+
+  create_table "borders", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "corners", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "game_memberships", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_game_memberships_on_game_id"
+    t.index ["user_id"], name: "index_game_memberships_on_user_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "territories", force: :cascade do |t|
+    t.integer "distance_from_center", null: false
+    t.integer "offset_from_north", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -38,4 +82,10 @@ ActiveRecord::Schema.define(version: 2020_05_01_035152) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "adjacencies", "borders"
+  add_foreign_key "adjacencies", "corners"
+  add_foreign_key "adjacencies", "games"
+  add_foreign_key "adjacencies", "territories"
+  add_foreign_key "game_memberships", "games"
+  add_foreign_key "game_memberships", "users"
 end
