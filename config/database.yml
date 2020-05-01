@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: hecks_development
+
+test:
+  <<: *default
+  database: hecks_test
+
+production:
+  <<: *default
+  database: hecks_production
+  username: hecks
+  password: <%= ENV['HECKS_DATABASE_PASSWORD'] %>
