@@ -15,25 +15,19 @@ ActiveRecord::Schema.define(version: 2020_05_01_042800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "adjacencies", force: :cascade do |t|
-    t.bigint "game_id"
-    t.bigint "corner_id"
-    t.bigint "border_id"
-    t.bigint "territory_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["border_id"], name: "index_adjacencies_on_border_id"
-    t.index ["corner_id"], name: "index_adjacencies_on_corner_id"
-    t.index ["game_id"], name: "index_adjacencies_on_game_id"
-    t.index ["territory_id"], name: "index_adjacencies_on_territory_id"
-  end
+# Could not dump table "adjacencies" because of following StandardError
+#   Unknown type 'adjacency_corner_territory_relationship' for column 'corner_territory_relationship'
 
   create_table "borders", force: :cascade do |t|
+    t.integer "x", null: false
+    t.integer "y", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "corners", force: :cascade do |t|
+    t.integer "x", null: false
+    t.integer "y", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -53,8 +47,8 @@ ActiveRecord::Schema.define(version: 2020_05_01_042800) do
   end
 
   create_table "territories", force: :cascade do |t|
-    t.integer "distance_from_center", null: false
-    t.integer "offset_from_north", null: false
+    t.integer "x", null: false
+    t.integer "y", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

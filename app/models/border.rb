@@ -3,4 +3,6 @@ class Border < ApplicationRecord
     has_one :game, through: :adjacencies
     has_many :corners, -> { distinct }, through: :adjacencies
     has_many :territories, -> { distinct }, through: :adjacencies
+
+    validates :x, :y, presence: true
 end

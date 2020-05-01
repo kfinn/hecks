@@ -5,4 +5,6 @@ class Corner < ApplicationRecord
     has_many :territories, -> { distinct }, through: :adjacencies
 
     has_many :neighboring_corners, -> { distinct }, through: :borders, source: :corners
+
+    validates :x, :y, presence: true
 end
