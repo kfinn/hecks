@@ -7,6 +7,12 @@ class Territory < ApplicationRecord
     has_many :neighboring_territories, -> { distinct }, through: :borders, source: :territories
 
     belongs_to_active_hash :terrain
+    belongs_to_active_hash :production_number
 
-    validates :x, :y, presence: true
+    validates :x, :y, :terrain, presence: true
+    validates :production_number, presence: true, unless: :desert?
+
+    def desert?
+        terrain == Terrain::DESERT
+    end
 end

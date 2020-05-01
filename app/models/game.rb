@@ -18,12 +18,12 @@ class Game < ApplicationRecord
             { y: 2, x_range: 0..2 }
         ]
 
-        generated_territories_by_position = Hash.new
+        generated_territories = []
 
         rows.each do |row|
             y = row[:y]
             row[:x_range].each do |x|
-                generated_territories_by_position[Position.new(x, y)] = Territory.new(x: x, y: y)
+                generated_territories << Territory.new(x: x, y: y)
             end
         end
 
@@ -31,9 +31,15 @@ class Game < ApplicationRecord
         generated_corners_by_position  = Hash.new { |hash, position| hash[position] = Corner.new(x: position.x, y: position.y) }
 
         generated_terrains = Terrain.shuffled
+        generated_production_numbers = ProductionNumber.shuffled
+        next_production_number_index = 0
 
-        generated_territories_by_position.values.each_with_index do |territory, index|
+        generated_territories.each_with_index do |territory, index|
             territory.terrain = generated_terrains[index]
+            if territory.terrain != Terrain::DESERT
+                territory.production_number = generated_production_numbers[next_production_number_index]
+                next_production_number_index += 1
+            end
 
             x = territory.x
             y = territory.y

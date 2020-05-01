@@ -7,6 +7,9 @@
         <polygon points="<%= territory_polygon_points(territory) %>" fill="white" stroke="black" />
         <text x="<%= territory_center_x(territory) %>" y="<%= territory_center_y(territory) %>" text-anchor="middle" dominant-baseline="middle" >
             <%= territory.terrain.name %>
+            <% if territory.production_number %>
+                (<%= territory.production_number.value %>)
+            <% end %>
         </text>
     <% end %>
 </svg>

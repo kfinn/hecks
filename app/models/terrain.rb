@@ -1,5 +1,6 @@
 class Terrain < ActiveHash::Base
     include ActiveHash::Enum
+    enum_accessor :name
     self.data = [
         {
             id: 'desert',
