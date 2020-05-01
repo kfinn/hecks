@@ -30,7 +30,11 @@ class Game < ApplicationRecord
         generated_borders_by_position = Hash.new { |hash, position| hash[position] = Border.new(x: position.x, y: position.y) }
         generated_corners_by_position  = Hash.new { |hash, position| hash[position] = Corner.new(x: position.x, y: position.y) }
 
-        generated_territories_by_position.values.each do |territory|
+        generated_terrains = Terrain.shuffled
+
+        generated_territories_by_position.values.each_with_index do |territory, index|
+            territory.terrain = generated_terrains[index]
+
             x = territory.x
             y = territory.y
 

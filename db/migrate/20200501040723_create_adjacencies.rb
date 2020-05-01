@@ -1,5 +1,5 @@
 class CreateAdjacencies < ActiveRecord::Migration[6.0]
-  def change
+  def up
     execute <<~SQL
       CREATE TYPE adjacency_corner_territory_relationship
       AS ENUM ('north', 'northeast', 'southeast', 'south', 'southwest', 'northwest');
@@ -28,5 +28,22 @@ class CreateAdjacencies < ActiveRecord::Migration[6.0]
       name: :index_adjacencies_uniquely_on_physical_limits,
       unique: true
     )
+  end
+
+  def down
+    remove_index(
+      :adjacencies,
+      :index_adjacencies_uniquely_on_physical_limits
+    )
+
+    drop_table(:adjacencies)
+
+    execute <<~SQL
+      DROP TYPE adjacency_border_territory_relationship;
+    SQL
+
+    execute <<~SQL
+      DROP TYPE adjacency_corner_territory_relationship;
+    SQL
   end
 end

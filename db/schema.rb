@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_01_042800) do
+ActiveRecord::Schema.define(version: 2020_05_01_212541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,12 +46,8 @@ ActiveRecord::Schema.define(version: 2020_05_01_042800) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "territories", force: :cascade do |t|
-    t.integer "x", null: false
-    t.integer "y", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
+# Could not dump table "territories" because of following StandardError
+#   Unknown type 'territory_terrain_id_type' for column 'terrain_id'
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

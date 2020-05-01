@@ -6,5 +6,7 @@ class Territory < ApplicationRecord
 
     has_many :neighboring_territories, -> { distinct }, through: :borders, source: :territories
 
+    belongs_to_active_hash :terrain
+
     validates :x, :y, presence: true
 end

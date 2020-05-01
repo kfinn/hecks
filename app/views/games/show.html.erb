@@ -6,7 +6,7 @@
     <% @game.territories.each do |territory| %>
         <polygon points="<%= territory_polygon_points(territory) %>" fill="white" stroke="black" />
         <text x="<%= territory_center_x(territory) %>" y="<%= territory_center_y(territory) %>" text-anchor="middle" dominant-baseline="middle" >
-            <%= territory.id %>
+            <%= territory.terrain.name %>
         </text>
     <% end %>
 </svg>
