@@ -10,6 +10,8 @@ class Game < ApplicationRecord
     Position = Struct.new(:x, :y)
 
     def generate!
+        self.key = 3.words.join('-')
+
         rows = [
             { y: -2, x_range: -2..0 },
             { y: -1, x_range: -2..1 },
