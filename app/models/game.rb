@@ -5,6 +5,9 @@ class Game < ApplicationRecord
     has_many :corners, -> { distinct }, through: :adjacencies
     has_many :territories, -> { distinct }, through: :adjacencies
 
+    has_many :game_memberships
+    has_many :users, through: :game_memberships
+
     before_create :generate!
 
     Position = Struct.new(:x, :y)

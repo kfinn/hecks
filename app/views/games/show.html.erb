@@ -1,6 +1,12 @@
 <h1> Game</h1>
 
-<h2>Rendering test</h2>
+<h2>Players</h2>
+
+<ul>
+<% @game.game_memberships.each do |membership| %>
+    <li><%= membership.name %></li>
+<% end %>
+</ul>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-250 -250 500 500">
     <% @game.territories.each do |territory| %>

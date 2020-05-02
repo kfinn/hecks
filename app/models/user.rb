@@ -3,4 +3,8 @@ class User < ApplicationRecord
 
   has_many :game_memberships
   has_many :games, through: :game_memberships
+
+  def name
+    super || "User #{id}"
+  end
 end

@@ -7,6 +7,10 @@ class GamesController < ApplicationController
     end
 
     def show
-        @game = current_or_guest_user.games.find_by!(key: params[:id])
+        @user = current_or_guest_user
+        @game = Game.find_by! key: params[:id]
+        unless current_or_guest_user.in? @game.users
+            @game.game_memberships.create! user: @user
+        end
     end
 end
