@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_02_040314) do
+ActiveRecord::Schema.define(version: 2020_05_02_234900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,19 +32,31 @@ ActiveRecord::Schema.define(version: 2020_05_02_040314) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "game_memberships", force: :cascade do |t|
-    t.bigint "game_id"
-    t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["game_id"], name: "index_game_memberships_on_game_id"
-    t.index ["user_id"], name: "index_game_memberships_on_user_id"
-  end
-
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "key", null: false
+    t.datetime "started_at"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.bigint "game_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "ordering_roll_id"
+    t.integer "ordering"
+    t.index ["game_id"], name: "index_players_on_game_id"
+    t.index ["ordering"], name: "index_players_on_ordering"
+    t.index ["ordering_roll_id"], name: "index_players_on_ordering_roll_id"
+    t.index ["user_id"], name: "index_players_on_user_id"
+  end
+
+  create_table "rolls", force: :cascade do |t|
+    t.integer "die_1_value"
+    t.integer "die_2_value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 # Could not dump table "territories" because of following StandardError
@@ -78,6 +90,7 @@ ActiveRecord::Schema.define(version: 2020_05_02_040314) do
   add_foreign_key "adjacencies", "corners"
   add_foreign_key "adjacencies", "games"
   add_foreign_key "adjacencies", "territories"
-  add_foreign_key "game_memberships", "games"
-  add_foreign_key "game_memberships", "users"
+  add_foreign_key "players", "games"
+  add_foreign_key "players", "rolls", column: "ordering_roll_id"
+  add_foreign_key "players", "users"
 end

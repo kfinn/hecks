@@ -1,0 +1,2 @@
+class PlayerOrdering < ApplicationRecord
+end

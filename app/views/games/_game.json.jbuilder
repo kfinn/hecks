@@ -11,6 +11,14 @@ json.territories game.territories do |territory|
     end
 end
 
-json.players game.game_memberships do |game_membership|
-    json.(game_membership.user, :id, :name)
+json.players game.players.order(:ordering, :created_at) do |player|
+    json.(player.user, :id, :name)
+    if player.ordering
+        json.(player, :ordering)
+    end
+    if player.ordering_roll
+        json.ordering_roll do
+            json.(player.ordering_roll, :die_1_value, :die_2_value, :value)
+        end
+    end
 end
