@@ -1,5 +1,9 @@
 import { ProductionNumber } from './ProductionNumber';
-import { DesertTerrain, ProductionTerrain } from './Terrain';
+import { DesertTerrain, ProductionTerrain, TerrainId } from './Terrain';
+
+export function territoryIsDesert(territory: Territory) {
+    return territory.terrain.id == TerrainId.Desert
+}
 
 export interface ProductionTerritory {
     id: number

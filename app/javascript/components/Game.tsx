@@ -52,12 +52,18 @@ export default function Game(props: GameProps) {
 
     return (
         <CsrfTokenContext.Provider value={csrfToken}>
-            <div>
-                <h1>Game</h1>
-                <a href="#" onClick={onRefreshClicked}>Refresh</a>
-                <PlayerList players={game.players} user={props.user} />
-                <BoardSvg territories={game.territories} />
-            </div>
+            <h1>Game</h1>
+            <a href="#" onClick={onRefreshClicked}>Refresh</a>
+            <PlayerList players={game.players} user={props.user} />
+            <BoardSvg territories={game.territories} />
+            <h2>Attribution</h2>
+            <ul>
+                <li>Brick icon: Created by Ben Davis from the Noun Project</li>
+                <li>Grain icon: Created by Adrien Coquet from the Noun Project</li>
+                <li>Lumber icon: Created by Luthfi Ahmad Robbaniy from the Noun Project</li>
+                <li>Ore icon: Created by Franco Mateo from the Noun Project</li>
+                <li>Wool icon: Created by Unrecognized MJ from the Noun Project</li>
+            </ul>
         </CsrfTokenContext.Provider>
     )
 }

@@ -7,8 +7,10 @@ export enum TerrainId {
     Hills = 'hills'
 }
 
+type ProductionTerrainId = TerrainId.Fields | TerrainId.Forest | TerrainId.Hills | TerrainId.Mountains | TerrainId.Pasture
+
 export interface ProductionTerrain {
-    id: TerrainId.Fields | TerrainId.Pasture | TerrainId.Forest | TerrainId.Mountains | TerrainId.Hills
+    id: ProductionTerrainId
     name: string
 }
 
