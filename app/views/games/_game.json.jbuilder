@@ -1,3 +1,5 @@
+json.id game.id
+
 json.territories game.territories do |territory|
     json.(territory, :id, :x, :y,)
     json.terrain do
@@ -11,7 +13,7 @@ json.territories game.territories do |territory|
     end
 end
 
-json.players game.players.order(:ordering, :created_at) do |player|
+json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
     json.id player.id
     json.user do
         json.(player.user, :id, :name)

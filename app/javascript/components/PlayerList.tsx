@@ -1,9 +1,9 @@
-import axios from 'axios';
 import _ from 'lodash';
 import React, { useState } from 'react';
+import Api from '../models/Api';
+import { useCsrfToken } from '../models/CsrfTokenContext';
 import { Player, playerName } from '../models/Player';
 import { User } from '../models/User';
-import { useCsrfToken } from '../models/CsrfTokenContext';
 
 function CurrentUserPlayer({ player }: { player: Player }) {
     const [editing, setEditing] = useState(false)
@@ -14,12 +14,12 @@ function CurrentUserPlayer({ player }: { player: Player }) {
         event.preventDefault()
 
         const onSubmitAsync = async () => {
-            const response = await axios({
+            const response = await Api({
                 url: '/api/v1/current_user.json',
                 method: 'put',
                 data: {
-                    current_user: { name },
-                    authenticity_token: csrfToken
+                    currentUser: { name },
+                    authenticityToken: csrfToken
                 },
                 responseType: 'json'
             })
@@ -32,7 +32,7 @@ function CurrentUserPlayer({ player }: { player: Player }) {
     if (editing) {
         return <span>
             <form>
-                <input type="text" name="current_user[name]" onChange={({ target: { value } }) => setName(value)} value={name} />
+                <input type="text" onChange={({ target: { value } }) => setName(value)} value={name} />
                 <input type="submit" value="Save" onClick={onSubmit} />
             </form>
             <a href="#" onClick={(e) => { e.preventDefault(); setEditing(false) }}>Cancel</a>
