@@ -10,6 +10,8 @@ class Game < ApplicationRecord
 
     before_create :generate!
 
+    after_save :broadcast!
+
     def generate!
         self.key = 3.words.join('-')
         FourPlayerRandomizedBoard.new(game: self).generate!
@@ -32,5 +34,9 @@ class Game < ApplicationRecord
 
     def started?
         started_at.present?
+    end
+
+    def broadcast!
+        GamesChannel.broadcast_to(self, {})
     end
 end

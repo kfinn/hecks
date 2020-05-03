@@ -6,6 +6,8 @@ class Player < ApplicationRecord
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 
+    after_save :broadcast_to_game!
+
     def build_distinct_ordering_roll
         existing_ordering_roll_values = game.players.map(&:ordering_roll_value)
         build_ordering_roll
@@ -13,5 +15,9 @@ class Player < ApplicationRecord
             ordering_roll.roll!
         end
         ordering_roll
+    end
+
+    def broadcast_to_game!
+        GamesChannel.broadcast_to(game, {})
     end
 end

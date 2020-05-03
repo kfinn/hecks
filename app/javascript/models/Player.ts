@@ -11,3 +11,10 @@ export interface Player {
 export function playerName(player: Player) {
     return player.user.name
 }
+
+export function playerOrderingRollDescription({ orderingRoll }: Player) {
+    if (orderingRoll) {
+        return `(${orderingRoll.die1Value}, ${orderingRoll.die2Value})`
+    }
+    return ''
+}

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
 import { useCsrfToken } from '../models/CsrfTokenContext';
-import { Player, playerName } from '../models/Player';
+import { Player, playerName, playerOrderingRollDescription } from '../models/Player';
 import { User } from '../models/User';
 
 function CurrentUserPlayer({ player }: { player: Player }) {
@@ -10,7 +10,7 @@ function CurrentUserPlayer({ player }: { player: Player }) {
     const [name, setName] = useState(playerName(player))
     const csrfToken = useCsrfToken()
 
-    const onSubmit = (event) => {
+    const onSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault()
         setEditing(false)
 
@@ -47,7 +47,9 @@ function CurrentUserPlayer({ player }: { player: Player }) {
 }
 
 function ReadOnlyPlayer({ player }: { player: Player }) {
-    return <span>{playerName(player)}</span>
+    return <span>
+        {playerName(player)} {playerOrderingRollDescription(player)}
+    </span>
 }
 
 export interface PlayerListProps {

@@ -7,6 +7,7 @@ import { Game } from '../models/Game';
 import { User } from '../models/User';
 import BoardSvg from './BoardSvg';
 import PlayerList from './PlayerList';
+import _ from 'lodash';
 
 interface GameProps {
     game: Game
@@ -26,15 +27,17 @@ export default function Game(props: GameProps) {
         setGame(response.data as Game)
     }
 
+    const debouncedRefresh = _.debounce(refresh)
+
     useEffect(() => {
         const subscription = consumer.subscriptions.create(
             { channel: 'GamesChannel', id: game.id },
             {
                 connected() {
-                    refresh()
+                    debouncedRefresh()
                 },
                 received() {
-                    refresh()
+                    debouncedRefresh()
                 }
             }
         )
