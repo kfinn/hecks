@@ -1,5 +1,6 @@
 import React from 'react';
 import { Territory, ProductionTerritory } from '../models/Territory';
+import _ from 'lodash';
 
 const HEX_SCALE = 50
 

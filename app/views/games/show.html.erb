@@ -1,1 +1,5 @@
-<%= react_component("Game", game: render_json_partial(@game)) %>
+<%= react_component("Game", game: render_json_partial(@game), user: render_json_partial(@user)) %>
+
+<%= form_with model: @user, url: api_v1_current_user_path do |f| %>
+    <%= f.text_field :name %>
+<% end %>

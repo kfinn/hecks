@@ -12,6 +12,10 @@ json.territories game.territories do |territory|
 end
 
 json.players game.players.order(:ordering, :created_at) do |player|
+    json.id player.id
+    json.user do
+        json.(player.user, :id, :name)
+    end
     json.(player.user, :id, :name)
     if player.ordering
         json.(player, :ordering)

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resource :current_user, only: :update
       resources :games, only: [] do
         resource :start, only: :create
       end
