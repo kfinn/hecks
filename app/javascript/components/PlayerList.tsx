@@ -12,6 +12,7 @@ function CurrentUserPlayer({ player }: { player: Player }) {
 
     const onSubmit = (event) => {
         event.preventDefault()
+        setEditing(false)
 
         const onSubmitAsync = async () => {
             const response = await Api({
