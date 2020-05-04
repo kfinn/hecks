@@ -13,6 +13,10 @@ json.territories game.territories do |territory|
     end
 end
 
+json.corners game.corners do |corner|
+    json.(corner, :id, :x, :y)
+end
+
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
     json.id player.id
     json.user do

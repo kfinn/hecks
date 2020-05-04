@@ -55,7 +55,7 @@ export default function Game(props: GameProps) {
             <h1>Game</h1>
             <a href="#" onClick={onRefreshClicked}>Refresh</a>
             <PlayerList players={game.players} user={props.user} />
-            <BoardSvg territories={game.territories} />
+            <BoardSvg game={game} />
             <h2>Attribution</h2>
             <ul>
                 <li>Brick icon: Created by Ben Davis from the Noun Project</li>

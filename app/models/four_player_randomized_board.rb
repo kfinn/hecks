@@ -20,8 +20,8 @@ class FourPlayerRandomizedBoard
             x = territory.x
             y = territory.y
 
-            northwest_border = borders_by_position[Position.new(2 * x, 2 * y)]
-            north_corner = corners_by_position[Position.new(2 * x, 2 * y)]
+            northwest_border = borders_by_position[Position.new(x - 1, y - 2)]
+            north_corner = corners_by_position[Position.new(x, y - 3)]
 
             adjacencies.build(
                 territory: territory,
@@ -29,7 +29,7 @@ class FourPlayerRandomizedBoard
                 north_corner: north_corner
             )
 
-            northeast_border = borders_by_position[Position.new(2 * x + 1, 2 * y)]
+            northeast_border = borders_by_position[Position.new(x + 1, y - 2)]
 
             adjacencies.build(
                 territory: territory,
@@ -37,7 +37,7 @@ class FourPlayerRandomizedBoard
                 north_corner: north_corner
             )
 
-            northeast_corner = corners_by_position[Position.new(2 * x + 1, 2 * y)]
+            northeast_corner = corners_by_position[Position.new(x + 2, y - 1)]
 
             adjacencies.build(
                 territory: territory,
@@ -45,7 +45,7 @@ class FourPlayerRandomizedBoard
                 northeast_corner: northeast_corner
             )
 
-            east_border = borders_by_position[Position.new(2 * x + 2, 2 * y + 1)]
+            east_border = borders_by_position[Position.new(x + 2, y)]
 
             adjacencies.build(
                 territory: territory,
@@ -53,7 +53,7 @@ class FourPlayerRandomizedBoard
                 northeast_corner: northeast_corner
             )
 
-            southeast_corner = corners_by_position[Position.new(2 * x + 1, 2 * y + 1)]
+            southeast_corner = corners_by_position[Position.new(x + 2, y + 1)]
 
             adjacencies.build(
                 territory: territory,
@@ -61,7 +61,7 @@ class FourPlayerRandomizedBoard
                 southeast_corner: southeast_corner
             )
 
-            southeast_border = borders_by_position[Position.new(2 * x + 2, 2 * y + 2)]
+            southeast_border = borders_by_position[Position.new(x + 1, y + 2)]
 
             adjacencies.build(
                 territory: territory,
@@ -69,7 +69,7 @@ class FourPlayerRandomizedBoard
                 southeast_corner: southeast_corner
             )
 
-            south_corner = corners_by_position[Position.new(2 * x + 1, 2 * y + 2)]
+            south_corner = corners_by_position[Position.new(x, y + 3)]
 
             adjacencies.build(
                 territory: territory,
@@ -77,7 +77,7 @@ class FourPlayerRandomizedBoard
                 south_corner: south_corner
             )
 
-            southwest_border = borders_by_position[Position.new(2 * x + 1, 2 * y + 2)]
+            southwest_border = borders_by_position[Position.new(x - 1, y + 2)]
 
             adjacencies.build(
                 territory: territory,
@@ -85,7 +85,7 @@ class FourPlayerRandomizedBoard
                 south_corner: south_corner
             )
 
-            southwest_corner = corners_by_position[Position.new(2 * x, 2 * y + 2)]
+            southwest_corner = corners_by_position[Position.new(x - 2, y + 1)]
 
             adjacencies.build(
                 territory: territory,
@@ -93,7 +93,7 @@ class FourPlayerRandomizedBoard
                 southwest_corner: southwest_corner
             )
 
-            west_border = borders_by_position[Position.new(2 * x, 2 * y + 1)]
+            west_border = borders_by_position[Position.new(x - 2, y)]
 
             adjacencies.build(
                 territory: territory,
@@ -101,7 +101,7 @@ class FourPlayerRandomizedBoard
                 southwest_corner: southwest_corner
             )
 
-            northwest_corner = corners_by_position[Position.new(2 * x, 2 * y + 1)]
+            northwest_corner = corners_by_position[Position.new(x - 2, y - 1)]
 
             adjacencies.build(
                 territory: territory,
@@ -119,22 +119,31 @@ class FourPlayerRandomizedBoard
 
     private
 
-    BOARD_LAYOUT_ROWS = [
-        { y: -2, x_range: -2..0 },
-        { y: -1, x_range: -2..1 },
-        { y: 0, x_range: -2..2 },
-        { y: 1, x_range: -1..2 },
-        { y: 2, x_range: 0..2 }
+    TERRITORY_POSITIONS = [
+        Position.new(-4, -8),
+        Position.new(0, -8),
+        Position.new(4, -8),
+        Position.new(-6, -4),
+        Position.new(-2, -4),
+        Position.new(2, -4),
+        Position.new(6, -4),
+        Position.new(-8, 0),
+        Position.new(-4, 0),
+        Position.new(0, 0),
+        Position.new(4, 0),
+        Position.new(8, 0),
+        Position.new(-6, 4),
+        Position.new(-2, 4),
+        Position.new(2, 4),
+        Position.new(6, 4),
+        Position.new(-4, 8),
+        Position.new(0, 8),
+        Position.new(4, 8)
     ]
 
 
     def territories
-        @territories ||= BOARD_LAYOUT_ROWS.each_with_object [] do |row, acc|
-            y = row[:y]
-            row[:x_range].each do |x|
-                acc << Territory.new(x: x, y: y)
-            end
-        end
+        @territories ||= TERRITORY_POSITIONS.map { |position| Territory.new(x: position.x, y: position.y) }
     end
 
     def terrains

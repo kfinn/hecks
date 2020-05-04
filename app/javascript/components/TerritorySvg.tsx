@@ -2,16 +2,18 @@ import _ from 'lodash';
 import React from 'react';
 import { TerrainId } from '../models/Terrain';
 import { ProductionTerritory, Territory, territoryIsDesert } from '../models/Territory';
+import { positionToScreenX, positionToScreenY } from '../models/Position';
 
-const HEX_RADIUS = 50
+export const TERRITORY_RADIUS = 50
+export const HEX_RADIUS = 48
 const TERRAIN_ICON_RADIUS = HEX_RADIUS * 0.4
 
-function territoryCenterX({ x, y }: Territory) {
-    return (x + y * Math.cos(2 * Math.PI / 3)) * 2 * HEX_RADIUS
+function territoryCenterX(territory: Territory) {
+    return positionToScreenX(territory)  * 2 * TERRITORY_RADIUS
 }
 
-function territoryCenterY({ y }: Territory) {
-    return (y * Math.sin(2 * Math.PI / 3)) * 2 * HEX_RADIUS
+function territoryCenterY(territory: Territory) {
+    return positionToScreenY(territory) * 2 * TERRITORY_RADIUS
 }
 
 function territoryPolygonPoints(territory: Territory) {
@@ -28,8 +30,7 @@ function territoryPolygonPoints(territory: Territory) {
             y * HEX_RADIUS + territoryCenterY(territory)
         ]
     })
-    const roundedScreenPoints = screenPoints.map(Math.round)
-    return roundedScreenPoints.join(' ')
+    return screenPoints.join(' ')
 }
 
 const TERRAIN_ICONS_BY_TERRAIN_ID = {
