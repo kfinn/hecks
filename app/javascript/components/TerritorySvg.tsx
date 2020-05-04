@@ -5,7 +5,7 @@ import { ProductionTerritory, Territory, territoryIsDesert } from '../models/Ter
 import { positionToScreenX, positionToScreenY } from '../models/Position';
 
 export const TERRITORY_RADIUS = 50
-export const HEX_RADIUS = 48
+export const HEX_RADIUS = 42
 const TERRAIN_ICON_RADIUS = HEX_RADIUS * 0.4
 
 function territoryCenterX(territory: Territory) {

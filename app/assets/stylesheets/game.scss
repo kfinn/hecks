@@ -22,8 +22,14 @@ $hills-highlight: $red;
 $mountains-highlight: $violet;
 $pasture-highlight: $cyan;
 
+body {
+    background: $base3;
+}
+
 .territory {
     fill: $base2;
+    stroke-width: 4px;
+    stroke-linejoin: round;
 }
 
 .territory.desert {
