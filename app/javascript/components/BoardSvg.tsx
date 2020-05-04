@@ -3,6 +3,7 @@ import React from 'react';
 import { Game } from '../models/Game';
 import CornerSvg from './CornerSvg';
 import TerritorySvg from './TerritorySvg';
+import BorderSvg from './BorderSvg';
 
 export interface BoardSvgProps {
     game: Game
@@ -18,6 +19,9 @@ export default function BoardSvg({ game }: BoardSvgProps) {
                 }
                 {
                     _.map(game.corners, (corner) => <CornerSvg key={corner.id} corner={corner} />)
+                }
+                {
+                    _.map(game.borders, (border) => <BorderSvg key={border.id} border={border} />)
                 }
             </svg>
         </React.Fragment>

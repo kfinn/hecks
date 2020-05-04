@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :players
   has_many :games, through: :players
   has_many :corners, through: :games
+  has_many :borders, through: :games
 
   after_save :broadcast_to_games!
 
@@ -12,8 +13,6 @@ class User < ApplicationRecord
   end
 
   def broadcast_to_games!
-    games.each do |game|
-      GamesChannel.broadcast_to(game, {})
-    end
+    games.each(&:broadcast!)
   end
 end

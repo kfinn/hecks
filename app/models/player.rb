@@ -3,6 +3,7 @@ class Player < ApplicationRecord
     belongs_to :user
     belongs_to :ordering_roll, class_name: 'Roll', optional: true
     belongs_to :initial_settlement, class_name: 'Settlement', optional: true
+    belongs_to :initial_road, class_name: 'Road', optional: true
 
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
@@ -22,6 +23,6 @@ class Player < ApplicationRecord
     end
 
     def broadcast_to_game!
-        GamesChannel.broadcast_to(game, {})
+        game.broadcast!
     end
 end

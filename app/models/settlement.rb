@@ -3,6 +3,7 @@ class Settlement < ApplicationRecord
     belongs_to :corner
     has_one :game, through: :corner
 
+    validates :corner, uniqueness: true
     validate :must_not_be_adjacent_to_another_settlement
 
     after_save :broadcast_to_game!
@@ -15,6 +16,6 @@ class Settlement < ApplicationRecord
     end
 
     def broadcast_to_game!
-        GamesChannel.broadcast_to(game, {})
+        game.broadcast!
     end
 end

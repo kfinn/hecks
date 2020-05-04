@@ -56,11 +56,11 @@ $pasture-highlight: lightgreen;
     fill: magenta;
 }
 
-.corner {
+.corner, .border {
     stroke: black;
     fill: black;
 }
 
-.corner.with-settlement {
+.corner.with-settlement, .border.with-road {
     fill: white;
 }

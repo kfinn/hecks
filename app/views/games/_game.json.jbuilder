@@ -24,6 +24,17 @@ json.corners game.corners.includes(settlement: :player) do |corner|
     end
 end
 
+json.borders game.borders.includes(road: :player) do |border|
+    json.(border, :id, :x, :y)
+    if border.road
+        json.road do
+            json.player do
+                json.id border.road.player.id
+            end
+        end
+    end
+end
+
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
     json.(player, :id, :ordering)
     json.user do

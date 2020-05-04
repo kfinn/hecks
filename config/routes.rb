@@ -15,6 +15,9 @@ Rails.application.routes.draw do
       resources :corners, only: [] do
         resource :initial_settlement, only: :create
       end
+      resources :borders, only: [] do
+        resource :initial_road, only: :create
+      end
     end
   end
 end
