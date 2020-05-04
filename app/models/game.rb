@@ -5,6 +5,8 @@ class Game < ApplicationRecord
     has_many :corners, -> { distinct }, through: :adjacencies
     has_many :territories, -> { distinct }, through: :adjacencies
 
+    has_many :settlements, -> { distinct }, through: :corners
+
     has_many :players
     has_many :users, through: :players
 
@@ -20,7 +22,8 @@ class Game < ApplicationRecord
     def start!
         transaction do
             players.each(&:build_distinct_ordering_roll)
-            players.sort_by(&:ordering_roll).each_with_index do |player, index|
+            sorted_players = players.sort_by { |player| -player.ordering_roll_value }
+            sorted_players.each_with_index do |player, index|
                 player.ordering = index
                 player.save!
             end
@@ -38,5 +41,9 @@ class Game < ApplicationRecord
 
     def broadcast!
         GamesChannel.broadcast_to(self, {})
+    end
+
+    def current_player
+        players.without_initial_settlement.ordered.first
     end
 end

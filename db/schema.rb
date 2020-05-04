@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_02_234900) do
+ActiveRecord::Schema.define(version: 2020_05_04_201900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,7 +46,9 @@ ActiveRecord::Schema.define(version: 2020_05_02_234900) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ordering_roll_id"
     t.integer "ordering"
+    t.bigint "initial_settlement_id"
     t.index ["game_id"], name: "index_players_on_game_id"
+    t.index ["initial_settlement_id"], name: "index_players_on_initial_settlement_id"
     t.index ["ordering"], name: "index_players_on_ordering"
     t.index ["ordering_roll_id"], name: "index_players_on_ordering_roll_id"
     t.index ["user_id"], name: "index_players_on_user_id"
@@ -57,6 +59,15 @@ ActiveRecord::Schema.define(version: 2020_05_02_234900) do
     t.integer "die_2_value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "settlements", force: :cascade do |t|
+    t.bigint "player_id"
+    t.bigint "corner_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["corner_id"], name: "index_settlements_on_corner_id", unique: true
+    t.index ["player_id"], name: "index_settlements_on_player_id"
   end
 
 # Could not dump table "territories" because of following StandardError
@@ -92,5 +103,6 @@ ActiveRecord::Schema.define(version: 2020_05_02_234900) do
   add_foreign_key "adjacencies", "territories"
   add_foreign_key "players", "games"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"
+  add_foreign_key "players", "settlements", column: "initial_settlement_id"
   add_foreign_key "players", "users"
 end

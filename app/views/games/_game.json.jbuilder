@@ -1,4 +1,4 @@
-json.id game.id
+json.(game, :id, :started_at)
 
 json.territories game.territories do |territory|
     json.(territory, :id, :x, :y,)
@@ -13,18 +13,21 @@ json.territories game.territories do |territory|
     end
 end
 
-json.corners game.corners do |corner|
+json.corners game.corners.includes(settlement: :player) do |corner|
     json.(corner, :id, :x, :y)
+    if corner.settlement
+        json.settlement do
+            json.player do
+                json.id corner.settlement.player.id
+            end
+        end
+    end
 end
 
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
-    json.id player.id
+    json.(player, :id, :ordering)
     json.user do
         json.(player.user, :id, :name)
-    end
-    json.(player.user, :id, :name)
-    if player.ordering
-        json.(player, :ordering)
     end
     if player.ordering_roll
         json.ordering_roll do

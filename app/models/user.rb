@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   has_many :players
   has_many :games, through: :players
+  has_many :corners, through: :games
 
   after_save :broadcast_to_games!
 

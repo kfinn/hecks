@@ -9,7 +9,6 @@ export interface BoardSvgProps {
 }
 
 export default function BoardSvg({ game }: BoardSvgProps) {
-    console.log(game.corners.length)
     return (
         <React.Fragment>
             <h2>Board</h2>

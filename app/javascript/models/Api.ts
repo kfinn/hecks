@@ -1,22 +1,27 @@
 import Axios from 'axios';
 import camelize from 'camelize';
+import $ from 'jquery';
 import _ from 'lodash';
 import snakeize from 'snakeize';
 
-const Api = Axios.create()
+const Api = Axios.create({ baseURL: '/api/v1' })
+
+const NON_MUTATIVE_METHODS = ['get', 'GET', 'head', 'HEAD', 'link', 'LINK', 'unlink', 'UNLINK']
 
 Api.interceptors.request.use((config) => {
-    const data = config.data
-    if (data) {
-        return { data: snakeize(data), ..._.omit(config, 'data') }
+    if (_.includes(NON_MUTATIVE_METHODS, config.method)) {
+        return config
     }
-    return config
+    const data = config.data || {}
+    const authenticityToken = $('meta[name=csrf-token]').attr('content')
+    const dataWithAuthToken = { authenticityToken, ...data }
+    return { data: snakeize(dataWithAuthToken), ..._.omit(config, 'data') }
 })
 
 Api.interceptors.response.use((response) => {
     const data = response.data
     if (data) {
-        return { data : camelize(data), ..._.omit(response, 'data') }
+        return { data: camelize(data), ..._.omit(response, 'data') }
     }
     return response
 })

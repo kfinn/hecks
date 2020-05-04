@@ -1,30 +1,25 @@
 import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
-import { useCsrfToken } from '../models/CsrfTokenContext';
 import { Player, playerName, playerOrderingRollDescription } from '../models/Player';
 import { User } from '../models/User';
 
 function CurrentUserPlayer({ player }: { player: Player }) {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState(playerName(player))
-    const csrfToken = useCsrfToken()
 
     const onSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault()
         setEditing(false)
 
         const onSubmitAsync = async () => {
-            const response = await Api({
-                url: '/api/v1/current_user.json',
-                method: 'put',
-                data: {
-                    currentUser: { name },
-                    authenticityToken: csrfToken
+            const response = await Api.put(
+                'current_user.json',
+                {
+                    currentUser: { name }
                 },
-                responseType: 'json'
-            })
-            console.log(response.data)
+                { responseType: 'json' }
+            )
         }
 
         onSubmitAsync()

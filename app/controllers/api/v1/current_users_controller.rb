@@ -4,7 +4,7 @@ class Api::V1::CurrentUsersController < Api::ApiController
         if @user.update update_params
             head :ok
         else
-            render :unprocessable_entity, partial: 'errors/errors', locals: { errors: @user.errors }
+            render status: :unprocessable_entity, partial: 'errors/errors', locals: { errors: @user.errors }
         end
     end
 

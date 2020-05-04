@@ -55,3 +55,12 @@ $pasture-highlight: lightgreen;
     color: magenta;
     fill: magenta;
 }
+
+.corner {
+    stroke: black;
+    fill: black;
+}
+
+.corner.with-settlement {
+    fill: white;
+}

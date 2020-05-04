@@ -5,7 +5,7 @@ export interface Player {
     id: number
     user: User
     ordering: number
-    orderingRoll: Roll
+    orderingRoll?: Roll
 }
 
 export function playerName(player: Player) {
