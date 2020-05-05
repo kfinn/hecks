@@ -9,6 +9,7 @@ class Road < ApplicationRecord
 
     validates :border, uniqueness: true
     validate :must_connect_to_road_or_settlement
+    validate :game_must_be_started
 
     after_save :broadcast_to_game!
 
@@ -21,6 +22,10 @@ class Road < ApplicationRecord
         end
 
         errors[:border] << 'must be connected to an existing settlement or road'
+    end
+
+    def game_must_be_started
+        errors[:game] << 'must be started' unless game.started?
     end
 
     def broadcast_to_game!

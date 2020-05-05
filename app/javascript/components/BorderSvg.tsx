@@ -15,7 +15,11 @@ function borderCenterY(border: Border) {
 export default function BorderSvg({ border }: { border: Border }) {
     const createInitialRoad = () => {
         const asyncCreateInitialRoad = async () => {
-            await Api.post(`borders/${border.id}/initial_road.json`)
+            try{
+                await Api.post(`borders/${border.id}/initial_road.json`)
+            } catch (error) {
+                console.log(error.response)
+            }
         }
 
         asyncCreateInitialRoad()

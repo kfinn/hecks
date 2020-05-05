@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
 import { Player, playerName, playerOrderingRollDescription } from '../models/Player';
-import { User } from '../models/User';
 
 function CurrentUserPlayer({ player }: { player: Player }) {
     const [editing, setEditing] = useState(false)
@@ -48,11 +47,10 @@ function ReadOnlyPlayer({ player }: { player: Player }) {
 }
 
 export interface PlayerListProps {
-    user: User
     players: Player[]
 }
 
-export default function PlayerList({ user, players }: PlayerListProps) {
+export default function PlayerList({ players }: PlayerListProps) {
     return (
         <React.Fragment>
             <h2>Players</h2>
@@ -61,7 +59,7 @@ export default function PlayerList({ user, players }: PlayerListProps) {
                     _.map(players, (player) => {
                         return <li key={player.id}>
                             {
-                                player.user.id == user.id ? <CurrentUserPlayer player={player} /> : <ReadOnlyPlayer player={player} />
+                                player.user.isCurrentUser ? <CurrentUserPlayer player={player} /> : <ReadOnlyPlayer player={player} />
                             }
                         </li>
                     })

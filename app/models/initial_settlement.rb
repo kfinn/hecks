@@ -4,6 +4,7 @@ class InitialSettlement
 
     delegate :game, to: :player
 
+    validate :player_must_not_already_have_initial_settlement
     validate :must_be_players_turn
     validate :settlement_must_be_valid
 
@@ -24,8 +25,13 @@ class InitialSettlement
 
     private
 
+    def player_must_not_already_have_initial_settlement
+        errors[:player] << 'must not already have an initial settlement' if player.initial_settlement.present?
+    end
+
     def must_be_players_turn
-        errors[:player] << "must be this player's turn" unless game.current_player == player
+        earlier_players_without_initial_setup = player.earlier_players.without_initial_setup
+        errors[:player] << "must be this player's turn" if earlier_players_without_initial_setup.any?
     end
 
     def settlement_must_be_valid

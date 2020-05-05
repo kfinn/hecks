@@ -4,7 +4,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 import snakeize from 'snakeize';
 
-const Api = Axios.create({ baseURL: '/api/v1' })
+const Api = Axios.create({ baseURL: '/api/v1', responseType: 'json' })
 
 const NON_MUTATIVE_METHODS = ['get', 'GET', 'head', 'HEAD', 'link', 'LINK', 'unlink', 'UNLINK']
 

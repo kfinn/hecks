@@ -1,16 +1,13 @@
 import { createConsumer } from '@rails/actioncable';
-import $ from 'jquery';
-import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
 import Api from '../models/Api';
 import { Game, gameIsStarted } from '../models/Game';
-import { User } from '../models/User';
 import BoardSvg from './BoardSvg';
 import PlayerList from './PlayerList';
-import _ from 'lodash';
 
 interface GameProps {
     game: Game
-    user: User
 }
 
 const consumer = createConsumer()
@@ -61,7 +58,7 @@ export default function Game(props: GameProps) {
             <h1>Game</h1>
             <a href="#" onClick={onRefreshClicked}>Refresh</a>
             {gameIsStarted(game) ? null : <button onClick={onStartClicked}>Start Game</button>}
-            <PlayerList players={game.players} user={props.user} />
+            <PlayerList players={game.players} />
             <BoardSvg game={game} />
             <h2>Attribution</h2>
             <ul>

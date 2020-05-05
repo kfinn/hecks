@@ -39,6 +39,7 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
     json.(player, :id, :ordering)
     json.user do
         json.(player.user, :id, :name)
+        json.is_current_user player.user == current_or_guest_user
     end
     if player.ordering_roll
         json.ordering_roll do

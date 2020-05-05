@@ -15,7 +15,11 @@ function cornerCenterY(corner: Corner) {
 export default function CornerSvg({ corner }: { corner: Corner }) {
     const createInitialSettlement = () => {
         const asyncCreateInitialSettlement = async () => {
-            await Api.post(`corners/${corner.id}/initial_settlement.json`)
+            try {
+                await Api.post(`corners/${corner.id}/initial_settlement.json`)
+            } catch (error) {
+                console.log(error.response)
+            }
         }
 
         asyncCreateInitialSettlement()
