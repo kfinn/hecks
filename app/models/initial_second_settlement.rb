@@ -9,14 +9,12 @@ class InitialSecondSettlement
     validate :must_be_players_turn
     validate :settlement_must_be_valid
 
-    def self.corner_action_for_player(**kwargs)
-        if new(**kwargs).valid?
-            return "#{name}#create"
+    def save!
+        raise ActiveRecord::RecordInvalid(self) unless valid?
+        ApplicationRecord.transaction do
+            settlement.save!
+            update_player!
         end
-    end
-
-    def save
-        valid? && settlement.save && player.save
     end
 
     def settlement
@@ -25,7 +23,6 @@ class InitialSecondSettlement
                 player: player,
                 corner: corner
             )
-            player.initial_second_settlement = @settlement
         end
         @settlement
     end
@@ -52,5 +49,13 @@ class InitialSecondSettlement
                 errors[:settlement] << "#{key}: #{message}"
             end
         end
+    end
+
+    def update_player!
+        player.initial_second_settlement = settlement
+        corner.territories.map(&:terrain).map(&:resource).compact.tally.each do |resource, amount|
+            player.collect_resource(resource, amount)
+        end
+        player.save!
     end
 end

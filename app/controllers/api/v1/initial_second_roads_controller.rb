@@ -4,7 +4,8 @@ class Api::V1::InitialSecondRoadsController < Api::ApiController
         player = current_or_guest_user.players.find_by!(game: border.game)
 
         initial_second_road = InitialSecondRoad.new(border: border, player: player)
-        if initial_second_road.save
+        if initial_second_road.valid?
+            initial_second_road.save!
             head :created
         else
             render status: :unprocessable_entity, partial: 'errors/errors', locals: { errors: initial_second_road.errors }

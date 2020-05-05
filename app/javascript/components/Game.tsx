@@ -5,6 +5,7 @@ import Api from '../models/Api';
 import { Game, gameIsStarted } from '../models/Game';
 import BoardSvg from './BoardSvg';
 import PlayerList from './PlayerList';
+import Hand from './Hand';
 
 interface GameProps {
     game: Game
@@ -63,6 +64,7 @@ export default function Game(props: GameProps) {
             {gameIsStarted(game) ? null : <button onClick={onStartClicked}>Start Game</button>}
             <PlayerList players={game.players} />
             <BoardSvg game={game} />
+            <Hand hand={game.hand} />
             <h2>Attribution</h2>
             <ul>
                 <li>Brick icon: Created by Ben Davis from the Noun Project</li>

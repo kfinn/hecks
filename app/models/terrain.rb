@@ -10,27 +10,32 @@ class Terrain < ActiveHash::Base
         {
             id: 'fields',
             name: 'Fields',
-            territories_count: 4
+            territories_count: 4,
+            resource: Resource::GRAIN
         },
         {
             id: 'pasture',
             name: 'Pasture',
-            territories_count: 4
+            territories_count: 4,
+            resource: Resource::WOOL
         },
         {
             id: 'forest',
             name: 'Forest',
-            territories_count: 4
+            territories_count: 4,
+            resource: Resource::LUMBER
         },
         {
             id: 'mountains',
             name: 'Mountains',
-            territories_count: 3
+            territories_count: 3,
+            resource: Resource::ORE
         },
         {
             id: 'hills',
             name: 'Hills',
-            territories_count: 3
+            territories_count: 3,
+            resource: Resource::BRICK
         }
     ]
 

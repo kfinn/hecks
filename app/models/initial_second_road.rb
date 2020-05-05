@@ -14,8 +14,12 @@ class InitialSecondRoad
         end
     end
 
-    def save
-        valid? && road.save && player.save
+    def save!
+        raise ActiveRecord::RecordInvalid(self) unless valid?
+        ApplicationRecord.transaction do
+            road.save!
+            update_player!
+        end
     end
 
     def road
@@ -24,7 +28,6 @@ class InitialSecondRoad
                 player: player,
                 border: border
             )
-            player.initial_second_road = @road
         end
         @road
     end
@@ -48,5 +51,9 @@ class InitialSecondRoad
             return
         end
         errors[:border] << 'must connect to initial second settlement'
+    end
+
+    def update_player!
+        player.update! initial_second_road: road
     end
 end

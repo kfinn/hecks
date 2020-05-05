@@ -7,8 +7,12 @@ class InitialSettlement
     validate :player_must_be_able_to_create_initial_settlement
     validate :settlement_must_be_valid
 
-    def save
-        valid? && settlement.save && player.save
+    def save!
+        raise ActiveRecord::RecordInvalid(self) unless valid?
+        ApplicationRecord.transaction do
+            settlement.save!
+            update_player!
+        end
     end
 
     def settlement
@@ -17,7 +21,6 @@ class InitialSettlement
                 player: player,
                 corner: corner
             )
-            player.initial_settlement = @settlement
         end
         @settlement
     end
@@ -34,5 +37,9 @@ class InitialSettlement
                 errors[:settlement] << "#{key}: #{message}"
             end
         end
+    end
+
+    def update_player!
+        player.update! initial_settlement: settlement
     end
 end

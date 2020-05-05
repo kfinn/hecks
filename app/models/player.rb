@@ -94,4 +94,10 @@ class Player < ApplicationRecord
             game.players.without_initial_setup.empty? &&
             later_players.without_initial_second_setup.empty?
     end
+
+    def collect_resource(resource, amount=1)
+        attribute_name = "#{resource.name}_cards_count"
+        current_resource_cards_count = send(attribute_name)
+        send("#{attribute_name}=", current_resource_cards_count + amount)
+    end
 end

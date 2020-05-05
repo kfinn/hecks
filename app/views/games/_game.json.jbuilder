@@ -52,3 +52,13 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
     end
 end
 
+json.hand do
+    json.(
+        current_player,
+        :brick_cards_count,
+        :grain_cards_count,
+        :lumber_cards_count,
+        :ore_cards_count,
+        :wool_cards_count
+    )
+end

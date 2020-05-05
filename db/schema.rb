@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_05_024112) do
+ActiveRecord::Schema.define(version: 2020_05_05_042827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,11 @@ ActiveRecord::Schema.define(version: 2020_05_05_024112) do
     t.bigint "initial_road_id"
     t.bigint "initial_second_settlement_id"
     t.bigint "initial_second_road_id"
+    t.integer "brick_cards_count", default: 0, null: false
+    t.integer "grain_cards_count", default: 0, null: false
+    t.integer "lumber_cards_count", default: 0, null: false
+    t.integer "ore_cards_count", default: 0, null: false
+    t.integer "wool_cards_count", default: 0, null: false
     t.index ["game_id"], name: "index_players_on_game_id"
     t.index ["initial_road_id"], name: "index_players_on_initial_road_id"
     t.index ["initial_second_road_id"], name: "index_players_on_initial_second_road_id"
