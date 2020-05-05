@@ -14,11 +14,12 @@ class InitialRoad
         end
     end
 
-    def save
+    def save!
         raise ActiveRecord::RecordInvalid(self) unless valid?
         ApplicationRecord.transaction do
             road.save!
             update_player!
+            update_game!
         end
     end
 
@@ -55,5 +56,11 @@ class InitialRoad
 
     def update_player!
         player.update! initial_road: road
+    end
+
+    def update_game!
+        if player.later_players.any?
+            game.end_turn!
+        end
     end
 end

@@ -1,4 +1,6 @@
 class Road < ApplicationRecord
+    include GameChanging
+
     belongs_to :player
     belongs_to :border
     has_one :game, through: :border
@@ -10,8 +12,6 @@ class Road < ApplicationRecord
     validates :border, uniqueness: true
     validate :must_connect_to_road_or_settlement
     validate :game_must_be_started
-
-    after_save :broadcast_to_game!
 
     def must_connect_to_road_or_settlement
         if settlements.where(player: player).any?
@@ -26,9 +26,5 @@ class Road < ApplicationRecord
 
     def game_must_be_started
         errors[:game] << 'must be started' unless game.started?
-    end
-
-    def broadcast_to_game!
-        game.broadcast!
     end
 end

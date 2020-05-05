@@ -11,9 +11,11 @@ class Game < ApplicationRecord
     has_many :players
     has_many :users, through: :players
 
+    belongs_to :current_player, class_name: 'Player', optional: true
+
     before_create :generate!
 
-    after_save :broadcast!
+    after_save :changed!
 
     def generate!
         self.key = 3.words.join('-')
@@ -28,7 +30,10 @@ class Game < ApplicationRecord
                 player.ordering = index
                 player.save!
             end
-            update! started_at: Time.zone.now
+            update!(
+                started_at: Time.zone.now,
+                current_player: sorted_players.first
+            )
         end
     end
 
@@ -40,11 +45,17 @@ class Game < ApplicationRecord
         started_at.present?
     end
 
-    def broadcast!
-        GamesChannel.broadcast_to(self, {})
+    def changed!
+        broadcast!
     end
 
-    def current_player
-        players.without_initial_settlement.ordered.first
+    def end_turn!(next_player: current_player.next_player)
+        update! current_player: current_player.next_player
+    end
+
+    private
+
+    def broadcast!
+        GamesChannel.broadcast_to(self, {})
     end
 end

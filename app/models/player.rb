@@ -1,4 +1,6 @@
 class Player < ApplicationRecord
+    include GameChanging
+
     belongs_to :game
     belongs_to :user
     belongs_to :ordering_roll, class_name: 'Roll', optional: true
@@ -9,9 +11,6 @@ class Player < ApplicationRecord
 
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
-
-    after_save :broadcast_to_game!
-    after_destroy :broadcast_to_game!
 
     scope :ordered, -> { order(:ordering) }
 
@@ -32,9 +31,12 @@ class Player < ApplicationRecord
         ordering_roll
     end
 
-    def broadcast_to_game!
-        Rails.logger.info "broadcasting!"
-        game.broadcast!
+    def next_player
+        later_players.ordered.first || game.players.ordered.first
+    end
+
+    def previous_player
+        earlier_players.ordered.last || game.players.ordered.last
     end
 
     def earlier_players
@@ -48,7 +50,7 @@ class Player < ApplicationRecord
     def actions
         unless instance_variable_defined?(:@actions)
             @actions = Hash.new { |hash, key| hash[key] = [] }
-            if game.started?
+            if game.current_player == self
 
                 if can_create_initial_settlement?
                     game.corners.available_for_settlement.each do |corner|

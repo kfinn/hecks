@@ -19,6 +19,7 @@ class InitialSecondRoad
         ApplicationRecord.transaction do
             road.save!
             update_player!
+            update_game!
         end
     end
 
@@ -55,5 +56,11 @@ class InitialSecondRoad
 
     def update_player!
         player.update! initial_second_road: road
+    end
+
+    def update_game!
+        if player.earlier_players.any?
+            game.end_turn! next_player: player.previous_player
+        end
     end
 end

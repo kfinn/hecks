@@ -13,6 +13,6 @@ class User < ApplicationRecord
   end
 
   def broadcast_to_games!
-    games.each(&:broadcast!)
+    games.each(&:changed!)
   end
 end
