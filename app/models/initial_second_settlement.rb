@@ -53,7 +53,7 @@ class InitialSecondSettlement
 
     def update_player!
         player.initial_second_settlement = settlement
-        corner.territories.map(&:terrain).map(&:resource).compact.tally.each do |resource, amount|
+        corner.territories.map(&:resource).compact.tally.each do |resource, amount|
             player.collect_resource(resource, amount)
         end
         player.save!

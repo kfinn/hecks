@@ -22,9 +22,9 @@ const CORNER_ACTIONS = {
 }
 
 export default function CornerSvg({ corner }: { corner: Corner }) {
-    const action = CORNER_ACTIONS[corner.actions[0]]
-    const onClick = () => {
-        const asyncCreateInitialSettlement = async () => {
+    const action = CORNER_ACTIONS[corner.cornerActions[0]]
+    const onClick = action ? (() => {
+        const asyncOnClick = async () => {
             try {
                 await action(corner)
             } catch (error) {
@@ -32,8 +32,8 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
             }
         }
 
-        asyncCreateInitialSettlement()
-    }
+        asyncOnClick()
+    }) : null
 
     let classNames = ['corner']
     if (corner.settlement) {
@@ -47,7 +47,7 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
         cx={cornerCenterX(corner)}
         cy={cornerCenterY(corner)}
         r="5"
-        onClick={action ? onClick : null}
+        onClick={onClick}
         className={classNames.join(' ')}
     />
 }

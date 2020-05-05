@@ -2,10 +2,10 @@ class ActionCollection
     class EmptyActionCollection
         include Singleton
 
+        EMPTY_ACTIONS = [].freeze
+
         class EmptyActionSubcollection
             include Singleton
-
-            EMPTY_ACTIONS = [].freeze
 
             def [](_key)
                 EMPTY_ACTIONS
@@ -19,6 +19,10 @@ class ActionCollection
         def corner_actions
             EmptyActionSubcollection.instance
         end
+
+        def dice_actions
+            EMPTY_ACTIONS
+        end
     end
 
     def self.none
@@ -31,5 +35,9 @@ class ActionCollection
 
     def corner_actions
         @corner_actions ||= Hash.new { |hash, key| hash[key] = [] }
+    end
+
+    def dice_actions
+        @dice_actions ||= Set.new
     end
 end

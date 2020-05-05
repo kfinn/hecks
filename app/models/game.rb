@@ -15,6 +15,9 @@ class Game < ApplicationRecord
     belongs_to :current_turn, optional: true, class_name: 'Turn'
     has_one :current_player, through: :current_turn, source: :player
 
+    has_many :repeating_turns
+    has_many :rolls, through: :repeating_turns
+
     before_create :generate!
 
     after_save :changed!
@@ -53,6 +56,13 @@ class Game < ApplicationRecord
 
     def end_turn!
         update! current_turn: current_turn.build_next_turn
+    end
+
+    def latest_roll
+        unless instance_variable_defined?(:@latest_roll)
+            @latest_roll = rolls.order(created_at: :desc).last
+        end
+        @latest_roll
     end
 
     private

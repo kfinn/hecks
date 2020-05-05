@@ -10,5 +10,5 @@ export interface Corner {
     x: number
     y: number
     settlement?: Settlement
-    actions: CornerAction[]
+    cornerActions: CornerAction[]
 }

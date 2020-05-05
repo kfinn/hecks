@@ -5,6 +5,8 @@ class Player < ApplicationRecord
     belongs_to :user
     belongs_to :ordering_roll, class_name: 'Roll', optional: true
 
+    has_one :current_turn, -> { current }, class_name: 'Turn'
+
     has_one :initial_setup_turn
     has_one :initial_settlement, through: :initial_setup_turn, source: :settlement
     has_one :initial_road, through: :initial_setup_turn, source: :road
@@ -13,8 +15,10 @@ class Player < ApplicationRecord
     has_one :initial_second_settlement, through: :initial_second_setup_turn, source: :settlement
     has_one :initial_second_road, through: :initial_second_setup_turn, source: :road
 
-    has_many :turns
-    has_one :current_turn, -> { current }, class_name: 'Turn'
+    has_many :settlements
+    has_many :roads
+
+    has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
 
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
@@ -31,8 +35,9 @@ class Player < ApplicationRecord
 
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
+    delegate :can_create_production_roll?, to: :current_repeating_turn, allow_nil: true
 
-    delegate :corner_actions, :border_actions, to: :actions
+    delegate :corner_actions, :border_actions, :dice_actions, to: :actions
 
     def build_distinct_ordering_roll
         existing_ordering_roll_values = game.players.map(&:ordering_roll_value)

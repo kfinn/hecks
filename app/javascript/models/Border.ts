@@ -10,5 +10,5 @@ export interface Border {
     x: number
     y: number
     road?: Road
-    actions: BorderAction[]
+    borderActions: BorderAction[]
 }

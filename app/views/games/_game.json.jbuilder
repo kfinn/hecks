@@ -24,7 +24,7 @@ json.corners game.corners.includes(settlement: :player) do |corner|
             end
         end
     end
-    json.actions current_player.corner_actions[corner]
+    json.corner_actions current_player.corner_actions[corner]
 end
 
 json.borders game.borders.includes(road: :player) do |border|
@@ -36,7 +36,7 @@ json.borders game.borders.includes(road: :player) do |border|
             end
         end
     end
-    json.actions current_player.border_actions[border]
+    json.border_actions current_player.border_actions[border]
 end
 
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
@@ -61,4 +61,13 @@ json.hand do
         :ore_cards_count,
         :wool_cards_count
     )
+end
+
+json.dice do
+    if game.latest_roll
+        json.latest_roll do
+            json.(game.latest_roll, :die_1_value, :die_2_value, :value)
+        end
+    end
+    json.dice_actions current_player.dice_actions
 end

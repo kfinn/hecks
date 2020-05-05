@@ -4,7 +4,15 @@ class RepeatingTurn < Turn
     validates :roll, presence: { if: :ended? }
 
     def actions
-        return ActionCollection.none
+        ActionCollection.new.tap do |action_collection|
+            if roll.blank?
+                action_collection.dice_actions << 'ProductionRoll#create'
+            end
+        end
+    end
+
+    def can_create_production_roll?
+        roll.nil? && current?
     end
 
     def ended?

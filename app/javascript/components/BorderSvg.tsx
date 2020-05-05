@@ -22,9 +22,9 @@ const BORDER_ACTIONS = {
 }
 
 export default function BorderSvg({ border }: { border: Border }) {
-    const action = BORDER_ACTIONS[border.actions[0]]
-    const createInitialRoad = () => {
-        const asyncCreateInitialRoad = async () => {
+    const action = BORDER_ACTIONS[border.borderActions[0]]
+    const onClick = action ? (() => {
+        const asyncOnClick = async () => {
             try{
                 await action(border)
             } catch (error) {
@@ -32,8 +32,8 @@ export default function BorderSvg({ border }: { border: Border }) {
             }
         }
 
-        asyncCreateInitialRoad()
-    }
+        asyncOnClick()
+    }) : null
 
     const classNames = ['border']
     if (border.road) {
@@ -48,7 +48,7 @@ export default function BorderSvg({ border }: { border: Border }) {
         y={borderCenterY(border) - 4}
         width="8"
         height="8"
-        onClick={action ? createInitialRoad : null}
+        onClick={onClick}
         className={classNames.join(' ')}
     />
 }
