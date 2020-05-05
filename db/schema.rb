@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_05_150452) do
+ActiveRecord::Schema.define(version: 2020_05_05_193118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,9 +95,12 @@ ActiveRecord::Schema.define(version: 2020_05_05_150452) do
     t.bigint "road_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "roll_id"
+    t.datetime "ended_at"
     t.index ["game_id"], name: "index_turns_on_game_id"
     t.index ["player_id"], name: "index_turns_on_player_id"
     t.index ["road_id"], name: "index_turns_on_road_id"
+    t.index ["roll_id"], name: "index_turns_on_roll_id"
     t.index ["settlement_id"], name: "index_turns_on_settlement_id"
   end
 
@@ -136,5 +139,6 @@ ActiveRecord::Schema.define(version: 2020_05_05_150452) do
   add_foreign_key "turns", "games"
   add_foreign_key "turns", "players"
   add_foreign_key "turns", "roads"
+  add_foreign_key "turns", "rolls"
   add_foreign_key "turns", "settlements"
 end

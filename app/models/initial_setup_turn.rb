@@ -4,16 +4,28 @@ class InitialSetupTurn < Turn
 
     validates :player, uniqueness: true
 
+    def actions
+        ActionCollection.new.tap do |action_collection|
+            if can_create_initial_settlement?
+                game.corners.available_for_settlement.each do |corner|
+                    action_collection.corner_actions[corner] << 'InitialSettlement#create'
+                end
+            end
+
+            if can_create_initial_road?
+                settlement.borders.each do |border|
+                    action_collection.border_actions[border] << 'InitialRoad#create'
+                end
+            end
+        end
+    end
+
     def can_create_initial_settlement?
         settlement.nil? && current?
     end
 
     def can_create_initial_road?
         settlement.present? && road.nil? && current?
-    end
-
-    def current?
-        game.current_turn == self
     end
 
     def build_next_turn

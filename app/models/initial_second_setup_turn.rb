@@ -4,6 +4,22 @@ class InitialSecondSetupTurn < Turn
 
     validates :player, uniqueness: true
 
+    def actions
+        ActionCollection.new.tap do |action_collection|
+            if can_create_initial_second_settlement?
+                game.corners.available_for_settlement.each do |corner|
+                    action_collection.corner_actions[corner] << 'InitialSecondSettlement#create'
+                end
+            end
+
+            if can_create_initial_second_road?
+                settlement.borders.each do |border|
+                    action_collection.border_actions[border] << 'InitialSecondRoad#create'
+                end
+            end
+        end
+    end
+
     def can_create_initial_second_settlement?
         settlement.nil? && current?
     end
@@ -12,15 +28,11 @@ class InitialSecondSetupTurn < Turn
         settlement.present? && road.nil? && current?
     end
 
-    def current?
-        game.current_turn == self
-    end
-
     def build_next_turn
         if player.previous_player.initial_second_setup_turn.blank?
             InitialSecondSetupTurn.new(game: game, player: player.previous_player)
         else
-            self
+            RepeatingTurn.new(game: game, player: player)
         end
     end
 end

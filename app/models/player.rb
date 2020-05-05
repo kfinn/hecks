@@ -13,6 +13,9 @@ class Player < ApplicationRecord
     has_one :initial_second_settlement, through: :initial_second_setup_turn, source: :settlement
     has_one :initial_second_road, through: :initial_second_setup_turn, source: :road
 
+    has_many :turns
+    has_one :current_turn, -> { current }, class_name: 'Turn'
+
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 
@@ -28,6 +31,8 @@ class Player < ApplicationRecord
 
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
+
+    delegate :corner_actions, :border_actions, to: :actions
 
     def build_distinct_ordering_roll
         existing_ordering_roll_values = game.players.map(&:ordering_roll_value)
@@ -55,32 +60,7 @@ class Player < ApplicationRecord
     end
 
     def actions
-        unless instance_variable_defined?(:@actions)
-            @actions = Hash.new { |hash, key| hash[key] = [] }
-            if game.current_player == self
-
-                if can_create_initial_settlement?
-                    game.corners.available_for_settlement.each do |corner|
-                        @actions[corner] << 'InitialSettlement#create'
-                    end
-                elsif can_create_initial_second_settlement?
-                    game.corners.available_for_settlement.each do |corner|
-                        @actions[corner] << 'InitialSecondSettlement#create'
-                    end
-                end
-
-                if can_create_initial_road?
-                    initial_settlement.borders.each do |border|
-                        @actions[border] << 'InitialRoad#create'
-                    end
-                elsif can_create_initial_second_road?
-                    initial_second_settlement.borders.each do |border|
-                        @actions[border] << 'InitialSecondRoad#create'
-                    end
-                end
-            end
-        end
-        @actions
+        @actions = current_turn&.actions || ActionCollection.none
     end
 
     def collect_resource(resource, amount=1)

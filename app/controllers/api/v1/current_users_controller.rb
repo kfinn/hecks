@@ -1,10 +1,10 @@
 class Api::V1::CurrentUsersController < Api::ApiController
     def update
-        @user = current_or_guest_user
-        if @user.update update_params
+        user = current_or_guest_user
+        if user.update update_params
             head :ok
         else
-            render_errors_for @user
+            render_errors_for user
         end
     end
 

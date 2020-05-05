@@ -8,7 +8,7 @@ class Api::V1::InitialSecondRoadsController < Api::ApiController
             initial_second_road.save!
             head :created
         else
-            render_errors_for errors
+            render_errors_for initial_second_road
         end
     end
 end
