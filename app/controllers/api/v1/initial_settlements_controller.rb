@@ -8,7 +8,7 @@ class Api::V1::InitialSettlementsController < Api::ApiController
             initial_settlement.save!
             head :created
         else
-            render status: :unprocessable_entity, partial: 'errors/errors', locals: { errors: initial_settlement.errors }
+            render_errors_for initial_settlement
         end
     end
 end

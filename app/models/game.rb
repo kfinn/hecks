@@ -11,7 +11,9 @@ class Game < ApplicationRecord
     has_many :players
     has_many :users, through: :players
 
-    belongs_to :current_player, class_name: 'Player', optional: true
+    has_many :turns
+    belongs_to :current_turn, optional: true, class_name: 'Turn'
+    has_one :current_player, through: :current_turn, source: :player
 
     before_create :generate!
 
@@ -30,10 +32,10 @@ class Game < ApplicationRecord
                 player.ordering = index
                 player.save!
             end
-            update!(
-                started_at: Time.zone.now,
-                current_player: sorted_players.first
-            )
+
+            self.started_at = Time.zone.now
+            self.current_turn = InitialSetupTurn.new(game: self, player: sorted_players.first)
+            save!
         end
     end
 
@@ -49,8 +51,8 @@ class Game < ApplicationRecord
         broadcast!
     end
 
-    def end_turn!(next_player: current_player.next_player)
-        update! current_player: current_player.next_player
+    def end_turn!
+        update! current_turn: current_turn.build_next_turn
     end
 
     private

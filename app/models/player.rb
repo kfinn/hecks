@@ -4,10 +4,14 @@ class Player < ApplicationRecord
     belongs_to :game
     belongs_to :user
     belongs_to :ordering_roll, class_name: 'Roll', optional: true
-    belongs_to :initial_settlement, class_name: 'Settlement', optional: true
-    belongs_to :initial_road, class_name: 'Road', optional: true
-    belongs_to :initial_second_settlement, class_name: 'Settlement', optional: true
-    belongs_to :initial_second_road, class_name: 'Road', optional: true
+
+    has_one :initial_setup_turn
+    has_one :initial_settlement, through: :initial_setup_turn, source: :settlement
+    has_one :initial_road, through: :initial_setup_turn, source: :road
+
+    has_one :initial_second_setup_turn
+    has_one :initial_second_settlement, through: :initial_second_setup_turn, source: :settlement
+    has_one :initial_second_road, through: :initial_second_setup_turn, source: :road
 
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
@@ -22,6 +26,9 @@ class Player < ApplicationRecord
     scope :without_initial_second_road, -> { where(initial_second_road: nil) }
     scope :without_initial_second_setup, -> { without_initial_second_settlement.or(without_initial_second_road) }
 
+    delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
+    delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
+
     def build_distinct_ordering_roll
         existing_ordering_roll_values = game.players.map(&:ordering_roll_value)
         build_ordering_roll
@@ -32,11 +39,11 @@ class Player < ApplicationRecord
     end
 
     def next_player
-        later_players.ordered.first || game.players.ordered.first
+        @next_player ||= later_players.ordered.first || game.players.ordered.first
     end
 
     def previous_player
-        earlier_players.ordered.last || game.players.ordered.last
+        @previous_player ||= earlier_players.ordered.last || game.players.ordered.last
     end
 
     def earlier_players
@@ -74,27 +81,6 @@ class Player < ApplicationRecord
             end
         end
         @actions
-    end
-
-    def can_create_initial_settlement?
-        initial_settlement.blank? && earlier_players.without_initial_setup.none?
-    end
-
-    def can_create_initial_road?
-        initial_settlement.present? && initial_road.blank? && earlier_players.without_initial_setup.none?
-    end
-
-    def can_create_initial_second_settlement?
-        initial_second_settlement.blank? &&
-            game.players.without_initial_setup.empty? &&
-            later_players.without_initial_second_setup.empty?
-    end
-
-    def can_create_initial_second_road?
-        initial_second_settlement.present? &&
-            initial_second_road.blank? &&
-            game.players.without_initial_setup.empty? &&
-            later_players.without_initial_second_setup.empty?
     end
 
     def collect_resource(resource, amount=1)

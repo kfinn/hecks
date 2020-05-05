@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resource :current_user, only: :update
       resources :games, only: :show do
         resource :game_start, only: :create
+        resources :production_rolls, only: :create
       end
       resources :corners, only: [] do
         resource :initial_settlement, only: :create

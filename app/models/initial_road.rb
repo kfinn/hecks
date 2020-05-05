@@ -59,8 +59,6 @@ class InitialRoad
     end
 
     def update_game!
-        if player.later_players.any?
-            game.end_turn!
-        end
+        game.end_turn!
     end
 end

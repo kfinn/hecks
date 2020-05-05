@@ -8,7 +8,7 @@ class Api::V1::InitialRoadsController < Api::ApiController
             initial_road.save!
             head :created
         else
-            render status: :unprocessable_entity, partial: 'errors/errors', locals: { errors: initial_road.errors }
+            render_errors_for initial_road
         end
     end
 end

@@ -8,7 +8,7 @@ class Api::V1::InitialSecondRoadsController < Api::ApiController
             initial_second_road.save!
             head :created
         else
-            render status: :unprocessable_entity, partial: 'errors/errors', locals: { errors: initial_second_road.errors }
+            render_errors_for errors
         end
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_05_134120) do
+ActiveRecord::Schema.define(version: 2020_05_05_150452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 2020_05_05_134120) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "key", null: false
     t.datetime "started_at"
-    t.bigint "current_player_id"
-    t.index ["current_player_id"], name: "index_games_on_current_player_id"
+    t.bigint "current_turn_id"
+    t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -48,20 +48,12 @@ ActiveRecord::Schema.define(version: 2020_05_05_134120) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "ordering_roll_id"
     t.integer "ordering"
-    t.bigint "initial_settlement_id"
-    t.bigint "initial_road_id"
-    t.bigint "initial_second_settlement_id"
-    t.bigint "initial_second_road_id"
     t.integer "brick_cards_count", default: 0, null: false
     t.integer "grain_cards_count", default: 0, null: false
     t.integer "lumber_cards_count", default: 0, null: false
     t.integer "ore_cards_count", default: 0, null: false
     t.integer "wool_cards_count", default: 0, null: false
     t.index ["game_id"], name: "index_players_on_game_id"
-    t.index ["initial_road_id"], name: "index_players_on_initial_road_id"
-    t.index ["initial_second_road_id"], name: "index_players_on_initial_second_road_id"
-    t.index ["initial_second_settlement_id"], name: "index_players_on_initial_second_settlement_id"
-    t.index ["initial_settlement_id"], name: "index_players_on_initial_settlement_id"
     t.index ["ordering"], name: "index_players_on_ordering"
     t.index ["ordering_roll_id"], name: "index_players_on_ordering_roll_id"
     t.index ["user_id"], name: "index_players_on_user_id"
@@ -95,6 +87,20 @@ ActiveRecord::Schema.define(version: 2020_05_05_134120) do
 # Could not dump table "territories" because of following StandardError
 #   Unknown type 'territory_terrain_id_type' for column 'terrain_id'
 
+  create_table "turns", force: :cascade do |t|
+    t.string "type", null: false
+    t.bigint "player_id", null: false
+    t.bigint "game_id", null: false
+    t.bigint "settlement_id"
+    t.bigint "road_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_turns_on_game_id"
+    t.index ["player_id"], name: "index_turns_on_player_id"
+    t.index ["road_id"], name: "index_turns_on_road_id"
+    t.index ["settlement_id"], name: "index_turns_on_settlement_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -123,12 +129,12 @@ ActiveRecord::Schema.define(version: 2020_05_05_134120) do
   add_foreign_key "adjacencies", "corners"
   add_foreign_key "adjacencies", "games"
   add_foreign_key "adjacencies", "territories"
-  add_foreign_key "games", "players", column: "current_player_id"
+  add_foreign_key "games", "turns", column: "current_turn_id"
   add_foreign_key "players", "games"
-  add_foreign_key "players", "roads", column: "initial_road_id"
-  add_foreign_key "players", "roads", column: "initial_second_road_id"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"
-  add_foreign_key "players", "settlements", column: "initial_second_settlement_id"
-  add_foreign_key "players", "settlements", column: "initial_settlement_id"
   add_foreign_key "players", "users"
+  add_foreign_key "turns", "games"
+  add_foreign_key "turns", "players"
+  add_foreign_key "turns", "roads"
+  add_foreign_key "turns", "settlements"
 end

@@ -59,8 +59,6 @@ class InitialSecondRoad
     end
 
     def update_game!
-        if player.earlier_players.any?
-            game.end_turn! next_player: player.previous_player
-        end
+        game.end_turn!
     end
 end
