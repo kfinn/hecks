@@ -6,6 +6,7 @@ class Game < ApplicationRecord
     has_many :territories, -> { distinct }, through: :adjacencies
 
     has_many :settlements, -> { distinct }, through: :corners
+    has_many :roads, -> { distinct }, through: :borders
 
     has_many :players
     has_many :users, through: :players

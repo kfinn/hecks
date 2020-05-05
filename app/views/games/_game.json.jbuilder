@@ -1,5 +1,7 @@
 json.(game, :id, :started_at)
 
+current_player = game.players.find_by!(user: current_or_guest_user)
+
 json.territories game.territories do |territory|
     json.(territory, :id, :x, :y,)
     json.terrain do
@@ -22,6 +24,7 @@ json.corners game.corners.includes(settlement: :player) do |corner|
             end
         end
     end
+    json.actions current_player.actions[corner]
 end
 
 json.borders game.borders.includes(road: :player) do |border|
@@ -33,13 +36,14 @@ json.borders game.borders.includes(road: :player) do |border|
             end
         end
     end
+    json.actions current_player.actions[border]
 end
 
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
     json.(player, :id, :ordering)
     json.user do
         json.(player.user, :id, :name)
-        json.is_current_user player.user == current_or_guest_user
+        json.is_current_user current_player == player
     end
     if player.ordering_roll
         json.ordering_roll do
@@ -47,3 +51,4 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
         end
     end
 end
+

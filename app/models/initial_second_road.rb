@@ -1,12 +1,12 @@
-class InitialRoad
+class InitialSecondRoad
     include ActiveModel::Model
     attr_accessor :player, :border
 
     delegate :game, to: :player
 
-    validate :player_must_be_able_to_create_initial_road
+    validate :player_must_be_able_to_create_initial_second_road
     validate :road_must_be_valid
-    validate :road_must_connect_to_initial_settlement
+    validate :road_must_connect_to_initial_second_settlement
 
     def self.border_action_for_player(**kwargs)
         if new(**kwargs).valid?
@@ -24,15 +24,15 @@ class InitialRoad
                 player: player,
                 border: border
             )
-            player.initial_road = @road
+            player.initial_second_road = @road
         end
         @road
     end
 
     private
 
-    def player_must_be_able_to_create_initial_road
-        errors[:player] << 'cannot create initial road' unless player.can_create_initial_road?
+    def player_must_be_able_to_create_initial_second_road
+        errors[:player] << 'cannot create initial second road' unless player.can_create_initial_second_road?
     end
 
     def road_must_be_valid
@@ -43,10 +43,10 @@ class InitialRoad
         end
     end
 
-    def road_must_connect_to_initial_settlement
-        if player.initial_settlement && border.corners.include?(player.initial_settlement.corner)
+    def road_must_connect_to_initial_second_settlement
+        if player.initial_second_settlement && border.corners.include?(player.initial_second_settlement.corner)
             return
         end
-        errors[:border] << 'must connect to initial settlement'
+        errors[:border] << 'must connect to initial second settlement'
     end
 end

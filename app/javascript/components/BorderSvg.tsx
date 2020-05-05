@@ -1,5 +1,5 @@
 import React from 'react';
-import { Border } from '../models/Border';
+import { Border, BorderAction } from '../models/Border';
 import { TERRITORY_RADIUS } from './TerritorySvg';
 import { positionToScreenX, positionToScreenY } from '../models/Position';
 import Api from '../models/Api';
@@ -12,11 +12,21 @@ function borderCenterY(border: Border) {
     return positionToScreenY(border) * 2 * TERRITORY_RADIUS
 }
 
+const BORDER_ACTIONS = {
+    [BorderAction.CreateInitialRoad]: async ({ id }: Border) => {
+        return await Api.post(`borders/${id}/initial_road.json`)
+    },
+    [BorderAction.CreateInitialSecondRoad]: async ({ id }: Border) => {
+        return await Api.post(`borders/${id}/initial_second_road.json`)
+    }
+}
+
 export default function BorderSvg({ border }: { border: Border }) {
+    const action = BORDER_ACTIONS[border.actions[0]]
     const createInitialRoad = () => {
         const asyncCreateInitialRoad = async () => {
             try{
-                await Api.post(`borders/${border.id}/initial_road.json`)
+                await action(border)
             } catch (error) {
                 console.log(error.response)
             }
@@ -25,12 +35,20 @@ export default function BorderSvg({ border }: { border: Border }) {
         asyncCreateInitialRoad()
     }
 
+    const classNames = ['border']
+    if (border.road) {
+        classNames.push('with-road')
+    }
+    if (action) {
+        classNames.push('has-action')
+    }
+
     return <rect
         x={borderCenterX(border) - 4}
         y={borderCenterY(border) - 4}
         width="8"
         height="8"
-        onClick={createInitialRoad}
-        className={`border ${border.road ? 'with-road' : ''}`}
+        onClick={action ? createInitialRoad : null}
+        className={classNames.join(' ')}
     />
 }

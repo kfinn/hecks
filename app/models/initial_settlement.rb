@@ -4,8 +4,7 @@ class InitialSettlement
 
     delegate :game, to: :player
 
-    validate :player_must_not_already_have_initial_settlement
-    validate :must_be_players_turn
+    validate :player_must_be_able_to_create_initial_settlement
     validate :settlement_must_be_valid
 
     def save
@@ -25,13 +24,8 @@ class InitialSettlement
 
     private
 
-    def player_must_not_already_have_initial_settlement
-        errors[:player] << 'must not already have an initial settlement' if player.initial_settlement.present?
-    end
-
-    def must_be_players_turn
-        earlier_players_without_initial_setup = player.earlier_players.without_initial_setup
-        errors[:player] << "must be this player's turn" if earlier_players_without_initial_setup.any?
+    def player_must_be_able_to_create_initial_settlement
+        errors[:player] << 'cannot create initial settlement' unless player.can_create_initial_settlement?
     end
 
     def settlement_must_be_valid

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Corner } from '../models/Corner';
-import { TERRITORY_RADIUS } from './TerritorySvg';
-import { positionToScreenX, positionToScreenY } from '../models/Position';
 import Api from '../models/Api';
+import { Corner, CornerAction } from '../models/Corner';
+import { positionToScreenX, positionToScreenY } from '../models/Position';
+import { TERRITORY_RADIUS } from './TerritorySvg';
 
 function cornerCenterX(corner: Corner) {
     return positionToScreenX(corner) * 2 * TERRITORY_RADIUS
@@ -12,11 +12,21 @@ function cornerCenterY(corner: Corner) {
     return positionToScreenY(corner) * 2 * TERRITORY_RADIUS
 }
 
+const CORNER_ACTIONS = {
+    [CornerAction.CreateInitialSettlement]: async ({ id }: Corner) => {
+        return await Api.post(`corners/${id}/initial_settlement.json`)
+    },
+    [CornerAction.CreateInitialSecondSettlement]: async ({ id }: Corner) => {
+        return await Api.post(`corners/${id}/initial_second_settlement.json`)
+    }
+}
+
 export default function CornerSvg({ corner }: { corner: Corner }) {
-    const createInitialSettlement = () => {
+    const action = CORNER_ACTIONS[corner.actions[0]]
+    const onClick = () => {
         const asyncCreateInitialSettlement = async () => {
             try {
-                await Api.post(`corners/${corner.id}/initial_settlement.json`)
+                await action(corner)
             } catch (error) {
                 console.log(error.response)
             }
@@ -25,11 +35,19 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
         asyncCreateInitialSettlement()
     }
 
+    let classNames = ['corner']
+    if (corner.settlement) {
+        classNames.push('with-settlement')
+    }
+    if (action) {
+        classNames.push('has-action')
+    }
+
     return <circle
         cx={cornerCenterX(corner)}
         cy={cornerCenterY(corner)}
         r="5"
-        onClick={createInitialSettlement}
-        className={`corner ${corner.settlement ? 'with-settlement' : ''}`}
+        onClick={action ? onClick : null}
+        className={classNames.join(' ')}
     />
 }

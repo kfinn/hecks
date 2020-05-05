@@ -10,4 +10,8 @@ class Corner < ApplicationRecord
     has_one :settlement
 
     validates :x, :y, presence: true
+
+    def self.available_for_settlement
+        where.not(id: Settlement.all.joins(:neighboring_corners).select('corners.id'))
+    end
 end

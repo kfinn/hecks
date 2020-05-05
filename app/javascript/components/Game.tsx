@@ -47,8 +47,11 @@ export default function Game(props: GameProps) {
         event.preventDefault()
 
         const startAsync = async () => {
-            const response = await Api.post(`games/${game.id}/game_start`)
-            console.log(response)
+            try {
+                await Api.post(`games/${game.id}/game_start`)
+            } catch (error) {
+                console.log(error.response)
+            }
         }
         startAsync()
     }
