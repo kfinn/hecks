@@ -18,6 +18,9 @@ const BORDER_ACTIONS = {
     },
     [BorderAction.CreateInitialSecondRoad]: async ({ id }: Border) => {
         return await Api.post(`borders/${id}/initial_second_road.json`)
+    },
+    [BorderAction.CreateRoadPurchase]: async ({ id }: Border) => {
+        return await Api.post(`borders/${id}/road_purchase.json`)
     }
 }
 

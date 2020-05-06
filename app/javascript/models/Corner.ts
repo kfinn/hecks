@@ -2,7 +2,8 @@ import { Settlement } from "./Settlement";
 
 export enum CornerAction {
     CreateInitialSettlement = 'InitialSettlement#create',
-    CreateInitialSecondSettlement = 'InitialSecondSettlement#create'
+    CreateInitialSecondSettlement = 'InitialSecondSettlement#create',
+    CreateSettlementPurchase = 'SettlementPurchase#create'
 }
 
 export interface Corner {

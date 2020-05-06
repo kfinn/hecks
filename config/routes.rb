@@ -17,10 +17,12 @@ Rails.application.routes.draw do
       resources :corners, only: [] do
         resource :initial_settlement, only: :create
         resource :initial_second_settlement, only: :create
+        resource :settlement_purchase, only: :create
       end
       resources :borders, only: [] do
         resource :initial_road, only: :create
         resource :initial_second_road, only: :create
+        resource :road_purchase, only: :create
       end
     end
   end

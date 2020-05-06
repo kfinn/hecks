@@ -2,7 +2,8 @@ import { Road } from "./Road";
 
 export enum BorderAction {
     CreateInitialRoad = 'InitialRoad#create',
-    CreateInitialSecondRoad = 'InitialSecondRoad#create'
+    CreateInitialSecondRoad = 'InitialSecondRoad#create',
+    CreateRoadPurchase = 'RoadPurchase#create'
 }
 
 export interface Border {

@@ -18,6 +18,9 @@ const CORNER_ACTIONS = {
     },
     [CornerAction.CreateInitialSecondSettlement]: async ({ id }: Corner) => {
         return await Api.post(`corners/${id}/initial_second_settlement.json`)
+    },
+    [CornerAction.CreateSettlementPurchase]: async ({ id }: Corner) => {
+        return await Api.post(`corners/${id}/settlement_purchase.json`)
     }
 }
 

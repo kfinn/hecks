@@ -14,4 +14,8 @@ class Corner < ApplicationRecord
     def self.available_for_settlement
         where.not(id: Settlement.all.joins(:neighboring_corners).select('corners.id'))
     end
+
+    def self.reachable_by(player)
+        where(id: player.roads.joins(:corners).select('corners.id'))
+    end
 end
