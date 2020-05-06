@@ -35,7 +35,7 @@ class Player < ApplicationRecord
 
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
-    delegate :can_create_production_roll?, to: :current_repeating_turn, allow_nil: true
+    delegate :can_create_production_roll?, :can_end_turn?, to: :current_repeating_turn, allow_nil: true
 
     delegate :corner_actions, :border_actions, :dice_actions, to: :actions
 

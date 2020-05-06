@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :games, only: :show do
         resource :game_start, only: :create
         resources :production_rolls, only: :create
+        resources :repeating_turn_ends, only: :create
       end
       resources :corners, only: [] do
         resource :initial_settlement, only: :create

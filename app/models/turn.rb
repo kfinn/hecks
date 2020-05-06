@@ -1,4 +1,6 @@
 class Turn < ApplicationRecord
+    include GameChanging
+
     belongs_to :player
     belongs_to :game
 

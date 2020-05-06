@@ -60,7 +60,7 @@ class Game < ApplicationRecord
 
     def latest_roll
         unless instance_variable_defined?(:@latest_roll)
-            @latest_roll = rolls.order(created_at: :desc).last
+            @latest_roll = rolls.order(created_at: :desc).first
         end
         @latest_roll
     end

@@ -2,26 +2,28 @@ import React from 'react';
 import { DiceAction } from '../models/Dice';
 import { Game } from '../models/Game';
 import Api from '../models/Api';
+import _ from 'lodash';
 
 const DICE_ACTIONS = {
-    [DiceAction.CreateProductionRoll]: async ({ id }: Game) => {
-        Api.post(`games/${id}/production_rolls.json`)
+    [DiceAction.CreateProductionRoll]: {
+        action: DiceAction.CreateProductionRoll,
+        name: 'Roll',
+        onClick: async ({ id }: Game) => {
+            return await Api.post(`games/${id}/production_rolls.json`)
+        }
+    },
+    [DiceAction.EndTurn]: {
+        action: DiceAction.EndTurn,
+        name: 'End Turn',
+        onClick: async({ id }: Game) => {
+            return await Api.post(`games/${id}/repeating_turn_ends.json`)
+        }
     }
 }
 
 export default function Dice({ game }: { game: Game }) {
     const { latestRoll, diceActions } = game.dice
-    const action = DICE_ACTIONS[diceActions[0]]
-    const onClick = action ? (() => {
-        const asyncOnClick = async () => {
-            try {
-                await action(game)
-            } catch(error) {
-                console.log(error.response)
-            }
-        }
-        asyncOnClick()
-    }) : null
+    const actions = _.compact(_.map(diceActions, (action) => DICE_ACTIONS[action]))
 
     let die1Value = '?'
     let die2Value = '?'
@@ -34,7 +36,11 @@ export default function Dice({ game }: { game: Game }) {
         <React.Fragment>
         <h2>Dice</h2>
         <p>({die1Value}, {die2Value})</p>
-        <button onClick={onClick} disabled={!action}>Roll</button>
+        {
+            _.map(actions, ({ action, name, onClick }) => (
+                <button key={action} onClick={() => { onClick(game) }}>{name}</button>
+            ))
+        }
         </React.Fragment>
     )
 }

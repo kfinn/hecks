@@ -1,6 +1,4 @@
 class Roll < ApplicationRecord
-    POSSIBLE_DIE_VALUES = [1, 2, 3, 4, 5, 6]
-
     after_initialize :roll!
 
     def value

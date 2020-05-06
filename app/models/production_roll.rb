@@ -24,7 +24,7 @@ class ProductionRoll
 
     def collect_resources!
         if production_number.present?
-            game.territories.where(production_number: production_number).includes(:settlements).each do |territory|
+            game.territories.where(production_number_id: production_number.id).includes(:settlements).each do |territory|
                 if territory.resource.present?
                     territory.settlements.map(&:player).each do |player|
                         player.collect_resource(territory.resource)
