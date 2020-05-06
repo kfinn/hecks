@@ -4,10 +4,12 @@ import { Corner } from './Corner';
 import { Border } from './Border';
 import { Hand } from './Hand';
 import { Dice } from './Dice';
+import { Status } from './Status';
 
 export interface Game {
     id: number
     startedAt: string
+    status: Status
     territories: Territory[]
     corners: Corner[]
     borders: Border[]

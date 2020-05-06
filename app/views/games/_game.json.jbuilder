@@ -2,6 +2,20 @@ json.(game, :id, :started_at)
 
 current_player = game.players.find_by!(user: current_or_guest_user)
 
+json.status do
+    if game.current_turn
+        if game.current_turn.player == current_player
+            json.actor 'you'
+        else
+            json.actor game.current_turn.player.name
+        end
+        json.description  game.current_turn.description
+    else
+        json.actor 'someone'
+        json.description 'start the game'
+    end
+end
+
 json.territories game.territories do |territory|
     json.(territory, :id, :x, :y,)
     json.terrain do

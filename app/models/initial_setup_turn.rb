@@ -4,6 +4,14 @@ class InitialSetupTurn < Turn
 
     validates :player, uniqueness: true
 
+    def description
+        if settlement.blank?
+            'build an initial settlement'
+        else
+            'build an initial road'
+        end
+    end
+
     def actions
         ActionCollection.new.tap do |action_collection|
             if can_create_initial_settlement?
