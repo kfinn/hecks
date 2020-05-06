@@ -3,6 +3,7 @@ import { Border, BorderAction } from '../models/Border';
 import { TERRITORY_RADIUS } from './TerritorySvg';
 import { positionToScreenX, positionToScreenY } from '../models/Position';
 import Api from '../models/Api';
+import { colorClassName } from '../models/Color';
 
 function borderCenterX(border: Border) {
     return positionToScreenX(border) * 2 * TERRITORY_RADIUS
@@ -39,8 +40,9 @@ export default function BorderSvg({ border }: { border: Border }) {
     }) : null
 
     const classNames = ['border']
-    if (border.road) {
-        classNames.push('with-road')
+    const road = border.road
+    if (road) {
+        classNames.push(colorClassName(road.color))
     }
     if (action) {
         classNames.push('has-action')

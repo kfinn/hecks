@@ -1,5 +1,5 @@
-import { Player } from "./Player";
+import { Color } from "./Color";
 
 export interface Settlement {
-    player: Player
+    color: Color
 }

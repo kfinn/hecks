@@ -13,6 +13,8 @@ class Road < ApplicationRecord
     validate :must_connect_to_road_or_settlement
     validate :game_must_be_started
 
+    delegate :color, to: :player
+
     def must_connect_to_road_or_settlement
         if settlements.where(player: player).any?
             return

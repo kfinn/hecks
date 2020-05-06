@@ -3,6 +3,7 @@ import Api from '../models/Api';
 import { Corner, CornerAction } from '../models/Corner';
 import { positionToScreenX, positionToScreenY } from '../models/Position';
 import { TERRITORY_RADIUS } from './TerritorySvg';
+import { colorClassName } from '../models/Color';
 
 function cornerCenterX(corner: Corner) {
     return positionToScreenX(corner) * 2 * TERRITORY_RADIUS
@@ -39,8 +40,9 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
     }) : null
 
     let classNames = ['corner']
-    if (corner.settlement) {
-        classNames.push('with-settlement')
+    const settlement = corner.settlement
+    if (settlement) {
+        classNames.push(colorClassName(corner.settlement.color))
     }
     if (action) {
         classNames.push('has-action')

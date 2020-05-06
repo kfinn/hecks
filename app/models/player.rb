@@ -20,6 +20,8 @@ class Player < ApplicationRecord
 
     has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
 
+    belongs_to_active_hash :color
+
     delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 
@@ -40,6 +42,7 @@ class Player < ApplicationRecord
     delegate :corner_actions, :border_actions, :dice_actions, to: :actions
 
     validates :brick_cards_count, :grain_cards_count, :lumber_cards_count, :ore_cards_count, :wool_cards_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+    validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
 
     def build_distinct_ordering_roll
         existing_ordering_roll_values = game.players.map(&:ordering_roll_value)

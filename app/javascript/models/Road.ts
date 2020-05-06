@@ -1,5 +1,5 @@
-import { Player } from "./Player";
+import { Color } from "./Color";
 
 export interface Road {
-    player: Player
+    color: Color
 }

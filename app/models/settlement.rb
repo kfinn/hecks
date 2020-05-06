@@ -12,6 +12,8 @@ class Settlement < ApplicationRecord
     validate :must_not_be_adjacent_to_another_settlement
     validate :game_must_be_started
 
+    delegate :color, to: :player
+
     def must_not_be_adjacent_to_another_settlement
         other_neighboring_settlements = corner.neighboring_settlements - [self]
         if other_neighboring_settlements.any?
