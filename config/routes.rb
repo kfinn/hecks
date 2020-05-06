@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :current_user, only: :update
       resources :games, only: :show do
+        resource :current_player, only: :update
         resource :game_start, only: :create
         resources :production_rolls, only: :create
         resources :repeating_turn_ends, only: :create

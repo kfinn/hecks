@@ -63,7 +63,7 @@ export default function Game(props: GameProps) {
             <h1>Game</h1>
             <a href="#" onClick={onRefreshClicked}>Refresh</a>
             {gameIsStarted(game) ? null : <button onClick={onStartClicked}>Start Game</button>}
-            <PlayerList players={game.players} />
+            <PlayerList game={game} />
             <BoardSvg game={game} />
             <Hand hand={game.hand} />
             <Dice game={game} />

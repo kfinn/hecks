@@ -1,40 +1,55 @@
 import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
-import { Player, playerName, playerOrderingRollDescription } from '../models/Player';
+import { Game } from '../models/Game';
+import { Player, playerColor, playerName, playerOrderingRollDescription } from '../models/Player';
+import { Color } from '../models/Color';
 
-function CurrentUserPlayer({ player }: { player: Player }) {
+function CurrentUserPlayer({ game, player }: { game: Game, player: Player }) {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState(playerName(player))
 
-    const onSubmit = (event: { preventDefault: () => void; }) => {
+    const onSubmitName = (event: { preventDefault: () => void; }) => {
         event.preventDefault()
         setEditing(false)
 
-        const onSubmitAsync = async () => {
-            const response = await Api.put(
+        const onSubmitNameAsync = async () => {
+            return await Api.put(
                 'current_user.json',
-                {
-                    currentUser: { name }
-                },
-                { responseType: 'json' }
+                { currentUser: { name } }
             )
         }
 
-        onSubmitAsync()
+        onSubmitNameAsync()
+    }
+
+    const onColorChange = ({ target: { value }}) => {
+        const submitColorAsync = async () => {
+            return await Api.put(
+                `games/${game.id}/current_player.json`,
+                { currentPlayer: { colorId: value } }
+            )
+        }
+
+        submitColorAsync()
     }
 
     if (editing) {
         return <span>
-            <form>
-                <input type="text" onChange={({ target: { value } }) => setName(value)} value={name} />
-                <input type="submit" value="Save" onClick={onSubmit} />
-            </form>
+            <input type="text" onChange={({ target: { value } }) => setName(value)} value={name} />
+            <select value={playerColor(player)} onChange={onColorChange}>
+                {
+                    _.map(Object.keys(Color), (colorName) => (
+                        <option key={Color[colorName]} value={Color[colorName]}>{colorName}</option>
+                    ))
+                }
+            </select>
+            <input type="submit" value="Save" onClick={onSubmitName} />
             <a href="#" onClick={(e) => { e.preventDefault(); setEditing(false) }}>Cancel</a>
         </span>
     } else {
         return <span>
-            <ReadOnlyPlayer player={player} />
+            <ReadOnlyPlayer player={player}/>
             <a href="#" onClick={(e) => { e.preventDefault(); setEditing(true) }}>Edit</a>
         </span>
     }
@@ -42,15 +57,16 @@ function CurrentUserPlayer({ player }: { player: Player }) {
 
 function ReadOnlyPlayer({ player }: { player: Player }) {
     return <span>
-        {playerName(player)} {playerOrderingRollDescription(player)}
+        {playerName(player)} - {playerColor(player)} - {playerOrderingRollDescription(player)}
     </span>
 }
 
 export interface PlayerListProps {
-    players: Player[]
+    game: Game
 }
 
-export default function PlayerList({ players }: PlayerListProps) {
+export default function PlayerList({ game }: PlayerListProps) {
+    const players = game.players
     return (
         <React.Fragment>
             <h2>Players</h2>
@@ -59,7 +75,7 @@ export default function PlayerList({ players }: PlayerListProps) {
                     _.map(players, (player) => {
                         return <li key={player.id}>
                             {
-                                player.user.isCurrentUser ? <CurrentUserPlayer player={player} /> : <ReadOnlyPlayer player={player} />
+                                player.user.isCurrentUser ? <CurrentUserPlayer game={game} player={player} /> : <ReadOnlyPlayer player={player} />
                             }
                         </li>
                     })

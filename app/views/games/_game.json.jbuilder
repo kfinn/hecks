@@ -46,6 +46,7 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
             json.(player.ordering_roll, :die_1_value, :die_2_value, :value)
         end
     end
+    json.color player.color.id
 end
 
 json.hand do

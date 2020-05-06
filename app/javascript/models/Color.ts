@@ -6,6 +6,5 @@ export enum Color {
 }
 
 export function colorClassName(color: Color) {
-    console.log(color)
     return color.toString()
 }
