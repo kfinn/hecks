@@ -1,4 +1,9 @@
 import React from 'react';
+import BrickIcon from '../images/brick.svg';
+import GrainIcon from '../images/grain.svg';
+import LumberIcon from '../images/lumber.svg';
+import OreIcon from '../images/ore.svg';
+import WoolIcon from '../images/wool.svg';
 import { Hand } from '../models/Hand';
 
 export default function Hand({ hand }: { hand: Hand }) {
@@ -6,11 +11,11 @@ export default function Hand({ hand }: { hand: Hand }) {
         <React.Fragment>
             <h2>Hand</h2>
             <ul>
-                <li><img className="hand-icon" src={require('../images/brick.svg')} /> {hand.brickCardsCount}</li>
-                <li><img className="hand-icon" src={require('../images/grain.svg')} /> {hand.grainCardsCount}</li>
-                <li><img className="hand-icon" src={require('../images/lumber.svg')} /> {hand.lumberCardsCount}</li>
-                <li><img className="hand-icon" src={require('../images/ore.svg')} /> {hand.oreCardsCount}</li>
-                <li><img className="hand-icon" src={require('../images/wool.svg')} /> {hand.woolCardsCount}</li>
+                <li><img className="hand-icon" src={BrickIcon} /> {hand.brickCardsCount}</li>
+                <li><img className="hand-icon" src={GrainIcon} /> {hand.grainCardsCount}</li>
+                <li><img className="hand-icon" src={LumberIcon} /> {hand.lumberCardsCount}</li>
+                <li><img className="hand-icon" src={OreIcon} /> {hand.oreCardsCount}</li>
+                <li><img className="hand-icon" src={WoolIcon} /> {hand.woolCardsCount}</li>
             </ul>
         </React.Fragment>
     )

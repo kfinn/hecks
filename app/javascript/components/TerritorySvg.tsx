@@ -1,8 +1,14 @@
 import _ from 'lodash';
 import React from 'react';
+import BrickIcon from '../images/brick.svg';
+import GrainIcon from '../images/grain.svg';
+import LumberIcon from '../images/lumber.svg';
+import OreIcon from '../images/ore.svg';
+import WoolIcon from '../images/wool.svg';
+import { positionToScreenX, positionToScreenY } from '../models/Position';
 import { TerrainId } from '../models/Terrain';
 import { ProductionTerritory, Territory, territoryIsDesert } from '../models/Territory';
-import { positionToScreenX, positionToScreenY } from '../models/Position';
+
 
 export const TERRITORY_RADIUS = 50
 export const HEX_RADIUS = 42
@@ -34,11 +40,11 @@ function territoryPolygonPoints(territory: Territory) {
 }
 
 const TERRAIN_ICONS_BY_TERRAIN_ID = {
-    [TerrainId.Fields]: require('../images/grain.svg'),
-    [TerrainId.Pasture]: require('../images/wool.svg'),
-    [TerrainId.Forest]: require('../images/lumber.svg'),
-    [TerrainId.Mountains]: require('../images/ore.svg'),
-    [TerrainId.Hills]: require('../images/brick.svg')
+    [TerrainId.Fields]: GrainIcon,
+    [TerrainId.Pasture]: WoolIcon,
+    [TerrainId.Forest]: LumberIcon,
+    [TerrainId.Mountains]: OreIcon,
+    [TerrainId.Hills]: BrickIcon
 }
 
 export interface TerritorySvgProps {

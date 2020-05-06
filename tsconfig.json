@@ -17,5 +17,6 @@
     "vendor",
     "public"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "files": ["typings/index.d.ts"]
 }
