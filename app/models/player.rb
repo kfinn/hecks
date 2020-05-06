@@ -44,6 +44,8 @@ class Player < ApplicationRecord
     validates :brick_cards_count, :grain_cards_count, :lumber_cards_count, :ore_cards_count, :wool_cards_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
 
+    before_validation :assign_color, on: :create
+
     def build_distinct_ordering_roll
         existing_ordering_roll_values = game.players.map(&:ordering_roll_value)
         build_ordering_roll
@@ -77,5 +79,12 @@ class Player < ApplicationRecord
         attribute_name = "#{resource.name}_cards_count"
         current_resource_cards_count = send(attribute_name)
         send("#{attribute_name}=", current_resource_cards_count + amount)
+    end
+
+    private
+
+    def assign_color
+        used_colors = game.players.map(&:color)
+        self.color = (Color.all.to_a - used_colors).first
     end
 end
