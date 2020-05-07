@@ -5,11 +5,11 @@ import { positionToScreenX, positionToScreenY } from '../models/Position';
 import { TERRITORY_RADIUS } from './TerritorySvg';
 import { colorClassName } from '../models/Color';
 
-function cornerCenterX(corner: Corner) {
+export function cornerCenterX(corner: Corner) {
     return positionToScreenX(corner) * 2 * TERRITORY_RADIUS
 }
 
-function cornerCenterY(corner: Corner) {
+export function cornerCenterY(corner: Corner) {
     return positionToScreenY(corner) * 2 * TERRITORY_RADIUS
 }
 

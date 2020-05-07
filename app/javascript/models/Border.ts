@@ -1,4 +1,5 @@
 import { Road } from "./Road";
+import { Corner } from './Corner';
 
 export enum BorderAction {
     CreateInitialRoad = 'InitialRoad#create',
@@ -11,5 +12,6 @@ export interface Border {
     x: number
     y: number
     road?: Road
+    corners: Corner[]
     borderActions: BorderAction[]
 }

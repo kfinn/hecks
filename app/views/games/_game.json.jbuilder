@@ -48,12 +48,15 @@ json.corners game.corners.includes(settlement: :player) do |corner|
     json.corner_actions current_player.corner_actions[corner]
 end
 
-json.borders game.borders.includes(road: :player) do |border|
+json.borders game.borders.includes(road: [:player], corners: []) do |border|
     json.(border, :id, :x, :y)
     if border.road
         json.road do
             json.color border.road.color.id
         end
+    end
+    json.corners border.corners do |corner|
+        json.(corner, :x, :y)
     end
     json.border_actions current_player.border_actions[border]
 end

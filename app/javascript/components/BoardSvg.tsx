@@ -18,10 +18,10 @@ export default function BoardSvg({ game }: BoardSvgProps) {
                     _.map(game.territories, (territory) => <TerritorySvg key={territory.id} territory={territory} />)
                 }
                 {
-                    _.map(game.corners, (corner) => <CornerSvg key={corner.id} corner={corner} />)
+                    _.map(game.borders, (border) => <BorderSvg key={border.id} border={border} />)
                 }
                 {
-                    _.map(game.borders, (border) => <BorderSvg key={border.id} border={border} />)
+                    _.map(game.corners, (corner) => <CornerSvg key={corner.id} corner={corner} />)
                 }
             </svg>
         </React.Fragment>
