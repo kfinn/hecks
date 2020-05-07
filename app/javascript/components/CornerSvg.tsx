@@ -48,11 +48,19 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
         classNames.push('has-action')
     }
 
-    return <circle
-        cx={cornerCenterX(corner)}
-        cy={cornerCenterY(corner)}
-        r="5"
-        onClick={onClick}
-        className={classNames.join(' ')}
-    />
+    const sharedProps = {onClick, className: classNames.join(' ' ) }
+
+    if (settlement) {
+        return <path
+            d={`M${cornerCenterX(corner) - 5} ${cornerCenterY(corner) + 5} l0 -6 l5 -4 l5 4 l0 6 z`}
+            {...sharedProps}
+        />
+    } else {
+        return <circle
+            cx={cornerCenterX(corner)}
+            cy={cornerCenterY(corner)}
+            r="5"
+            {...sharedProps}
+        />
+    }
 }
