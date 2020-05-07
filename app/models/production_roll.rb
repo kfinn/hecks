@@ -24,14 +24,16 @@ class ProductionRoll
 
     def collect_resources!
         if production_number.present?
+            updated_players_by_id = Hash.new { |hash, player_id| hash[player_id] = game.players.find(player_id) }
             game.territories.without_robber.where(production_number_id: production_number.id).includes(:settlements).each do |territory|
                 if territory.resource.present?
                     territory.settlements.each do |settlement|
-                        settlement.player.collect_resource(territory.resource, settlement.resource_cards_per_production_roll)
-                        settlement.player.save!
+                        player = updated_players_by_id[settlement.player.id]
+                        player.collect_resource(territory.resource, settlement.resource_cards_per_production_roll)
                     end
                 end
             end
+            updated_players_by_id.values.each(&:save!)
         end
     end
 
