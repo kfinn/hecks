@@ -16,10 +16,18 @@ json.status do
     end
 end
 
+json.bank_offers current_player.bank_offers do |bank_offer|
+    json.resource_to_give do
+        json.id bank_offer.resource_to_give.id
+    end
+    json.(bank_offer, :resource_to_give_count_required)
+    json.bank_offer_actions current_player.bank_offer_actions[bank_offer]
+end
+
 json.territories game.territories do |territory|
     json.(territory, :id, :x, :y,)
     json.terrain do
-        json.(territory.terrain, :id, :name)
+        json.id territory.terrain.id
     end
 
     unless territory.desert?

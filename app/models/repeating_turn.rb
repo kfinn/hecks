@@ -30,6 +30,12 @@ class RepeatingTurn < Turn
                     action_collection.border_actions[border] << 'RoadPurchase#create'
                 end
             end
+
+            if can_trade?
+                player.bank_offers.each do |bank_offer|
+                    action_collection.bank_offer_actions[bank_offer] << 'BankTrade#create' if bank_offer.affordable?
+                end
+            end
         end
     end
 
@@ -66,6 +72,7 @@ class RepeatingTurn < Turn
     def can_purchase?
         current? && active? && roll.present?
     end
+    alias can_trade? can_purchase?
 
     def build_next_turn
         RepeatingTurn.new(game: game, player: player.next_player)

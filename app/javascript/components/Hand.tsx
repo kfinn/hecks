@@ -1,21 +1,17 @@
 import React from 'react';
-import BrickIcon from '../images/brick.svg';
-import GrainIcon from '../images/grain.svg';
-import LumberIcon from '../images/lumber.svg';
-import OreIcon from '../images/ore.svg';
-import WoolIcon from '../images/wool.svg';
 import { Hand } from '../models/Hand';
+import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 
 export default function Hand({ hand }: { hand: Hand }) {
     return (
         <React.Fragment>
             <h2>Hand</h2>
             <ul>
-                <li><img className="hand-icon" src={BrickIcon} /> {hand.brickCardsCount}</li>
-                <li><img className="hand-icon" src={GrainIcon} /> {hand.grainCardsCount}</li>
-                <li><img className="hand-icon" src={LumberIcon} /> {hand.lumberCardsCount}</li>
-                <li><img className="hand-icon" src={OreIcon} /> {hand.oreCardsCount}</li>
-                <li><img className="hand-icon" src={WoolIcon} /> {hand.woolCardsCount}</li>
+                <li><BrickIcon /> {hand.brickCardsCount}</li>
+                <li><GrainIcon /> {hand.grainCardsCount}</li>
+                <li><LumberIcon /> {hand.lumberCardsCount}</li>
+                <li><OreIcon /> {hand.oreCardsCount}</li>
+                <li><WoolIcon /> {hand.woolCardsCount}</li>
             </ul>
         </React.Fragment>
     )

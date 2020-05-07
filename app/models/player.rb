@@ -37,9 +37,9 @@ class Player < ApplicationRecord
 
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
-    delegate :can_create_production_roll?, :can_end_turn?, :can_purchase_settlement?, :can_purchase_road?, to: :current_repeating_turn, allow_nil: true
+    delegate :can_create_production_roll?, :can_end_turn?, :can_purchase_settlement?, :can_purchase_road?, :can_trade?, to: :current_repeating_turn, allow_nil: true
 
-    delegate :corner_actions, :border_actions, :dice_actions, to: :actions
+    delegate :corner_actions, :border_actions, :dice_actions, :bank_offer_actions, to: :actions
 
     validates :brick_cards_count, :grain_cards_count, :lumber_cards_count, :ore_cards_count, :wool_cards_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
@@ -75,10 +75,24 @@ class Player < ApplicationRecord
         @actions = current_turn&.actions || ActionCollection.none
     end
 
+    def bank_offers
+        @bank_offers ||= BankOfferCollection.new(player: self)
+    end
+
+    def resource_cards_count(resource)
+        send(resource.player_attribute_name)
+    end
+
     def collect_resource(resource, amount=1)
-        attribute_name = "#{resource.name}_cards_count"
-        current_resource_cards_count = send(attribute_name)
-        send("#{attribute_name}=", current_resource_cards_count + amount)
+        raise 'can only collect a positive number of resource cards' if amount < 1
+        current_resource_cards_count = send(resource.player_attribute_name)
+        send("#{resource.player_attribute_setter_name}", current_resource_cards_count + amount)
+    end
+
+    def remove_resource(resource, amount=1)
+        raise 'can only remove a positive number of resource cards' if amount < 1
+        current_resource_cards_count = send(resource.player_attribute_name)
+        send(resource.player_attribute_setter_name, current_resource_cards_count - amount)
     end
 
     private

@@ -23,21 +23,39 @@ class ActionCollection
         def dice_actions
             EMPTY_ACTIONS
         end
+
+        def bank_offer_actions
+            EmptyActionSubcollection.instance
+        end
     end
 
     def self.none
         EmptyActionCollection.instance
     end
 
+    class ActionSubcollection
+        delegate :[], to: :state
+
+        private
+
+        def state
+            @state ||= Hash.new { |hash, key| hash[key] = Set.new }
+        end
+    end
+
     def border_actions
-        @border_actions ||= Hash.new { |hash, key| hash[key] = [] }
+        @border_actions ||= ActionSubcollection.new
     end
 
     def corner_actions
-        @corner_actions ||= Hash.new { |hash, key| hash[key] = [] }
+        @corner_actions ||= ActionSubcollection.new
     end
 
     def dice_actions
         @dice_actions ||= Set.new
+    end
+
+    def bank_offer_actions
+        @bank_offer_actions ||= ActionSubcollection.new
     end
 end

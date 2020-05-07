@@ -11,12 +11,10 @@ type ProductionTerrainId = TerrainId.Fields | TerrainId.Forest | TerrainId.Hills
 
 export interface ProductionTerrain {
     id: ProductionTerrainId
-    name: string
 }
 
 export interface DesertTerrain {
     id: TerrainId.Desert
-    name: string
 }
 
 export type Terrain = ProductionTerrain | DesertTerrain

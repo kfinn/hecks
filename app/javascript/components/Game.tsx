@@ -8,6 +8,7 @@ import PlayerList from './PlayerList';
 import Hand from './Hand';
 import Dice from './Dice';
 import Status from './Status';
+import BankOfferList from './BankOfferList';
 
 interface GameProps {
     game: Game
@@ -66,9 +67,10 @@ export default function Game(props: GameProps) {
             {gameIsStarted(game) ? null : <button onClick={onStartClicked}>Start Game</button>}
             <Status status={game.status} />
             <PlayerList game={game} />
+            <Dice game={game} />
             <BoardSvg game={game} />
             <Hand hand={game.hand} />
-            <Dice game={game} />
+            <BankOfferList game={game} />
             <h2>Attribution</h2>
             <ul>
                 <li>Brick icon: Created by Ben Davis from the Noun Project</li>
