@@ -22,6 +22,9 @@ const CORNER_ACTIONS = {
     },
     [CornerAction.CreateSettlementPurchase]: async ({ id }: Corner) => {
         return await Api.post(`corners/${id}/settlement_purchase.json`)
+    },
+    [CornerAction.CreateCityUpgradePurchase]: async ({ id }: Corner) => {
+        return await Api.post(`corners/${id}/city_upgrade_purchase.json`)
     }
 }
 
@@ -51,10 +54,17 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
     const sharedProps = {onClick, className: classNames.join(' ' ) }
 
     if (settlement) {
-        return <path
-            d={`M${cornerCenterX(corner) - 5} ${cornerCenterY(corner) + 5} l0 -6 l5 -4 l5 4 l0 6 z`}
-            {...sharedProps}
-        />
+        if (settlement.isCity) {
+            return <path
+                d={`M${cornerCenterX(corner) - 9} ${cornerCenterY(corner) + 7} l0 -9 l5 -5 l5 5 l8 0 l0 9 z`}
+                {...sharedProps}
+            />
+        } else {
+            return <path
+                d={`M${cornerCenterX(corner) - 5} ${cornerCenterY(corner) + 5} l0 -6 l5 -4 l5 4 l0 6 z`}
+                {...sharedProps}
+            />
+        }
     } else {
         return <circle
             cx={cornerCenterX(corner)}

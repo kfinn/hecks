@@ -40,11 +40,10 @@ class SettlementPurchase
     end
 
     def update_player!
-        player.update!(
-            brick_cards_count: player.brick_cards_count - 1,
-            grain_cards_count: player.grain_cards_count - 1,
-            lumber_cards_count: player.lumber_cards_count - 1,
-            wool_cards_count: player.wool_cards_count - 1
-        )
+        player.remove_resource Resource::BRICK
+        player.remove_resource Resource::GRAIN
+        player.remove_resource Resource::LUMBER
+        player.remove_resource Resource::WOOL
+        player.save!
     end
 end

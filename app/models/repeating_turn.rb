@@ -31,6 +31,12 @@ class RepeatingTurn < Turn
                 end
             end
 
+            if can_purchase_city_upgrade?
+                game.corners.available_for_city_upgrade_by(player).each do |corner|
+                    action_collection.corner_actions[corner] << 'CityUpgradePurchase#create'
+                end
+            end
+
             if can_trade?
                 player.bank_offers.each do |bank_offer|
                     action_collection.bank_offer_actions[bank_offer] << 'BankTrade#create' if bank_offer.affordable?
@@ -59,6 +65,12 @@ class RepeatingTurn < Turn
         can_purchase? &&
             player.brick_cards_count >= 1 &&
             player.lumber_cards_count >= 1
+    end
+
+    def can_purchase_city_upgrade?
+        can_purchase? &&
+        player.grain_cards_count >= 2 &&
+            player.ore_cards_count >= 3
     end
 
     def ended?

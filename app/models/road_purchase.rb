@@ -40,9 +40,8 @@ class RoadPurchase
     end
 
     def update_player!
-        player.update!(
-            brick_cards_count: player.brick_cards_count - 1,
-            lumber_cards_count: player.lumber_cards_count - 1
-        )
+        player.remove_resource Resource::BRICK
+        player.remove_resource Resource::LUMBER
+        player.save!
     end
 end

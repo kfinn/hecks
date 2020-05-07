@@ -18,4 +18,8 @@ class Corner < ApplicationRecord
     def self.reachable_by(player)
         where(id: player.roads.joins(:corners).select('corners.id'))
     end
+
+    def self.available_for_city_upgrade_by(player)
+        where(id: player.settlements.without_city_upgrade.select(:corner_id))
+    end
 end

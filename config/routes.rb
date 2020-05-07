@@ -22,6 +22,7 @@ Rails.application.routes.draw do
         resource :initial_settlement, only: :create
         resource :initial_second_settlement, only: :create
         resource :settlement_purchase, only: :create
+        resource :city_upgrade_purchase, only: :create
       end
       resources :borders, only: [] do
         resource :initial_road, only: :create

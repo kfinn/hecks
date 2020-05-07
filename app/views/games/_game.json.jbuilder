@@ -42,6 +42,7 @@ json.corners game.corners.includes(settlement: :player) do |corner|
     if corner.settlement
         json.settlement do
             json.color corner.settlement.color.id
+            json.is_city corner.settlement.city?
         end
     end
     json.corner_actions current_player.corner_actions[corner]
