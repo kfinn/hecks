@@ -29,6 +29,9 @@ Rails.application.routes.draw do
         resource :initial_second_road, only: :create
         resource :road_purchase, only: :create
       end
+      resources :territories, only: [] do
+        resources :robber_moves, only: :create
+      end
     end
   end
 end

@@ -25,7 +25,7 @@ json.bank_offers current_player.bank_offers do |bank_offer|
 end
 
 json.territories game.territories do |territory|
-    json.(territory, :id, :x, :y,)
+    json.(territory, :id, :x, :y)
     json.terrain do
         json.id territory.terrain.id
     end
@@ -35,6 +35,10 @@ json.territories game.territories do |territory|
             json.(territory.production_number, :value, :frequency)
         end
     end
+
+    json.has_robber territory.has_robber?
+
+    json.territory_actions current_player.territory_actions[territory]
 end
 
 json.corners game.corners.includes(settlement: :player) do |corner|
@@ -62,7 +66,7 @@ json.borders game.borders.includes(road: [:player], corners: []) do |border|
 end
 
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
-    json.(player, :id, :ordering)
+    json.(player, :id, :ordering, :total_resource_cards_count)
     json.user do
         json.(player.user, :id, :name)
         json.is_current_user current_player == player

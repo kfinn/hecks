@@ -24,11 +24,11 @@ class ProductionRoll
 
     def collect_resources!
         if production_number.present?
-            game.territories.where(production_number_id: production_number.id).includes(:settlements).each do |territory|
+            game.territories.without_robber.where(production_number_id: production_number.id).includes(:settlements).each do |territory|
                 if territory.resource.present?
-                    territory.settlements.map(&:player).each do |player|
-                        player.collect_resource(territory.resource)
-                        player.save!
+                    territory.settlements.each do |settlement|
+                        settlement.player.collect_resource(territory.resource, settlement.resource_cards_per_production_roll)
+                        settlement.player.save!
                     end
                 end
             end

@@ -34,4 +34,8 @@ class Settlement < ApplicationRecord
     def upgrade_to_city!
         self.update! upgraded_to_city_at: Time.zone.now
     end
+
+    def resource_cards_per_production_roll
+        city? ? 2 : 1
+    end
 end

@@ -8,6 +8,7 @@ export interface Player {
     ordering: number
     orderingRoll?: Roll
     color: Color
+    totalResourceCardsCount: number
 }
 
 export function playerName(player: Player) {
@@ -23,4 +24,8 @@ export function playerOrderingRollDescription({ orderingRoll }: Player) {
         return `(${orderingRoll.die1Value}, ${orderingRoll.die2Value})`
     }
     return ''
+}
+
+export function playerTotalResourceCardsCount({ totalResourceCardsCount }: Player) {
+    return totalResourceCardsCount
 }

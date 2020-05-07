@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
 import { Game } from '../models/Game';
-import { Player, playerColor, playerName, playerOrderingRollDescription } from '../models/Player';
+import { Player, playerColor, playerName, playerOrderingRollDescription, playerTotalResourceCardsCount } from '../models/Player';
 import { Color } from '../models/Color';
 
 function CurrentUserPlayer({ game, player }: { game: Game, player: Player }) {
@@ -57,7 +57,13 @@ function CurrentUserPlayer({ game, player }: { game: Game, player: Player }) {
 
 function ReadOnlyPlayer({ player }: { player: Player }) {
     return <span>
-        {playerName(player)} - {playerColor(player)} - {playerOrderingRollDescription(player)}
+        {playerName(player)}
+        {' - '}
+        {playerColor(player)}
+        {' - '}
+        {playerOrderingRollDescription(player)}
+        {' - '}
+        {playerTotalResourceCardsCount(player)} cards
     </span>
 }
 

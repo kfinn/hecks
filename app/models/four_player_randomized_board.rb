@@ -12,7 +12,9 @@ class FourPlayerRandomizedBoard
 
         territories.each_with_index do |territory, index|
             territory.terrain = terrains[index]
-            if territory.terrain != Terrain::DESERT
+            if territory.terrain == Terrain::DESERT
+                game.robber_territory = territory
+            else
                 territory.production_number = production_numbers[next_production_number_index]
                 next_production_number_index += 1
             end

@@ -18,7 +18,9 @@ class Game < ApplicationRecord
     has_many :repeating_turns
     has_many :rolls, through: :repeating_turns
 
-    before_create :generate!
+    belongs_to :robber_territory, class_name: 'Territory'
+
+    before_validation :generate!, on: :create
 
     after_save :changed!
 

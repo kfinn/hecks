@@ -37,9 +37,9 @@ class Player < ApplicationRecord
 
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
-    delegate :can_create_production_roll?, :can_end_turn?, :can_purchase_settlement?, :can_purchase_road?, :can_trade?, :can_purchase_city_upgrade?, to: :current_repeating_turn, allow_nil: true
+    delegate :can_create_production_roll?, :can_end_turn?, :can_purchase_settlement?, :can_purchase_road?, :can_trade?, :can_purchase_city_upgrade?, :can_move_robber?, to: :current_repeating_turn, allow_nil: true
 
-    delegate :corner_actions, :border_actions, :dice_actions, :bank_offer_actions, to: :actions
+    delegate :corner_actions, :border_actions, :territory_actions, :dice_actions, :bank_offer_actions, to: :actions
 
     validates :brick_cards_count, :grain_cards_count, :lumber_cards_count, :ore_cards_count, :wool_cards_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
@@ -81,6 +81,10 @@ class Player < ApplicationRecord
 
     def resource_cards_count(resource)
         send(resource.player_attribute_name)
+    end
+
+    def total_resource_cards_count
+        Resource.all.map { |resource| resource_cards_count(resource) }.sum
     end
 
     def collect_resource(resource, amount=1)

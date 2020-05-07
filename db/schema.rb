@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_063214) do
+ActiveRecord::Schema.define(version: 2020_05_07_155610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,9 @@ ActiveRecord::Schema.define(version: 2020_05_07_063214) do
     t.text "key", null: false
     t.datetime "started_at"
     t.bigint "current_turn_id"
+    t.bigint "robber_territory_id", null: false
     t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
+    t.index ["robber_territory_id"], name: "index_games_on_robber_territory_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -100,9 +102,12 @@ ActiveRecord::Schema.define(version: 2020_05_07_063214) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "roll_id"
     t.datetime "ended_at"
+    t.datetime "robber_moved_at"
+    t.bigint "robber_moved_to_territory_id"
     t.index ["game_id"], name: "index_turns_on_game_id"
     t.index ["player_id"], name: "index_turns_on_player_id"
     t.index ["road_id"], name: "index_turns_on_road_id"
+    t.index ["robber_moved_to_territory_id"], name: "index_turns_on_robber_moved_to_territory_id"
     t.index ["roll_id"], name: "index_turns_on_roll_id"
     t.index ["settlement_id"], name: "index_turns_on_settlement_id"
   end
@@ -135,6 +140,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_063214) do
   add_foreign_key "adjacencies", "corners"
   add_foreign_key "adjacencies", "games"
   add_foreign_key "adjacencies", "territories"
+  add_foreign_key "games", "territories", column: "robber_territory_id"
   add_foreign_key "games", "turns", column: "current_turn_id"
   add_foreign_key "players", "games"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"
@@ -144,4 +150,5 @@ ActiveRecord::Schema.define(version: 2020_05_07_063214) do
   add_foreign_key "turns", "roads"
   add_foreign_key "turns", "rolls"
   add_foreign_key "turns", "settlements"
+  add_foreign_key "turns", "territories", column: "robber_moved_to_territory_id"
 end

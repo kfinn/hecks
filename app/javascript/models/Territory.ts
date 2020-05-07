@@ -5,12 +5,18 @@ export function territoryIsDesert(territory: Territory) {
     return territory.terrain.id == TerrainId.Desert
 }
 
+export enum TerritoryAction {
+    CreateRobberMove = 'RobberMove#create'
+}
+
 export interface ProductionTerritory {
     id: number
     x: number
     y: number
     terrain: ProductionTerrain
     productionNumber: ProductionNumber
+    hasRobber: boolean
+    territoryActions: TerritoryAction[]
 }
 
 export interface DesertTerritory {
@@ -18,6 +24,8 @@ export interface DesertTerritory {
     x: number
     y: number
     terrain: DesertTerrain
+    hasRobber: boolean
+    territoryActions: TerritoryAction[]
 }
 
 export type Territory = ProductionTerritory | DesertTerritory

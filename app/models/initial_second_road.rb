@@ -8,12 +8,6 @@ class InitialSecondRoad
     validate :road_must_be_valid
     validate :road_must_connect_to_initial_second_settlement
 
-    def self.border_action_for_player(**kwargs)
-        if new(**kwargs).valid?
-            return "#{name}#create"
-        end
-    end
-
     def save!
         raise ActiveRecord::RecordInvalid(self) unless valid?
         ApplicationRecord.transaction do
