@@ -1,15 +1,19 @@
 class RepeatingTurn < Turn
     belongs_to :roll, optional: true
     belongs_to :robber_moved_to_territory, class_name: 'Territory', optional: true
+    belongs_to :robbed_player, class_name: 'Player', optional: true
 
     validates :roll, presence: { if: :ended? }
     validate :robber_move_columns_must_be_mutually_present
+    validate :robbed_player_must_occupy_robber_moved_to_territory
 
     def description
         if roll.blank?
             'roll the dice'
         elsif needs_robber_move?
             'move the robber'
+        elsif needs_robbed_player?
+            'select a player to rob'
         else
             'take an action or end the turn'
         end
@@ -22,6 +26,10 @@ class RepeatingTurn < Turn
             elsif needs_robber_move?
                 game.territories.without_robber.each do |territory|
                     action_collection.territory_actions[territory] << 'RobberMove#create'
+                end
+            elsif needs_robbed_player?
+                robbable_players.each do |player|
+                    action_collection.player_actions[player] << 'Robbery#create'
                 end
             elsif can_end_turn?
                 action_collection.dice_actions << 'RepeatingTurnEnds#create'
@@ -61,7 +69,7 @@ class RepeatingTurn < Turn
         if roll.blank?
             false
         elsif roll.value == 7
-            robber_moved?
+            robber_moved? && (player_robbed? || no_players_to_rob?)
         else
             true
         end
@@ -71,6 +79,30 @@ class RepeatingTurn < Turn
         roll.present? && roll.value == 7 && !robber_moved?
     end
     alias can_move_robber? needs_robber_move?
+
+    def needs_robbed_player?
+        robber_moved? && players_to_rob? && !player_robbed?
+    end
+
+    def can_rob_player?(player_to_rob)
+        needs_robbed_player? && robbable_players.include?(player_to_rob)
+    end
+
+    def player_robbed?
+        robbed_player.present?
+    end
+
+    def robbable_players
+        (robber_moved_to_territory&.players&.where&.not(id: player.id)) || []
+    end
+
+    def no_players_to_rob?
+        robber_moved_to_territory && robbable_players.empty?
+    end
+
+    def players_to_rob?
+        !no_players_to_rob?
+    end
 
     def robber_moved?
         robber_moved_at.present?
@@ -129,5 +161,10 @@ class RepeatingTurn < Turn
         elsif robber_moved_to_territory.present? && robber_moved_at.blank?
             errors[:robber_moved_at] << "can't be blank"
         end
+    end
+
+    def robbed_player_must_occupy_robber_moved_to_territory
+        return unless robber_moved_to_territory.present? && robbed_player.present?
+        errors[:robbed_player] << 'cannot rob this player' unless robbable_players.include? robbed_player
     end
 end

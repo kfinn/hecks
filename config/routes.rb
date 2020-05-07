@@ -32,6 +32,9 @@ Rails.application.routes.draw do
       resources :territories, only: [] do
         resources :robber_moves, only: :create
       end
+      resources :players, only: [] do
+        resources :robberies, only: :create
+      end
     end
   end
 end

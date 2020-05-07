@@ -6,6 +6,7 @@ class Territory < ApplicationRecord
     has_many :corners, -> { distinct }, through: :adjacencies
 
     has_many :settlements, -> { distinct }, through: :corners
+    has_many :players, -> { distinct }, through: :settlements
 
     belongs_to_active_hash :terrain
     belongs_to_active_hash :production_number

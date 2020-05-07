@@ -24,6 +24,10 @@ class ActionCollection
             EmptyActionSubcollection.instance
         end
 
+        def player_actions
+            EmptyActionSubcollection.instance
+        end
+
         def dice_actions
             EMPTY_ACTIONS
         end
@@ -57,6 +61,10 @@ class ActionCollection
 
     def territory_actions
         @territory_actions ||= ActionSubcollection.new
+    end
+
+    def player_actions
+        @player_actions ||= ActionSubcollection.new
     end
 
     def dice_actions

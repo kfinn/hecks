@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :borders, through: :games
   has_many :corners, through: :games
   has_many :territories, through: :games
+  has_many :opponent_players, through: :games, source: :players
 
   after_save :broadcast_to_games!
 

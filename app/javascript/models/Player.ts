@@ -2,6 +2,10 @@ import { Roll } from './Roll';
 import { User } from './User';
 import { Color } from './Color';
 
+export enum PlayerAction {
+    CreateRobbery = 'Robbery#create'
+}
+
 export interface Player {
     id: number
     user: User
@@ -9,6 +13,7 @@ export interface Player {
     orderingRoll?: Roll
     color: Color
     totalResourceCardsCount: number
+    playerActions: PlayerAction[]
 }
 
 export function playerName(player: Player) {

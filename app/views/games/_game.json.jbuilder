@@ -77,6 +77,7 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
         end
     end
     json.color player.color.id
+    json.player_actions current_player.player_actions[player]
 end
 
 json.hand do
