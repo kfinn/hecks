@@ -31,7 +31,7 @@ if current_player.pending_discard_requirement
     end
 end
 
-json.territories game.territories do |territory|
+json.territories game.territories.includes(:game) do |territory|
     json.(territory, :id, :x, :y)
     json.terrain do
         json.id territory.terrain.id

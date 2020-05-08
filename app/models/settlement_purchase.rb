@@ -8,7 +8,7 @@ class SettlementPurchase
     validate :settlement_must_be_valid
 
     def save!
-        raise ActiveRecord::RecordInvalid(self) unless valid?
+        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
             settlement.save!
             update_player!

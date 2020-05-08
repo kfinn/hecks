@@ -29,21 +29,6 @@ class Game < ApplicationRecord
         FourPlayerRandomizedBoard.new(game: self).generate!
     end
 
-    def start!
-        transaction do
-            players.each(&:build_distinct_ordering_roll)
-            sorted_players = players.sort_by { |player| -player.ordering_roll_value }
-            sorted_players.each_with_index do |player, index|
-                player.ordering = index
-                player.save!
-            end
-
-            self.started_at = Time.zone.now
-            self.current_turn = InitialSetupTurn.new(game: self, player: sorted_players.first)
-            save!
-        end
-    end
-
     def joinable?
         !started?
     end

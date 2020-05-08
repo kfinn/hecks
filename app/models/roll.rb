@@ -6,8 +6,8 @@ class Roll < ApplicationRecord
     end
 
     def roll!
-        self.die_1_value ||= 2 #random_die_value
-        self.die_2_value ||= 5 #random_die_value
+        self.die_1_value ||= random_die_value
+        self.die_2_value ||= random_die_value
     end
 
     def random_die_value

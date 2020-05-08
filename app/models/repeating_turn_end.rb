@@ -7,7 +7,7 @@ class RepeatingTurnEnd
     validate :player_must_be_able_to_end_turn
 
     def save!
-        raise ActiveRecord::RecordInvalid(self) unless valid?
+        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
             game.end_turn!
         end

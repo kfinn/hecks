@@ -8,7 +8,7 @@ class BankTrade
     validate :must_be_affordable
 
     def save!
-        raise ActiveRecord::RecordInvalid(self) unless valid?
+        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         update_player!
     end
 
