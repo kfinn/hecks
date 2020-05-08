@@ -5,7 +5,8 @@ class ActionCollection
         :territory_actions,
         :player_actions,
         :bank_offer_actions,
-        :player_offer_actions
+        :player_offer_actions,
+        :player_offer_agreement_actions
     ]
 
     SINGULAR_SUBCOLLECTIONS = [

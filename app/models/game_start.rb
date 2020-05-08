@@ -7,8 +7,8 @@ class GameStart
     delegate :players, to: :game
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             update_players!
             update_game!
         end

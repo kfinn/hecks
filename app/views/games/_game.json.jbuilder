@@ -43,6 +43,8 @@ json.player_offers game.player_offers.includes(:player).includes(player_offer_ag
 
     json.player_offer_agreements player_offer.player_offer_agreements do |player_offer_agreement|
         json.(player_offer_agreement, :id, :player_name)
+
+        json.player_offer_agreement_actions current_player.player_offer_agreement_actions[player_offer_agreement]
     end
 
     json.player_offer_actions current_player.player_offer_actions[player_offer]

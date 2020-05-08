@@ -10,8 +10,8 @@ class CityUpgradePurchase
     validate :settlement_must_not_be_upgraded_to_city
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             settlement.upgrade_to_city!
             update_player!
         end

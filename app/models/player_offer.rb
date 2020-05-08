@@ -31,6 +31,10 @@ class PlayerOffer < ApplicationRecord
         where.not(id: player.player_offer_agreements.select(:player_offer_id))
     end
 
+    def self.pending
+        where.not(id: PlayerOfferAgreement.completed.select(:player_offer_id))
+    end
+
     def resource_count_from_offering_player(resource)
         send(attribute_name_for_resource_from_offering_player(resource))
     end
@@ -41,6 +45,16 @@ class PlayerOffer < ApplicationRecord
 
     def attribute_name_for_resource_from_agreeing_player(resource)
         "#{resource.attribute_name}_from_agreeing_player"
+    end
+
+    def offering_player_has_resources?
+        Resource.all.all? do |resource|
+            player.resource_cards_count(resource) >= resource_count_from_offering_player(resource)
+        end
+    end
+
+    def offering_player_can_trade?
+        turn.can_trade?
     end
 
     private

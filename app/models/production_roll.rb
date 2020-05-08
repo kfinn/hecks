@@ -8,8 +8,8 @@ class ProductionRoll
     validate :player_must_be_able_to_create_production_roll
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             roll.save!
             discard_requirements.each(&:save!)
             current_repeating_turn.save!

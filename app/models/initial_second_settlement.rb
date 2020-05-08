@@ -10,8 +10,8 @@ class InitialSecondSettlement
     validate :settlement_must_be_valid
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             settlement.save!
             update_player!
         end

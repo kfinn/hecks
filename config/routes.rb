@@ -42,6 +42,9 @@ Rails.application.routes.draw do
       resources :player_offers, only: [] do
         resource :player_offer_agreement, only: :create
       end
+      resources :player_offer_agreements, only: [] do
+        resource :player_trade, only: :create
+      end
     end
   end
 end

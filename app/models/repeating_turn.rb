@@ -5,6 +5,8 @@ class RepeatingTurn < Turn
 
     has_many :discard_requirements, inverse_of: :turn, foreign_key: :turn_id
 
+    has_many :player_offer_agreements, through: :player_offers
+
     validates :roll, presence: { if: :ended? }
     validate :robber_move_columns_must_be_mutually_present
     validate :robbed_player_must_occupy_robber_moved_to_territory
@@ -63,6 +65,9 @@ class RepeatingTurn < Turn
                 end
                 if player.total_resource_cards_count > 0
                     action_collection.new_player_offer_actions << 'PlayerOffer#create'
+                end
+                player_offer_agreements.includes(:player_offer).each do |player_offer_agreement|
+                    action_collection.player_offer_agreement_actions[player_offer_agreement] << 'PlayerTrade#create' if player_offer_agreement.affordable?
                 end
             end
         end

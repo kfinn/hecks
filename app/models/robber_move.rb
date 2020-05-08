@@ -7,8 +7,8 @@ class RobberMove
     validate :player_must_be_able_to_move_robber
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             update_game!
             update_turn!
         end

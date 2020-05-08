@@ -8,8 +8,8 @@ class Discard
     validate :player_must_have_specified_cards
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             update_player!
             discard_requirement.complete!
         end

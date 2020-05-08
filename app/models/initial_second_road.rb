@@ -9,8 +9,8 @@ class InitialSecondRoad
     validate :road_must_connect_to_initial_second_settlement
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             road.save!
             update_player!
             update_game!

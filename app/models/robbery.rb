@@ -6,8 +6,8 @@ class Robbery
     validate :robbing_player_must_be_able_to_rob_player_to_rob
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
         ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
             if resource
                 player_to_rob.discard_resource(resource)
                 robbing_player.collect_resource(resource)

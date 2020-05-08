@@ -8,8 +8,10 @@ class BankTrade
     validate :must_be_affordable
 
     def save!
-        raise ActiveRecord::RecordInvalid.new(self) unless valid?
-        update_player!
+        ApplicationRecord.transaction do
+            raise ActiveRecord::RecordInvalid.new(self) unless valid?
+            update_player!
+        end
     end
 
     def resource_to_receive_id=(resource_to_receive_id)
