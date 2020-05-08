@@ -126,6 +126,12 @@ json.hand do
     )
 end
 
+json.development_cards current_player.active_development_cards do |development_card|
+    json.(development_card, :id, :name)
+end
+
+json.(current_player, :new_development_card_actions)
+
 json.dice do
     if game.latest_roll
         json.latest_roll do

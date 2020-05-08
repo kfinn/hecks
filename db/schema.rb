@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_070549) do
+ActiveRecord::Schema.define(version: 2020_05_08_151154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,22 @@ ActiveRecord::Schema.define(version: 2020_05_08_070549) do
     t.integer "y", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "development_cards", force: :cascade do |t|
+    t.string "development_card_behavior_id", null: false
+    t.integer "ordering", null: false
+    t.bigint "game_id", null: false
+    t.bigint "player_id"
+    t.bigint "purchased_during_turn_id"
+    t.bigint "played_during_turn_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["development_card_behavior_id"], name: "index_development_cards_on_development_card_behavior_id"
+    t.index ["game_id"], name: "index_development_cards_on_game_id"
+    t.index ["played_during_turn_id"], name: "index_development_cards_on_played_during_turn_id"
+    t.index ["player_id"], name: "index_development_cards_on_player_id"
+    t.index ["purchased_during_turn_id"], name: "index_development_cards_on_purchased_during_turn_id"
   end
 
   create_table "discard_requirements", force: :cascade do |t|
@@ -182,6 +198,10 @@ ActiveRecord::Schema.define(version: 2020_05_08_070549) do
   add_foreign_key "adjacencies", "corners"
   add_foreign_key "adjacencies", "games"
   add_foreign_key "adjacencies", "territories"
+  add_foreign_key "development_cards", "games"
+  add_foreign_key "development_cards", "players"
+  add_foreign_key "development_cards", "turns", column: "played_during_turn_id"
+  add_foreign_key "development_cards", "turns", column: "purchased_during_turn_id"
   add_foreign_key "discard_requirements", "players"
   add_foreign_key "discard_requirements", "turns"
   add_foreign_key "games", "territories", column: "robber_territory_id"

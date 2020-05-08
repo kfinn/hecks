@@ -13,7 +13,8 @@ class ActionCollection
         :dice_actions,
         :discard_requirement_actions,
         :pending_discard_requirement_actions,
-        :new_player_offer_actions
+        :new_player_offer_actions,
+        :new_development_card_actions
     ]
 
     class EmptyActionCollection

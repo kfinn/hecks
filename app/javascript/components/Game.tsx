@@ -11,6 +11,7 @@ import Status from './Status';
 import BankOfferList from './BankOfferList';
 import PendingDiscardRequirement from './PendingDiscardRequirement';
 import PlayerOfferList from './PlayerOfferList';
+import DevelopmentCardList from './DevelopmentCardList';
 
 interface GameProps {
     game: Game
@@ -73,6 +74,7 @@ export default function Game(props: GameProps) {
             <Dice game={game} />
             <BoardSvg game={game} />
             <Hand hand={game.hand} />
+            <DevelopmentCardList game={game} />
             <PlayerOfferList game={game} />
             <BankOfferList game={game} />
             <h2>Attribution</h2>

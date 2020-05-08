@@ -11,6 +11,8 @@ class Game < ApplicationRecord
     has_many :players
     has_many :users, through: :players
 
+    has_many :development_cards
+
     has_many :turns
     belongs_to :current_turn, optional: true, class_name: 'Turn'
     has_one :current_player, through: :current_turn, source: :player
@@ -30,6 +32,9 @@ class Game < ApplicationRecord
     def generate!
         self.key = 3.words.join('-')
         FourPlayerRandomizedBoard.new(game: self).generate!
+        DevelopmentCardBehavior.shuffled_deck.each_with_index do |development_card_behavior, index|
+            development_cards.build(development_card_behavior: development_card_behavior, ordering: index)
+        end
     end
 
     def joinable?

@@ -8,6 +8,7 @@ import { Player } from './Player';
 import { NewPlayerOfferAction, PlayerOffer } from './PlayerOffer';
 import { Status } from './Status';
 import { Territory } from './Territory';
+import { DevelopmentCard, NewDevelopmentCardAction } from './DevelopmentCard';
 
 export interface Game {
     id: number
@@ -21,6 +22,8 @@ export interface Game {
     borders: Border[]
     players: Player[]
     hand: Hand
+    developmentCards: DevelopmentCard[]
+    newDevelopmentCardActions: NewDevelopmentCardAction[]
     dice: Dice
     pendingDiscardRequirement?: DiscardRequirement
 }

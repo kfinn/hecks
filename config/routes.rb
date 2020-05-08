@@ -18,6 +18,7 @@ Rails.application.routes.draw do
         resources :player_offers, only: :create
         resources :production_rolls, only: :create
         resources :repeating_turn_ends, only: :create
+        resources :development_card_purchases, only: :create
       end
       resources :corners, only: [] do
         resource :initial_settlement, only: :create

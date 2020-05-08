@@ -64,8 +64,8 @@ class ProductionNumber < ActiveHash::Base
 
     def self.shuffled
         for_territories = all.flat_map do |production_number|
-            Array.new(production_number.territories_count) { production_number }
+            Array.new(production_number.territories_count, production_number)
         end
-        for_territories.sample(for_territories.size)
+        for_territories.shuffle
     end
 end
