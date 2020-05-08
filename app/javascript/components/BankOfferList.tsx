@@ -27,16 +27,16 @@ function BankOffer({ game, bankOffer }: { game: Game, bankOffer: BankOffer }) {
     return (
         <React.Fragment>
             <ResourceIcon resourceId={bankOffer.resourceToGive.id} />
-            {' &times; '}
+            {' '}&times;{' '}
             { bankOffer.resourceToGiveCountRequired }
-            {' &rarr; '}
+            {' '}&rarr;{' '}
             <ResourceIdPicker
                 value={resourceToReceiveId}
                 onChange={setResourceToReceiveId}
                 disabled={disabled}
                 options={resourceIdOptions}
             />
-            {' &times; 1 '}
+            {' '}&times; 1{' '}
             <button onClick={onClick} disabled={disabled}>Trade</button>
         </React.Fragment>
     )
