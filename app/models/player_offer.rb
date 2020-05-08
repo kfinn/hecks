@@ -5,6 +5,8 @@ class PlayerOffer < ApplicationRecord
     has_one :player, through: :turn
     has_one :game, through: :turn
 
+    has_many :player_offer_agreements
+
     validate :player_must_have_offered_resources
     validate :must_give_some_resources
     validate :must_receive_some_resources
@@ -25,6 +27,22 @@ class PlayerOffer < ApplicationRecord
 
     delegate :name, to: :player, prefix: true
 
+    def self.without_agreement_from_player(player)
+        where.not(id: player.player_offer_agreements.select(:player_offer_id))
+    end
+
+    def resource_count_from_offering_player(resource)
+        send(attribute_name_for_resource_from_offering_player(resource))
+    end
+
+    def resource_count_from_agreeing_player(resource)
+        send(attribute_name_for_resource_from_agreeing_player(resource))
+    end
+
+    def attribute_name_for_resource_from_agreeing_player(resource)
+        "#{resource.attribute_name}_from_agreeing_player"
+    end
+
     private
 
     def player_must_have_offered_resources
@@ -42,7 +60,7 @@ class PlayerOffer < ApplicationRecord
 
     def total_resources_from_offering_player
         @total_resources_from_offering_player ||= Resource.all.map do |resource|
-            send(attribute_name_for_resource_from_offering_player(resource))
+            resource_count_from_offering_player(resource)
         end.sum
     end
 
@@ -58,9 +76,5 @@ class PlayerOffer < ApplicationRecord
 
     def attribute_name_for_resource_from_offering_player(resource)
         "#{resource.attribute_name}_from_offering_player"
-    end
-
-    def attribute_name_for_resource_from_agreeing_player(resource)
-        "#{resource.attribute_name}_from_agreeing_player"
     end
 end

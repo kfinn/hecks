@@ -1,3 +1,5 @@
+import { PlayerOfferAgreement } from './PlayerOfferAgreement';
+
 export enum NewPlayerOfferAction {
     CreatePlayerOffer = 'PlayerOffer#create'
 }
@@ -22,6 +24,7 @@ export interface NewPlayerOffer {
 interface ExistingPlayerOffer {
     id: number
     playerName: string
+    playerOfferAgreements: PlayerOfferAgreement[]
     playerOfferActions: PlayerOfferAction[]
 }
 

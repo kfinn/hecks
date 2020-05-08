@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :territories, through: :games
   has_many :opponent_players, through: :games, source: :players
   has_many :discard_requirements, through: :players
+  has_many :player_offers, through: :games
 
   after_save :broadcast_to_games!
 

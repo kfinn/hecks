@@ -5,16 +5,16 @@ import Api from '../models/Api';
 import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 import _ from 'lodash';
 import NewPlayerOfferForm from './NewPlayerOfferForm';
+import PlayerOfferAgreementList from './PlayerOfferAgreementList';
 
 const PLAYER_OFFER_ACTIONS = {
     [PlayerOfferAction.CreatePlayerOfferAgreement]: async ({ id }: PlayerOffer) => {
-        return await Api.post(`player_offers/#{id}/player_offer_agreement.json`)
+        return await Api.post(`player_offers/${id}/player_offer_agreement.json`)
     }
 }
 
 function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
     const action = PLAYER_OFFER_ACTIONS[playerOffer.playerOfferActions[0]]
-    const disabled = !action
     const onClick = action ? (() => {
         const asyncOnClick = async () => {
             try {
@@ -30,7 +30,7 @@ function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
     return (
         <React.Fragment>
             <div>
-                {playerOffer.playerName} offers to give...
+                <h3>{playerOffer.playerName} offers to give...</h3>
                 <ul>
                     {
                         playerOffer.brickCardsCountFromOfferingPlayer > 0 ? (
@@ -70,7 +70,7 @@ function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
                 </ul>
             </div>
             <div>
-                {playerOffer.playerName} wants to receive...
+                <h3>{playerOffer.playerName} wants to receive...</h3>
                 <ul>
                     {
                         playerOffer.brickCardsCountFromAgreeingPlayer > 0 ? (
@@ -109,7 +109,12 @@ function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
                     }
                 </ul>
             </div>
-            <button onClick={onClick} disabled={disabled}>Agree to trade</button>
+            <div>
+                <PlayerOfferAgreementList playerOffer={playerOffer} />
+            </div>
+            {
+                action ? (<div><button onClick={onClick}>Agree to trade</button></div>) : null
+            }
         </React.Fragment>
     )
 }

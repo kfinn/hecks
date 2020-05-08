@@ -39,6 +39,9 @@ Rails.application.routes.draw do
       resources :discard_requirements, only: [] do
         resource :discard, only: :create
       end
+      resources :player_offers, only: [] do
+        resource :player_offer_agreement, only: :create
+      end
     end
   end
 end

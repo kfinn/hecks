@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_040955) do
+ActiveRecord::Schema.define(version: 2020_05_08_061428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,16 @@ ActiveRecord::Schema.define(version: 2020_05_08_040955) do
     t.bigint "robber_territory_id", null: false
     t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
     t.index ["robber_territory_id"], name: "index_games_on_robber_territory_id"
+  end
+
+  create_table "player_offer_agreements", force: :cascade do |t|
+    t.bigint "player_offer_id", null: false
+    t.bigint "player_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["player_id"], name: "index_player_offer_agreements_on_player_id"
+    t.index ["player_offer_id", "player_id"], name: "index_player_offer_agreements_on_player_offer_id_and_player_id", unique: true
+    t.index ["player_offer_id"], name: "index_player_offer_agreements_on_player_offer_id"
   end
 
   create_table "player_offers", force: :cascade do |t|
@@ -175,6 +185,8 @@ ActiveRecord::Schema.define(version: 2020_05_08_040955) do
   add_foreign_key "discard_requirements", "turns"
   add_foreign_key "games", "territories", column: "robber_territory_id"
   add_foreign_key "games", "turns", column: "current_turn_id"
+  add_foreign_key "player_offer_agreements", "player_offers"
+  add_foreign_key "player_offer_agreements", "players"
   add_foreign_key "player_offers", "turns"
   add_foreign_key "players", "games"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"

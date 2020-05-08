@@ -23,6 +23,8 @@ class Player < ApplicationRecord
     has_many :discard_requirements
     has_one :pending_discard_requirement, -> { pending }, class_name: 'DiscardRequirement'
 
+    has_many :player_offer_agreements
+
     belongs_to_active_hash :color
 
     delegate :name, to: :user
@@ -92,22 +94,26 @@ class Player < ApplicationRecord
                 @receiving_player_offer_actions = ActionCollection.none
             else
                 @receiving_player_offer_actions = ActionCollection.new
-                game.player_offers.where(
-                    <<~SQL.squish,
-                        brick_cards_count_from_agreeing_player <= ? AND
-                        grain_cards_count_from_agreeing_player <= ? AND
-                        lumber_cards_count_from_agreeing_player <= ? AND
-                        ore_cards_count_from_agreeing_player <= ? AND
-                        wool_cards_count_from_agreeing_player <= ?
-                    SQL
-                    brick_cards_count,
-                    grain_cards_count,
-                    lumber_cards_count,
-                    ore_cards_count,
-                    wool_cards_count
-                ).each do |acceptable_player_offer|
-                    @receiving_player_offer_actions.player_offer_actions[acceptable_player_offer] << 'PlayerOfferAgreement#create'
-                end
+                game
+                    .player_offers
+                    .without_agreement_from_player(self)
+                    .where(
+                        <<~SQL.squish,
+                            brick_cards_count_from_agreeing_player <= ? AND
+                            grain_cards_count_from_agreeing_player <= ? AND
+                            lumber_cards_count_from_agreeing_player <= ? AND
+                            ore_cards_count_from_agreeing_player <= ? AND
+                            wool_cards_count_from_agreeing_player <= ?
+                        SQL
+                        brick_cards_count,
+                        grain_cards_count,
+                        lumber_cards_count,
+                        ore_cards_count,
+                        wool_cards_count
+                    )
+                    .each do |acceptable_player_offer|
+                        @receiving_player_offer_actions.player_offer_actions[acceptable_player_offer] << 'PlayerOfferAgreement#create'
+                    end
             end
         end
         @receiving_player_offer_actions
