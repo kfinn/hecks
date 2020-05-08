@@ -20,6 +20,9 @@ class Player < ApplicationRecord
 
     has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
 
+    has_many :discard_requirements
+    has_one :pending_discard_requirement, -> { pending }, class_name: 'DiscardRequirement'
+
     belongs_to_active_hash :color
 
     delegate :name, to: :user
@@ -35,11 +38,15 @@ class Player < ApplicationRecord
     scope :without_initial_second_road, -> { where(initial_second_road: nil) }
     scope :without_initial_second_setup, -> { without_initial_second_settlement.or(without_initial_second_road) }
 
+    def self.with_more_than_seven_resource_cards
+        where("#{Resource.all.map(&:attribute_name).join(' + ')} > ?", 7)
+    end
+
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
     delegate :can_create_production_roll?, :can_end_turn?, :can_purchase_settlement?, :can_purchase_road?, :can_trade?, :can_purchase_city_upgrade?, :can_move_robber?, :can_rob_player?, to: :current_repeating_turn, allow_nil: true
 
-    delegate :corner_actions, :border_actions, :territory_actions, :dice_actions, :bank_offer_actions, :player_actions, to: :actions
+    delegate :corner_actions, :border_actions, :territory_actions, :dice_actions, :bank_offer_actions, :player_actions, :pending_discard_requirement_actions, to: :actions
 
     validates :brick_cards_count, :grain_cards_count, :lumber_cards_count, :ore_cards_count, :wool_cards_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
@@ -72,7 +79,11 @@ class Player < ApplicationRecord
     end
 
     def actions
-        @actions = current_turn&.actions || ActionCollection.none
+        @actions ||= [
+            current_turn&.actions, pending_discard_requirement&.actions
+        ].compact.reduce(ActionCollection.none) do |actions, acc|
+            acc.merge(actions)
+        end
     end
 
     def bank_offers
@@ -80,7 +91,7 @@ class Player < ApplicationRecord
     end
 
     def resource_cards_count(resource)
-        send(resource.player_attribute_name)
+        send(resource.attribute_name)
     end
 
     def total_resource_cards_count
@@ -89,14 +100,14 @@ class Player < ApplicationRecord
 
     def collect_resource(resource, amount=1)
         raise 'can only collect a positive number of resource cards' if amount < 1
-        current_resource_cards_count = send(resource.player_attribute_name)
-        send("#{resource.player_attribute_setter_name}", current_resource_cards_count + amount)
+        current_resource_cards_count = send(resource.attribute_name)
+        send(resource.attribute_setter_name, current_resource_cards_count + amount)
     end
 
-    def remove_resource(resource, amount=1)
+    def discard_resource(resource, amount=1)
         raise 'can only remove a positive number of resource cards' if amount < 1
-        current_resource_cards_count = send(resource.player_attribute_name)
-        send(resource.player_attribute_setter_name, current_resource_cards_count - amount)
+        current_resource_cards_count = send(resource.attribute_name)
+        send(resource.attribute_setter_name, current_resource_cards_count - amount)
     end
 
     private

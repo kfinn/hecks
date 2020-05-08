@@ -6,6 +6,7 @@ import { Hand } from './Hand';
 import { Player } from './Player';
 import { Status } from './Status';
 import { Territory } from './Territory';
+import { DiscardRequirement } from './DiscardRequirement';
 
 export interface Game {
     id: number
@@ -18,6 +19,7 @@ export interface Game {
     players: Player[]
     hand: Hand
     dice: Dice
+    pendingDiscardRequirement?: DiscardRequirement
 }
 
 export function gameIsStarted({ startedAt }: Game) {

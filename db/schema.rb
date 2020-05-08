@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_155610) do
+ActiveRecord::Schema.define(version: 2020_05_07_221204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,18 @@ ActiveRecord::Schema.define(version: 2020_05_07_155610) do
     t.integer "y", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "discard_requirements", force: :cascade do |t|
+    t.bigint "player_id", null: false
+    t.bigint "turn_id", null: false
+    t.integer "resource_cards_count", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["completed_at"], name: "index_discard_requirements_on_completed_at"
+    t.index ["player_id"], name: "index_discard_requirements_on_player_id"
+    t.index ["turn_id"], name: "index_discard_requirements_on_turn_id"
   end
 
   create_table "games", force: :cascade do |t|
@@ -104,9 +116,11 @@ ActiveRecord::Schema.define(version: 2020_05_07_155610) do
     t.datetime "ended_at"
     t.datetime "robber_moved_at"
     t.bigint "robber_moved_to_territory_id"
+    t.bigint "robbed_player_id"
     t.index ["game_id"], name: "index_turns_on_game_id"
     t.index ["player_id"], name: "index_turns_on_player_id"
     t.index ["road_id"], name: "index_turns_on_road_id"
+    t.index ["robbed_player_id"], name: "index_turns_on_robbed_player_id"
     t.index ["robber_moved_to_territory_id"], name: "index_turns_on_robber_moved_to_territory_id"
     t.index ["roll_id"], name: "index_turns_on_roll_id"
     t.index ["settlement_id"], name: "index_turns_on_settlement_id"
@@ -140,6 +154,8 @@ ActiveRecord::Schema.define(version: 2020_05_07_155610) do
   add_foreign_key "adjacencies", "corners"
   add_foreign_key "adjacencies", "games"
   add_foreign_key "adjacencies", "territories"
+  add_foreign_key "discard_requirements", "players"
+  add_foreign_key "discard_requirements", "turns"
   add_foreign_key "games", "territories", column: "robber_territory_id"
   add_foreign_key "games", "turns", column: "current_turn_id"
   add_foreign_key "players", "games"
@@ -147,6 +163,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_155610) do
   add_foreign_key "players", "users"
   add_foreign_key "turns", "games"
   add_foreign_key "turns", "players"
+  add_foreign_key "turns", "players", column: "robbed_player_id"
   add_foreign_key "turns", "roads"
   add_foreign_key "turns", "rolls"
   add_foreign_key "turns", "settlements"

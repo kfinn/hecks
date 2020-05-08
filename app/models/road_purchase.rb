@@ -40,8 +40,8 @@ class RoadPurchase
     end
 
     def update_player!
-        player.remove_resource Resource::BRICK
-        player.remove_resource Resource::LUMBER
+        player.discard_resource Resource::BRICK
+        player.discard_resource Resource::LUMBER
         player.save!
     end
 end

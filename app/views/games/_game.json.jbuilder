@@ -24,6 +24,13 @@ json.bank_offers current_player.bank_offers do |bank_offer|
     json.bank_offer_actions current_player.bank_offer_actions[bank_offer]
 end
 
+if current_player.pending_discard_requirement
+    json.pending_discard_requirement do
+        json.(current_player.pending_discard_requirement, :id, :resource_cards_count)
+        json.pending_discard_requirement_actions current_player.pending_discard_requirement_actions
+    end
+end
+
 json.territories game.territories do |territory|
     json.(territory, :id, :x, :y)
     json.terrain do

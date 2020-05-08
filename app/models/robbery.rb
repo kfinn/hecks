@@ -9,7 +9,7 @@ class Robbery
         raise ActiveRecord::RecordInvalid(self) unless valid?
         ApplicationRecord.transaction do
             if resource
-                player_to_rob.remove_resource(resource)
+                player_to_rob.discard_resource(resource)
                 robbing_player.collect_resource(resource)
                 player_to_rob.save!
                 robbing_player.save!

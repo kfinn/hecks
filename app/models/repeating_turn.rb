@@ -3,6 +3,8 @@ class RepeatingTurn < Turn
     belongs_to :robber_moved_to_territory, class_name: 'Territory', optional: true
     belongs_to :robbed_player, class_name: 'Player', optional: true
 
+    has_many :discard_requirements, inverse_of: :turn, foreign_key: :turn_id
+
     validates :roll, presence: { if: :ended? }
     validate :robber_move_columns_must_be_mutually_present
     validate :robbed_player_must_occupy_robber_moved_to_territory
@@ -12,6 +14,8 @@ class RepeatingTurn < Turn
             'roll the dice'
         elsif needs_robber_move?
             'move the robber'
+        elsif !all_discard_requirements_met?
+            'wait for everyone to discard their excess cards'
         elsif needs_robbed_player?
             'select a player to rob'
         else
@@ -69,10 +73,16 @@ class RepeatingTurn < Turn
         if roll.blank?
             false
         elsif roll.value == 7
-            robber_moved? && (player_robbed? || no_players_to_rob?)
+            robber_moved? &&
+                (player_robbed? || no_players_to_rob?) &&
+                all_discard_requirements_met?
         else
             true
         end
+    end
+
+    def all_discard_requirements_met?
+        discard_requirements.pending.empty?
     end
 
     def needs_robber_move?
@@ -81,7 +91,7 @@ class RepeatingTurn < Turn
     alias can_move_robber? needs_robber_move?
 
     def needs_robbed_player?
-        robber_moved? && players_to_rob? && !player_robbed?
+        robber_moved? && players_to_rob? && !player_robbed? && all_discard_requirements_met?
     end
 
     def can_rob_player?(player_to_rob)

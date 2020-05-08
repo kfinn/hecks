@@ -27,7 +27,7 @@ class BankTrade
     end
 
     def update_player!
-        player.remove_resource(resource_to_give, resource_to_give_count_required)
+        player.discard_resource(resource_to_give, resource_to_give_count_required)
         player.collect_resource(resource_to_receive)
         player.save!
     end

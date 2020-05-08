@@ -35,6 +35,9 @@ Rails.application.routes.draw do
       resources :players, only: [] do
         resources :robberies, only: :create
       end
+      resources :discard_requirements, only: [] do
+        resource :discard, only: :create
+      end
     end
   end
 end

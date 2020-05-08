@@ -40,10 +40,10 @@ class SettlementPurchase
     end
 
     def update_player!
-        player.remove_resource Resource::BRICK
-        player.remove_resource Resource::GRAIN
-        player.remove_resource Resource::LUMBER
-        player.remove_resource Resource::WOOL
+        player.discard_resource Resource::BRICK
+        player.discard_resource Resource::GRAIN
+        player.discard_resource Resource::LUMBER
+        player.discard_resource Resource::WOOL
         player.save!
     end
 end

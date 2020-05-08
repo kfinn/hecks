@@ -28,8 +28,8 @@ class CityUpgradePurchase
     end
 
     def update_player!
-        player.remove_resource Resource::GRAIN, 2
-        player.remove_resource Resource::ORE, 3
+        player.discard_resource Resource::GRAIN, 2
+        player.discard_resource Resource::ORE, 3
         player.save!
     end
 end

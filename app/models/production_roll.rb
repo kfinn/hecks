@@ -11,6 +11,7 @@ class ProductionRoll
         raise ActiveRecord::RecordInvalid(self) unless valid?
         ApplicationRecord.transaction do
             roll.save!
+            discard_requirements.each(&:save!)
             current_repeating_turn.save!
             collect_resources!
         end
@@ -39,6 +40,19 @@ class ProductionRoll
 
     def roll
         @roll ||= current_repeating_turn.build_roll
+    end
+
+    def discard_requirements
+        unless instance_variable_defined?(:@discard_requirements)
+            if roll.value != 7
+                @discard_requirements = []
+            else
+                @discard_requirements = game.players.with_more_than_seven_resource_cards.map do |player_to_discard|
+                    player_to_discard.discard_requirements.build(turn: current_repeating_turn)
+                end
+            end
+        end
+        @discard_requirements
     end
 
     def production_number
