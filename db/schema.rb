@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_151154) do
+ActiveRecord::Schema.define(version: 2020_05_08_164201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_151154) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["development_card_behavior_id"], name: "index_development_cards_on_development_card_behavior_id"
+    t.index ["game_id", "ordering"], name: "index_development_cards_on_game_id_and_ordering", unique: true
     t.index ["game_id"], name: "index_development_cards_on_game_id"
     t.index ["played_during_turn_id"], name: "index_development_cards_on_played_during_turn_id"
     t.index ["player_id"], name: "index_development_cards_on_player_id"

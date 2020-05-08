@@ -11,6 +11,5 @@ class CreateDevelopmentCards < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
-    # add_index :development_cards, [:game_id, :ordering], unique: true
   end
 end
