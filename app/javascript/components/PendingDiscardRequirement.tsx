@@ -4,6 +4,8 @@ import { DiscardRequirement } from '../models/DiscardRequirement';
 import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 import _ from 'lodash';
 import Api from '../models/Api';
+import ResourceQuantityPicker from './ResourceQuantityPicker';
+import { ResourceId } from '../models/Resource';
 
 export default function PendingDiscardRequirement({ game }: { game: Game }) {
     if (!game.pendingDiscardRequirement) {
@@ -56,74 +58,44 @@ export default function PendingDiscardRequirement({ game }: { game: Game }) {
             <p>You must discard {discardRequirement.resourceCardsCount} cards</p>
             <ul>
                 <li>
-                    <BrickIcon />
-                    {
-                        game.hand.brickCardsCount > 0 ? (
-                            <select value={brickCardsCount} onChange={({ target: { value } }) => setBrickCardsCount(parseInt(value))}>
-                                {
-                                    _.map(_.range(game.hand.brickCardsCount), (count) => (
-                                        <option key={count} value={count}>{count}</option>
-                                    ))
-                                }
-                            </select>
-                        ) : '---'
-                    }
+                    <ResourceQuantityPicker
+                        resourceId={ResourceId.Brick}
+                        value={brickCardsCount}
+                        max={game.hand.brickCardsCount}
+                        onChange={setBrickCardsCount}
+                    />
                 </li>
                 <li>
-                    <GrainIcon />
-                    {
-                        game.hand.grainCardsCount > 0 ? (
-                                <select value={grainCardsCount} onChange={({ target: { value } }) => setGrainCardsCount(parseInt(value))}>
-                                    {
-                                        _.map(_.range(game.hand.grainCardsCount), (count) => (
-                                            <option key={count} value={count}>{count}</option>
-                                        ))
-                                    }
-                                </select>
-                        ) : ' --- '
-                    }
+                    <ResourceQuantityPicker
+                        resourceId={ResourceId.Grain}
+                        value={grainCardsCount}
+                        max={game.hand.grainCardsCount}
+                        onChange={setGrainCardsCount}
+                    />
                 </li>
                 <li>
-                    <LumberIcon />
-                        {
-                            game.hand.lumberCardsCount > 0 ? (
-                                <select value={lumberCardsCount} onChange={({ target: { value } }) => setLumberCardsCount(parseInt(value))}>
-                                    {
-                                        _.map(_.range(game.hand.lumberCardsCount), (count) => (
-                                            <option key={count} value={count}>{count}</option>
-                                        ))
-                                    }
-                                </select>
-                            ) : '---'
-                        }
+                    <ResourceQuantityPicker
+                        resourceId={ResourceId.Lumber}
+                        value={lumberCardsCount}
+                        max={game.hand.lumberCardsCount}
+                        onChange={setLumberCardsCount}
+                    />
                 </li>
                 <li>
-                    <OreIcon />
-                        {
-                            game.hand.oreCardsCount > 0 ? (
-                                <select value={oreCardsCount} onChange={({ target: { value } }) => setOreCardsCount(parseInt(value))}>
-                                    {
-                                        _.map(_.range(game.hand.oreCardsCount), (count) => (
-                                            <option key={count} value={count}>{count}</option>
-                                        ))
-                                    }
-                                </select>
-                            ) : '---'
-                        }
+                    <ResourceQuantityPicker
+                        resourceId={ResourceId.Ore}
+                        value={oreCardsCount}
+                        max={game.hand.oreCardsCount}
+                        onChange={setOreCardsCount}
+                    />
                 </li>
                 <li>
-                    <WoolIcon />
-                        {
-                            game.hand.woolCardsCount > 0 ? (
-                                <select value={woolCardsCount} onChange={({ target: { value } }) => setWoolCardsCount(parseInt(value))}>
-                                    {
-                                        _.map(_.range(game.hand.woolCardsCount), (count) => (
-                                            <option key={count} value={count}>{count}</option>
-                                        ))
-                                    }
-                                </select>
-                            ) : '---'
-                        }
+                    <ResourceQuantityPicker
+                        resourceId={ResourceId.Wool}
+                        value={woolCardsCount}
+                        max={game.hand.woolCardsCount}
+                        onChange={setWoolCardsCount}
+                    />
                 </li>
             </ul>
             <button disabled={!valid} onClick={onClick}>Discard</button>

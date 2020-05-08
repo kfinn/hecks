@@ -61,6 +61,9 @@ class RepeatingTurn < Turn
                 player.bank_offers.each do |bank_offer|
                     action_collection.bank_offer_actions[bank_offer] << 'BankTrade#create' if bank_offer.affordable?
                 end
+                if player.total_resource_cards_count > 0
+                    action_collection.new_player_offer_actions << 'PlayerOffer#create'
+                end
             end
         end
     end

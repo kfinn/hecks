@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         end
         resource :current_player, only: :update
         resource :game_start, only: :create
+        resources :player_offers, only: :create
         resources :production_rolls, only: :create
         resources :repeating_turn_ends, only: :create
       end

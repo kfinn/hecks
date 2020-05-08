@@ -1,4 +1,20 @@
 class ActionCollection
+    SUBCOLLECTIONS = [
+        :border_actions,
+        :corner_actions,
+        :territory_actions,
+        :player_actions,
+        :bank_offer_actions,
+        :player_offer_actions
+    ]
+
+    SINGULAR_SUBCOLLECTIONS = [
+        :dice_actions,
+        :discard_requirement_actions,
+        :pending_discard_requirement_actions,
+        :new_player_offer_actions
+    ]
+
     class EmptyActionCollection
         include Singleton
 
@@ -11,7 +27,6 @@ class ActionCollection
 
             delegate :each, to: :state
 
-
             def state
                 EMPTY_HASH
             end
@@ -21,36 +36,16 @@ class ActionCollection
             end
         end
 
-        def border_actions
-            EmptyActionSubcollection.instance
+        SUBCOLLECTIONS.each do |subcollection_name|
+            define_method(subcollection_name) do
+                EmptyActionSubcollection.instance
+            end
         end
 
-        def corner_actions
-            EmptyActionSubcollection.instance
-        end
-
-        def territory_actions
-            EmptyActionSubcollection.instance
-        end
-
-        def player_actions
-            EmptyActionSubcollection.instance
-        end
-
-        def dice_actions
-            EMPTY_ACTIONS
-        end
-
-        def discard_requirement_actions
-            EMPTY_ACTIONS
-        end
-
-        def pending_discard_requirement_actions
-            EMPTY_ACTIONS
-        end
-
-        def bank_offer_actions
-            EmptyActionSubcollection.instance
+        SINGULAR_SUBCOLLECTIONS.each do |singular_subcollection_name|
+            define_method(singular_subcollection_name) do
+                EMPTY_ACTIONS
+            end
         end
 
         def merge(other)
@@ -73,37 +68,27 @@ class ActionCollection
         end
     end
 
-    def border_actions
-        @border_actions ||= ActionSubcollection.new
+    SUBCOLLECTIONS.each do |subcollection_name|
+        define_method(subcollection_name) do
+            unless instance_variable_defined?("@#{subcollection_name}")
+                instance_variable_set("@#{subcollection_name}", ActionSubcollection.new)
+            end
+            instance_variable_get("@#{subcollection_name}")
+        end
     end
 
-    def corner_actions
-        @corner_actions ||= ActionSubcollection.new
-    end
-
-    def territory_actions
-        @territory_actions ||= ActionSubcollection.new
-    end
-
-    def player_actions
-        @player_actions ||= ActionSubcollection.new
-    end
-
-    def dice_actions
-        @dice_actions ||= Set.new
-    end
-
-    def bank_offer_actions
-        @bank_offer_actions ||= ActionSubcollection.new
-    end
-
-    def pending_discard_requirement_actions
-        @pending_discard_requirement_actions ||= Set.new
+    SINGULAR_SUBCOLLECTIONS.each do |singular_subcollection_name|
+        define_method(singular_subcollection_name) do
+            unless instance_variable_defined?("@#{singular_subcollection_name}")
+                instance_variable_set("@#{singular_subcollection_name}", Set.new)
+            end
+            instance_variable_get("@#{singular_subcollection_name}")
+        end
     end
 
     def merge(other)
         ActionCollection.new.tap do |merged|
-            [:border_actions, :corner_actions, :territory_actions, :player_actions, :bank_offer_actions].each do |subcollection_name|
+            SUBCOLLECTIONS.each do |subcollection_name|
                 merged_subcollection = merged.send(subcollection_name)
                 [self, other].each do |collection|
                     collection.send(subcollection_name).each do |key, value|
@@ -112,7 +97,7 @@ class ActionCollection
                 end
             end
 
-            [:dice_actions, :pending_discard_requirement_actions].each do |singular_subcollection_name|
+            SINGULAR_SUBCOLLECTIONS.each do |singular_subcollection_name|
                 merged_singular_actions = merged.send(singular_subcollection_name)
                 [self, other].each do |collection|
                     collection.send(singular_subcollection_name).each { |action| merged_singular_actions << action }

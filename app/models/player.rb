@@ -46,7 +46,7 @@ class Player < ApplicationRecord
     delegate :can_create_initial_second_settlement?, :can_create_initial_second_road?, to: :initial_second_setup_turn, allow_nil: true
     delegate :can_create_production_roll?, :can_end_turn?, :can_purchase_settlement?, :can_purchase_road?, :can_trade?, :can_purchase_city_upgrade?, :can_move_robber?, :can_rob_player?, to: :current_repeating_turn, allow_nil: true
 
-    delegate :corner_actions, :border_actions, :territory_actions, :dice_actions, :bank_offer_actions, :player_actions, :pending_discard_requirement_actions, to: :actions
+    delegate :corner_actions, :border_actions, :territory_actions, :dice_actions, :bank_offer_actions, :player_actions, :pending_discard_requirement_actions, :player_offer_actions, :new_player_offer_actions, to: :actions
 
     validates :brick_cards_count, :grain_cards_count, :lumber_cards_count, :ore_cards_count, :wool_cards_count, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
@@ -80,10 +80,37 @@ class Player < ApplicationRecord
 
     def actions
         @actions ||= [
-            current_turn&.actions, pending_discard_requirement&.actions
+            current_turn&.actions, pending_discard_requirement&.actions, receiving_player_offer_actions
         ].compact.reduce(ActionCollection.none) do |actions, acc|
             acc.merge(actions)
         end
+    end
+
+    def receiving_player_offer_actions
+        unless instance_variable_defined?(:@receiving_player_offer_actions)
+            if current_turn.present?
+                @receiving_player_offer_actions = ActionCollection.none
+            else
+                @receiving_player_offer_actions = ActionCollection.new
+                game.player_offers.where(
+                    <<~SQL.squish,
+                        brick_cards_count_from_agreeing_player <= ? AND
+                        grain_cards_count_from_agreeing_player <= ? AND
+                        lumber_cards_count_from_agreeing_player <= ? AND
+                        ore_cards_count_from_agreeing_player <= ? AND
+                        wool_cards_count_from_agreeing_player <= ?
+                    SQL
+                    brick_cards_count,
+                    grain_cards_count,
+                    lumber_cards_count,
+                    ore_cards_count,
+                    wool_cards_count
+                ).each do |acceptable_player_offer|
+                    @receiving_player_offer_actions.player_offer_actions[acceptable_player_offer] << 'PlayerOfferAgreement#create'
+                end
+            end
+        end
+        @receiving_player_offer_actions
     end
 
     def bank_offers

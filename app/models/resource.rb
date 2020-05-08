@@ -2,27 +2,17 @@ class Resource < ActiveHash::Base
     include ActiveHash::Enum
     enum_accessor :name
     self.data = [
+        'brick',
+        'grain',
+        'lumber',
+        'ore',
+        'wool'
+    ].map do |resource_name|
         {
-            id: 'brick',
-            name: 'brick'
-        },
-        {
-            id: 'grain',
-            name: 'grain'
-        },
-        {
-            id: 'lumber',
-            name: 'lumber'
-        },
-        {
-            id: 'ore',
-            name: 'ore'
-        },
-        {
-            id: 'wool',
-            name: 'wool'
+            id: resource_name,
+            name: resource_name
         }
-    ]
+    end
 
     def exchange_rate_for_player(player)
         return 4

@@ -3,6 +3,7 @@ class Turn < ApplicationRecord
 
     belongs_to :player
     belongs_to :game
+    has_many :player_offers
 
     scope :current, -> { where(id: Game.all.select(:current_turn_id)) }
 

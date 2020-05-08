@@ -20,6 +20,8 @@ class Game < ApplicationRecord
 
     belongs_to :robber_territory, class_name: 'Territory'
 
+    has_many :player_offers, through: :current_turn
+
     before_validation :generate!, on: :create
 
     after_save :changed!

@@ -24,6 +24,28 @@ json.bank_offers current_player.bank_offers do |bank_offer|
     json.bank_offer_actions current_player.bank_offer_actions[bank_offer]
 end
 
+json.player_offers game.player_offers do |player_offer|
+    json.(
+        player_offer,
+        :id,
+        :player_name,
+        :brick_cards_count_from_offering_player,
+        :grain_cards_count_from_offering_player,
+        :lumber_cards_count_from_offering_player,
+        :ore_cards_count_from_offering_player,
+        :wool_cards_count_from_offering_player,
+        :brick_cards_count_from_agreeing_player,
+        :grain_cards_count_from_agreeing_player,
+        :lumber_cards_count_from_agreeing_player,
+        :ore_cards_count_from_agreeing_player,
+        :wool_cards_count_from_agreeing_player
+    )
+
+    json.player_offer_actions current_player.player_offer_actions[player_offer]
+end
+
+json.(current_player, :new_player_offer_actions)
+
 if current_player.pending_discard_requirement
     json.pending_discard_requirement do
         json.(current_player.pending_discard_requirement, :id, :resource_cards_count)

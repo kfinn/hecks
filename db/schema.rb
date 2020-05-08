@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_221204) do
+ActiveRecord::Schema.define(version: 2020_05_08_040955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,23 @@ ActiveRecord::Schema.define(version: 2020_05_07_221204) do
     t.bigint "robber_territory_id", null: false
     t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
     t.index ["robber_territory_id"], name: "index_games_on_robber_territory_id"
+  end
+
+  create_table "player_offers", force: :cascade do |t|
+    t.bigint "turn_id", null: false
+    t.integer "brick_cards_count_from_offering_player", null: false
+    t.integer "grain_cards_count_from_offering_player", null: false
+    t.integer "lumber_cards_count_from_offering_player", null: false
+    t.integer "ore_cards_count_from_offering_player", null: false
+    t.integer "wool_cards_count_from_offering_player", null: false
+    t.integer "brick_cards_count_from_agreeing_player", null: false
+    t.integer "grain_cards_count_from_agreeing_player", null: false
+    t.integer "lumber_cards_count_from_agreeing_player", null: false
+    t.integer "ore_cards_count_from_agreeing_player", null: false
+    t.integer "wool_cards_count_from_agreeing_player", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["turn_id"], name: "index_player_offers_on_turn_id"
   end
 
   create_table "players", force: :cascade do |t|
@@ -158,6 +175,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_221204) do
   add_foreign_key "discard_requirements", "turns"
   add_foreign_key "games", "territories", column: "robber_territory_id"
   add_foreign_key "games", "turns", column: "current_turn_id"
+  add_foreign_key "player_offers", "turns"
   add_foreign_key "players", "games"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"
   add_foreign_key "players", "users"
