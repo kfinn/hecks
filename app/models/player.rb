@@ -49,37 +49,38 @@ class Player < ApplicationRecord
 
     delegate :can_create_initial_settlement?, :can_create_initial_road?, to: :initial_setup_turn, allow_nil: true
     delegate(
-        :can_create_initial_second_settlement?,
         :can_create_initial_second_road?,
+        :can_create_initial_second_settlement?,
         to: :initial_second_setup_turn,
         allow_nil: true
     )
     delegate(
         :can_create_production_roll?,
         :can_end_turn?,
-        :can_purchase_settlement?,
-        :can_purchase_road?,
-        :can_trade?,
+        :can_move_robber?,
         :can_purchase_city_upgrade?,
         :can_purchase_development_card?,
-        :can_move_robber?,
+        :can_purchase_road?,
+        :can_purchase_settlement?,
         :can_rob_player?,
+        :can_trade?,
         to: :current_repeating_turn,
         allow_nil: true
     )
 
     delegate(
-        :corner_actions,
-        :border_actions,
-        :territory_actions,
-        :dice_actions,
         :bank_offer_actions,
-        :player_actions,
-        :pending_discard_requirement_actions,
-        :player_offer_actions,
-        :new_player_offer_actions,
-        :player_offer_agreement_actions,
+        :border_actions,
+        :corner_actions,
+        :development_card_actions,
+        :dice_actions,
         :new_development_card_actions,
+        :new_player_offer_actions,
+        :pending_discard_requirement_actions,
+        :player_actions,
+        :player_offer_actions,
+        :player_offer_agreement_actions,
+        :territory_actions,
         to: :actions
     )
 

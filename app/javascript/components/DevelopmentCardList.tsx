@@ -3,6 +3,7 @@ import { Game } from '../models/Game';
 import _ from 'lodash';
 import { NewDevelopmentCardAction } from '../models/DevelopmentCard';
 import Api from '../models/Api';
+import DevelopmentCardForm from './DevelopmentCardForm';
 
 const NEW_DEVELOPMENT_CARD_ACTIONS = {
     [NewDevelopmentCardAction.CreateDevelopmentCardPurchase]: async ({ id }: Game) => {
@@ -33,7 +34,10 @@ export default function DevelopmentCardList({ game }: { game: Game }) {
                         <ul>
                             {
                                 _.map(game.developmentCards, (developmentCard) => (
-                                    <li>{developmentCard.name}</li>
+                                    <li key={developmentCard.id}>
+                                        {developmentCard.name}
+                                        <DevelopmentCardForm developmentCard={developmentCard} />
+                                    </li>
                                 ))
                             }
                         </ul>

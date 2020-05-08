@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :discard_requirements, through: :players
   has_many :player_offers, through: :games
   has_many :player_offer_agreements, through: :games
+  has_many :development_cards, through: :players
 
   after_save :broadcast_to_games!
 

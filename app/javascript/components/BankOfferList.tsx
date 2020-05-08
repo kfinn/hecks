@@ -5,6 +5,7 @@ import _ from 'lodash';
 import ResourceIcon from './ResourceIcon';
 import { ResourceId, resourceIdName } from '../models/Resource';
 import Api from '../models/Api';
+import ResourceIdPicker from './ResourceIdPicker';
 
 const BANK_OFFER_ACTIONS = {
     [BankOfferAction.CreateBankTrade]: async (game: Game, bankOffer: BankOffer, resourceToReceiveId: ResourceId) => {
@@ -16,7 +17,8 @@ const BANK_OFFER_ACTIONS = {
 }
 
 function BankOffer({ game, bankOffer }: { game: Game, bankOffer: BankOffer }) {
-    const [resourceToReceiveId, setResourceToReceiveId] = useState(_.values(ResourceId)[0])
+    const resourceIdOptions = _.difference(_.values(ResourceId), [bankOffer.resourceToGive.id])
+    const [resourceToReceiveId, setResourceToReceiveId] = useState(resourceIdOptions[0])
 
     const action = BANK_OFFER_ACTIONS[bankOffer.bankOfferActions[0]]
     const disabled = !action
@@ -24,15 +26,17 @@ function BankOffer({ game, bankOffer }: { game: Game, bankOffer: BankOffer }) {
 
     return (
         <React.Fragment>
-            <ResourceIcon resourceId={bankOffer.resourceToGive.id} /> &times; { bankOffer.resourceToGiveCountRequired } &rarr;
-            <select className="bank-offer-resource-to-receive-select" value={resourceToReceiveId} disabled={disabled} onChange={({ target: { value } }) => setResourceToReceiveId(value as ResourceId)}>
-                {
-                    _.map(_.difference(_.values(ResourceId), [bankOffer.resourceToGive.id]), (resourceId) => (
-                        <option key={resourceId} value={resourceId}>{resourceIdName(resourceId)}</option>
-                    ))
-                }
-            </select> &times; 1
-            {' '}
+            <ResourceIcon resourceId={bankOffer.resourceToGive.id} />
+            {' &times; '}
+            { bankOffer.resourceToGiveCountRequired }
+            {' &rarr; '}
+            <ResourceIdPicker
+                value={resourceToReceiveId}
+                onChange={setResourceToReceiveId}
+                disabled={disabled}
+                options={resourceIdOptions}
+            />
+            {' &times; 1 '}
             <button onClick={onClick} disabled={disabled}>Trade</button>
         </React.Fragment>
     )

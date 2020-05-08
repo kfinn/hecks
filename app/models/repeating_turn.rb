@@ -74,6 +74,12 @@ class RepeatingTurn < Turn
                     action_collection.player_offer_agreement_actions[player_offer_agreement] << 'PlayerTrade#create' if player_offer_agreement.affordable?
                 end
             end
+
+            player.active_development_cards.each do |development_card|
+                development_card.development_card_actions(self).each do |action|
+                    action_collection.development_card_actions[development_card] << action
+                end
+            end
         end
     end
 
@@ -177,6 +183,7 @@ class RepeatingTurn < Turn
         current? && active? && roll_completed?
     end
     alias can_trade? can_purchase?
+    alias can_play_development_cards? can_purchase?
 
     def build_next_turn
         RepeatingTurn.new(game: game, player: player.next_player)
