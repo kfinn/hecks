@@ -3,8 +3,9 @@ export enum NewDevelopmentCardAction {
 }
 
 export enum DevelopmentCardAction {
+    CreateKnightCardPlay = 'KnightCardPlay#create',
     CreateMonopolyCardPlay = 'MonopolyCardPlay#create',
-    CreateKnightCardPlay = 'KnightCardPlay#create'
+    CreateYearOfPlentyCardPlay = 'YearOfPlentyCardPlay#create'
 }
 
 export interface DevelopmentCard {

@@ -15,7 +15,7 @@ class DevelopmentCard < ApplicationRecord
         # :victory_point?,
         :monopoly?,
         # :road_building?,
-        # :year_of_plenty?,
+        :year_of_plenty?,
         to: :development_card_behavior
     )
 

@@ -30,12 +30,16 @@ class DevelopmentCardBehavior < ActiveHash::Base
         }
     ]
 
+    def knight?
+        self == KNIGHT
+    end
+
     def monopoly?
         self == MONOPOLY
     end
 
-    def knight?
-        self == KNIGHT
+    def year_of_plenty?
+        self == YEAR_OF_PLENTY
     end
 
     def self.shuffled_deck
@@ -47,7 +51,7 @@ class DevelopmentCardBehavior < ActiveHash::Base
 
     def can_play?(development_card, turn)
         case self
-        when MONOPOLY
+        when MONOPOLY, YEAR_OF_PLENTY
             development_card.played_during_turn.blank? &&
                 turn != development_card.purchased_during_turn &&
                 turn.can_play_development_cards?
@@ -61,19 +65,8 @@ class DevelopmentCardBehavior < ActiveHash::Base
     end
 
     def development_card_actions(development_card, turn)
-        case self
-        when MONOPOLY
-            if can_play?(development_card, turn)
-                ['MonopolyCardPlay#create']
-            else
-                []
-            end
-        when KNIGHT
-            if can_play?(development_card, turn)
-                ['KnightCardPlay#create']
-            else
-                []
-            end
+        if can_play?(development_card, turn)
+            ["#{id.camelize}CardPlay#create"]
         else
             []
         end

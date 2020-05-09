@@ -24,8 +24,9 @@ Rails.application.routes.draw do
       resource :current_user, only: :update
 
       resources :development_cards, only: [] do
-        resource :monopoly_card_play, only: :create
         resource :knight_card_play, only: :create
+        resource :monopoly_card_play, only: :create
+        resource :year_of_plenty_card_play, only: :create
       end
 
       resources :discard_requirements, only: [] do
