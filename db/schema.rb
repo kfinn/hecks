@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_164201) do
+ActiveRecord::Schema.define(version: 2020_05_08_230337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,6 +129,18 @@ ActiveRecord::Schema.define(version: 2020_05_08_164201) do
     t.index ["player_id"], name: "index_roads_on_player_id"
   end
 
+  create_table "robber_move_requirements", force: :cascade do |t|
+    t.bigint "turn_id", null: false
+    t.bigint "moved_to_territory_id"
+    t.bigint "robbed_player_id"
+    t.boolean "has_robbable_players", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["moved_to_territory_id"], name: "index_robber_move_requirements_on_moved_to_territory_id"
+    t.index ["robbed_player_id"], name: "index_robber_move_requirements_on_robbed_player_id"
+    t.index ["turn_id"], name: "index_robber_move_requirements_on_turn_id"
+  end
+
   create_table "rolls", force: :cascade do |t|
     t.integer "die_1_value"
     t.integer "die_2_value"
@@ -159,14 +171,9 @@ ActiveRecord::Schema.define(version: 2020_05_08_164201) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "roll_id"
     t.datetime "ended_at"
-    t.datetime "robber_moved_at"
-    t.bigint "robber_moved_to_territory_id"
-    t.bigint "robbed_player_id"
     t.index ["game_id"], name: "index_turns_on_game_id"
     t.index ["player_id"], name: "index_turns_on_player_id"
     t.index ["road_id"], name: "index_turns_on_road_id"
-    t.index ["robbed_player_id"], name: "index_turns_on_robbed_player_id"
-    t.index ["robber_moved_to_territory_id"], name: "index_turns_on_robber_moved_to_territory_id"
     t.index ["roll_id"], name: "index_turns_on_roll_id"
     t.index ["settlement_id"], name: "index_turns_on_settlement_id"
   end
@@ -213,11 +220,12 @@ ActiveRecord::Schema.define(version: 2020_05_08_164201) do
   add_foreign_key "players", "games"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"
   add_foreign_key "players", "users"
+  add_foreign_key "robber_move_requirements", "players", column: "robbed_player_id"
+  add_foreign_key "robber_move_requirements", "territories", column: "moved_to_territory_id"
+  add_foreign_key "robber_move_requirements", "turns"
   add_foreign_key "turns", "games"
   add_foreign_key "turns", "players"
-  add_foreign_key "turns", "players", column: "robbed_player_id"
   add_foreign_key "turns", "roads"
   add_foreign_key "turns", "rolls"
   add_foreign_key "turns", "settlements"
-  add_foreign_key "turns", "territories", column: "robber_moved_to_territory_id"
 end

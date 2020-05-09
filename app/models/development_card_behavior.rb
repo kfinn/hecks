@@ -42,14 +42,24 @@ class DevelopmentCardBehavior < ActiveHash::Base
     end
 
     def can_play?(development_card, turn)
-        return false unless monopoly?
-        development_card.played_during_turn.blank? && turn != development_card.purchased_during_turn && turn.can_play_development_cards?
+        case self
+        when MONOPOLY
+            development_card.played_during_turn.blank? &&
+                turn != development_card.purchased_during_turn &&
+                turn.can_play_development_cards?
+        else
+            false
+        end
     end
 
     def development_card_actions(development_card, turn)
-        return [] unless monopoly?
-        if can_play?(development_card, turn)
-            ['MonopolyCardPlay#create']
+        case self
+        when MONOPOLY
+            if can_play?(development_card, turn)
+                ['MonopolyCardPlay#create']
+            else
+                []
+            end
         else
             []
         end

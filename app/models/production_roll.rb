@@ -12,6 +12,7 @@ class ProductionRoll
             raise ActiveRecord::RecordInvalid.new(self) unless valid?
             roll.save!
             discard_requirements.each(&:save!)
+            robber_move_requirement&.save!
             current_repeating_turn.save!
             collect_resources!
         end
@@ -53,6 +54,13 @@ class ProductionRoll
             end
         end
         @discard_requirements
+    end
+
+    def robber_move_requirement
+        unless instance_variable_defined?(:@robber_move_requirement)
+            @robber_move_requirement = current_repeating_turn.robber_move_requirements.build
+        end
+        @robber_move_requirement
     end
 
     def production_number

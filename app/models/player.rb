@@ -43,6 +43,10 @@ class Player < ApplicationRecord
     scope :without_initial_second_road, -> { where(initial_second_road: nil) }
     scope :without_initial_second_setup, -> { without_initial_second_settlement.or(without_initial_second_road) }
 
+    def self.with_resource_cards
+        where("#{Resource.all.map(&:attribute_name).join(' + ')} > ?", 0)
+    end
+
     def self.with_more_than_seven_resource_cards
         where("#{Resource.all.map(&:attribute_name).join(' + ')} > ?", 7)
     end

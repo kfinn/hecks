@@ -1,15 +1,22 @@
 class RepeatingTurn < Turn
     belongs_to :roll, optional: true
-    belongs_to :robber_moved_to_territory, class_name: 'Territory', optional: true
-    belongs_to :robbed_player, class_name: 'Player', optional: true
 
     has_many :discard_requirements, inverse_of: :turn, foreign_key: :turn_id
+
+    has_many :robber_move_requirements, inverse_of: :turn, foreign_key: :turn_id
+    has_one(
+        :latest_robber_move_requirement,
+        -> { order(created_at: :desc) },
+        inverse_of: :turn,
+        foreign_key: :turn_id,
+        class_name: 'RobberMoveRequirement'
+    )
 
     has_many :player_offer_agreements, through: :player_offers
 
     validates :roll, presence: { if: :ended? }
-    validate :robber_move_columns_must_be_mutually_present
-    validate :robbed_player_must_occupy_robber_moved_to_territory
+
+    delegate :can_rob_player?, to: :latest_robber_move_requirement, allow_nil: true
 
     def description
         if roll.blank?
@@ -26,18 +33,26 @@ class RepeatingTurn < Turn
     end
 
     def actions
+        return [] unless current?
+
         ActionCollection.new.tap do |action_collection|
-            if can_create_production_roll?
-                action_collection.dice_actions << 'ProductionRoll#create'
-            elsif needs_robber_move?
+            if needs_robber_move?
                 game.territories.without_robber.each do |territory|
                     action_collection.territory_actions[territory] << 'RobberMove#create'
                 end
-            elsif needs_robbed_player?
-                robbable_players.each do |player|
+            end
+
+            if needs_robbed_player?
+                latest_robber_move_requirement.robbable_players.each do |player|
                     action_collection.player_actions[player] << 'Robbery#create'
                 end
-            elsif can_end_turn?
+            end
+
+            if can_create_production_roll?
+                action_collection.dice_actions << 'ProductionRoll#create'
+            end
+
+            if can_end_turn?
                 action_collection.dice_actions << 'RepeatingTurnEnds#create'
             end
 
@@ -84,19 +99,7 @@ class RepeatingTurn < Turn
     end
 
     def can_create_production_roll?
-        roll.nil? && current?
-    end
-
-    def roll_actions_completed?
-        if roll.blank?
-            false
-        elsif roll.value == 7
-            robber_moved? &&
-                (player_robbed? || no_players_to_rob?) &&
-                all_discard_requirements_met?
-        else
-            true
-        end
+        roll.blank? && all_robber_move_requirements_met?
     end
 
     def all_discard_requirements_met?
@@ -104,45 +107,29 @@ class RepeatingTurn < Turn
     end
 
     def needs_robber_move?
-        roll.present? && roll.value == 7 && !robber_moved?
+        latest_robber_move_requirement&.needs_moved_to_territory?
     end
     alias can_move_robber? needs_robber_move?
 
     def needs_robbed_player?
-        robber_moved? && players_to_rob? && !player_robbed? && all_discard_requirements_met?
+        all_discard_requirements_met? && latest_robber_move_requirement&.needs_robbed_player?
     end
 
-    def can_rob_player?(player_to_rob)
-        needs_robbed_player? && robbable_players.include?(player_to_rob)
+    def all_robber_move_requirements_met?
+        !needs_robber_move? && !needs_robbed_player?
     end
 
-    def player_robbed?
-        robbed_player.present?
+    def can_take_action?
+        roll.present? &&
+            all_robber_move_requirements_met? &&
+            all_discard_requirements_met? &&
+            !ended?
     end
+    alias can_end_turn? can_take_action?
+    alias can_purchase? can_take_action?
+    alias can_trade? can_take_action?
+    alias can_play_development_cards? can_take_action?
 
-    def robbable_players
-        (robber_moved_to_territory&.players&.where&.not(id: player.id)) || []
-    end
-
-    def no_players_to_rob?
-        robber_moved_to_territory && robbable_players.empty?
-    end
-
-    def players_to_rob?
-        !no_players_to_rob?
-    end
-
-    def robber_moved?
-        robber_moved_at.present?
-    end
-
-    def roll_completed?
-        roll.present? && roll_actions_completed?
-    end
-
-    def can_end_turn?
-        roll_completed? && current?
-    end
 
     def can_purchase_settlement?
         can_purchase? &&
@@ -175,32 +162,7 @@ class RepeatingTurn < Turn
         ended_at.present?
     end
 
-    def active?
-        !ended?
-    end
-
-    def can_purchase?
-        current? && active? && roll_completed?
-    end
-    alias can_trade? can_purchase?
-    alias can_play_development_cards? can_purchase?
-
     def build_next_turn
         RepeatingTurn.new(game: game, player: player.next_player)
-    end
-
-    private
-
-    def robber_move_columns_must_be_mutually_present
-        if robber_moved_at.present? && robber_moved_to_territory.blank?
-            errors[:robber_moved_to_territory] << "can't be blank"
-        elsif robber_moved_to_territory.present? && robber_moved_at.blank?
-            errors[:robber_moved_at] << "can't be blank"
-        end
-    end
-
-    def robbed_player_must_occupy_robber_moved_to_territory
-        return unless robber_moved_to_territory.present? && robbed_player.present?
-        errors[:robbed_player] << 'cannot rob this player' unless robbable_players.include? robbed_player
     end
 end

@@ -1,6 +1,6 @@
 class Robbery
     include ActiveModel::Model
-   attr_accessor :robbing_player, :player_to_rob
+    attr_accessor :robbing_player, :player_to_rob
 
     validates :robbing_player, :player_to_rob, presence: true
     validate :robbing_player_must_be_able_to_rob_player_to_rob
@@ -13,7 +13,8 @@ class Robbery
                 robbing_player.collect_resource(resource)
                 player_to_rob.save!
                 robbing_player.save!
-                robbing_player.current_repeating_turn.update! robbed_player: player_to_rob
+
+                robbing_player.current_turn.latest_robber_move_requirement.update! robbed_player: player_to_rob
             end
         end
     end
