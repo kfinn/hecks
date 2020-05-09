@@ -3,7 +3,8 @@ export enum NewDevelopmentCardAction {
 }
 
 export enum DevelopmentCardAction {
-    CreateMonopolyPlay = 'MonopolyCardPlay#create'
+    CreateMonopolyCardPlay = 'MonopolyCardPlay#create',
+    CreateKnightCardPlay = 'KnightCardPlay#create'
 }
 
 export interface DevelopmentCard {

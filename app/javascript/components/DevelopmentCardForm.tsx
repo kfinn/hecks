@@ -38,8 +38,29 @@ function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
     )
 }
 
+function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
+    const onClick = () => {
+        const onClickAsync = async () => {
+            try {
+                await Api.post(`development_cards/${id}/knight_card_play.json`)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        onClickAsync()
+    }
+
+    return (
+        <React.Fragment>
+            {': '}
+            <button onClick={onClick}>Play Knight</button>
+        </React.Fragment>
+    )
+}
+
 const FORMS_BY_DEVELOPMENT_CARD_ACTION = {
-    [DevelopmentCardAction.CreateMonopolyPlay]: MonopolyCardPlayForm
+    [DevelopmentCardAction.CreateMonopolyCardPlay]: MonopolyCardPlayForm,
+    [DevelopmentCardAction.CreateKnightCardPlay]: KnightCardPlayForm
 }
 
 export default function DevelopmentCardForm({ developmentCard }: { developmentCard: DevelopmentCard }) {

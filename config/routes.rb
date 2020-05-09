@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
       resources :development_cards, only: [] do
         resource :monopoly_card_play, only: :create
+        resource :knight_card_play, only: :create
       end
 
       resources :discard_requirements, only: [] do

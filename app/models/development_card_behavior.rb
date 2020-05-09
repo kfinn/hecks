@@ -34,6 +34,10 @@ class DevelopmentCardBehavior < ActiveHash::Base
         self == MONOPOLY
     end
 
+    def knight?
+        self == KNIGHT
+    end
+
     def self.shuffled_deck
         for_deck = all.flat_map do |development_card_behavior|
             Array.new(development_card_behavior.count, development_card_behavior)
@@ -47,6 +51,10 @@ class DevelopmentCardBehavior < ActiveHash::Base
             development_card.played_during_turn.blank? &&
                 turn != development_card.purchased_during_turn &&
                 turn.can_play_development_cards?
+        when KNIGHT
+            development_card.played_during_turn.blank? &&
+                turn != development_card.purchased_during_turn &&
+                (turn.can_create_production_roll? || turn.can_play_development_cards?)
         else
             false
         end
@@ -57,6 +65,12 @@ class DevelopmentCardBehavior < ActiveHash::Base
         when MONOPOLY
             if can_play?(development_card, turn)
                 ['MonopolyCardPlay#create']
+            else
+                []
+            end
+        when KNIGHT
+            if can_play?(development_card, turn)
+                ['KnightCardPlay#create']
             else
                 []
             end

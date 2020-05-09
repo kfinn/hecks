@@ -11,7 +11,7 @@ class DevelopmentCard < ApplicationRecord
 
     delegate(
         :name,
-        # :knight?,
+        :knight?,
         # :victory_point?,
         :monopoly?,
         # :road_building?,

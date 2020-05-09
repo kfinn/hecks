@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_230337) do
+ActiveRecord::Schema.define(version: 2020_05_09_221427) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,7 +133,6 @@ ActiveRecord::Schema.define(version: 2020_05_08_230337) do
     t.bigint "turn_id", null: false
     t.bigint "moved_to_territory_id"
     t.bigint "robbed_player_id"
-    t.boolean "has_robbable_players", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["moved_to_territory_id"], name: "index_robber_move_requirements_on_moved_to_territory_id"

@@ -19,14 +19,14 @@ class RepeatingTurn < Turn
     delegate :can_rob_player?, to: :latest_robber_move_requirement, allow_nil: true
 
     def description
-        if roll.blank?
-            'roll the dice'
-        elsif needs_robber_move?
+        if needs_robber_move?
             'move the robber'
-        elsif !all_discard_requirements_met?
-            'wait for everyone to discard their excess cards'
         elsif needs_robbed_player?
             'select a player to rob'
+        elsif roll.blank?
+            'roll the dice'
+        elsif !all_discard_requirements_met?
+            'wait for everyone to discard their excess cards'
         else
             'take an action or end the turn'
         end

@@ -58,7 +58,11 @@ class ProductionRoll
 
     def robber_move_requirement
         unless instance_variable_defined?(:@robber_move_requirement)
-            @robber_move_requirement = current_repeating_turn.robber_move_requirements.build
+            if roll.value == 7
+                @robber_move_requirement = current_repeating_turn.robber_move_requirements.build
+            else
+                @robber_move_requirement = nil
+            end
         end
         @robber_move_requirement
     end
