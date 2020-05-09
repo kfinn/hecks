@@ -101,9 +101,8 @@ json.borders game.borders.includes(road: [:player], corners: []) do |border|
 end
 
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
-    json.(player, :id, :ordering, :total_resource_cards_count)
+    json.(player, :id, :ordering, :total_resource_cards_count, :name)
     json.user do
-        json.(player.user, :id, :name)
         json.is_current_user current_player == player
     end
     if player.ordering_roll

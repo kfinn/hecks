@@ -8,44 +8,40 @@ import { Color } from '../models/Color';
 function CurrentUserPlayer({ game, player }: { game: Game, player: Player }) {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState(playerName(player))
+    const [colorId, setColorId] = useState(playerColor(player))
 
-    const onSubmitName = (event: { preventDefault: () => void; }) => {
+    const onSubmit = (event: { preventDefault: () => void; }) => {
         event.preventDefault()
         setEditing(false)
 
-        const onSubmitNameAsync = async () => {
-            return await Api.put(
-                'current_user.json',
-                { currentUser: { name } }
-            )
-        }
-
-        onSubmitNameAsync()
-    }
-
-    const onColorChange = ({ target: { value }}) => {
-        const submitColorAsync = async () => {
+        const onSubmitAsync = async () => {
             return await Api.put(
                 `games/${game.id}/current_player.json`,
-                { currentPlayer: { colorId: value } }
+                { currentPlayer: { name: name, colorId: colorId } }
             )
         }
 
-        submitColorAsync()
+        onSubmitAsync()
+    }
+
+    const stopEditing = () => {
+        setName(playerName(player))
+        setColorId(playerColor(player))
+        setEditing(false)
     }
 
     if (editing) {
         return <span>
             <input type="text" onChange={({ target: { value } }) => setName(value)} value={name} />
-            <select value={playerColor(player)} onChange={onColorChange}>
+            <select value={playerColor(player)} onChange={({ target: { value } }) => setColorId(value as Color)}>
                 {
                     _.map(Object.keys(Color), (colorName) => (
                         <option key={Color[colorName]} value={Color[colorName]}>{colorName}</option>
                     ))
                 }
             </select>
-            <input type="submit" value="Save" onClick={onSubmitName} />
-            <a href="#" onClick={(e) => { e.preventDefault(); setEditing(false) }}>Cancel</a>
+            <input type="submit" value="Save" onClick={onSubmit} />
+            <a href="#" onClick={(e) => { e.preventDefault(); stopEditing() }}>Cancel</a>
         </span>
     } else {
         return <span>

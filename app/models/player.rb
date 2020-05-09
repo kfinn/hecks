@@ -30,7 +30,6 @@ class Player < ApplicationRecord
     has_many :development_cards
     has_many :active_development_cards, -> { active }, class_name: 'DevelopmentCard'
 
-    delegate :name, to: :user
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 
     scope :ordered, -> { order(:ordering) }
@@ -108,6 +107,10 @@ class Player < ApplicationRecord
             ordering_roll.roll!
         end
         ordering_roll
+    end
+
+    def name
+        super || "Player #{id}"
     end
 
     def next_player

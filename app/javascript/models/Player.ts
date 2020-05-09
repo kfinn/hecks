@@ -8,6 +8,7 @@ export enum PlayerAction {
 
 export interface Player {
     id: number
+    name: string
     user: User
     ordering: number
     orderingRoll?: Roll
@@ -17,7 +18,7 @@ export interface Player {
 }
 
 export function playerName(player: Player) {
-    return player.user.name
+    return player.name
 }
 
 export function playerColor(player: Player) {

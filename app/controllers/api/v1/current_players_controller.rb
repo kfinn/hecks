@@ -10,6 +10,6 @@ class Api::V1::CurrentPlayersController < Api::ApiController
     end
 
     def update_params
-        params.require(:current_player).permit(:color_id)
+        params.require(:current_player).permit(:name, :color_id)
     end
 end
