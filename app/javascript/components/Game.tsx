@@ -12,6 +12,7 @@ import BankOfferList from './BankOfferList';
 import PendingDiscardRequirement from './PendingDiscardRequirement';
 import PlayerOfferList from './PlayerOfferList';
 import DevelopmentCardList from './DevelopmentCardList';
+import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 
 interface GameProps {
     game: Game
@@ -71,6 +72,62 @@ export default function Game(props: GameProps) {
             <DevelopmentCardList game={game} />
             <PlayerOfferList game={game} />
             <BankOfferList game={game} />
+            <h2>Prices</h2>
+            <ul>
+                <li>
+                    <h3>Road</h3>
+                    <ul>
+                        <li>
+                            <BrickIcon /> &times; 1
+                        </li>
+                        <li>
+                            <LumberIcon /> &times; 1
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Settlement</h3>
+                    <ul>
+                        <li>
+                            <BrickIcon /> &times; 1
+                        </li>
+                        <li>
+                            <GrainIcon /> &times; 1
+                        </li>
+                        <li>
+                            <LumberIcon /> &times; 1
+                        </li>
+                        <li>
+                            <WoolIcon /> &times; 1
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>City</h3>
+                    <ul>
+                        <li>
+                            <GrainIcon /> &times; 2
+                        </li>
+                        <li>
+                            <OreIcon /> &times; 3
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h3>Development Card</h3>
+                    <ul>
+                        <li>
+                            <GrainIcon /> &times; 1
+                        </li>
+                        <li>
+                            <OreIcon /> &times; 1
+                        </li>
+                        <li>
+                            <WoolIcon /> &times; 1
+                        </li>
+                    </ul>
+                </li>
+            </ul>
             <h2>Attribution</h2>
             <ul>
                 <li>Brick icon: Created by Ben Davis from the Noun Project</li>

@@ -1,11 +1,11 @@
-import React from 'react';
-import { Game } from '../models/Game';
-import { PlayerOffer, PlayerOfferAction, NewPlayerOfferAction, NewPlayerOffer } from '../models/PlayerOffer';
-import Api from '../models/Api';
-import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 import _ from 'lodash';
+import React from 'react';
+import Api from '../models/Api';
+import { Game } from '../models/Game';
+import { PlayerOffer, PlayerOfferAction } from '../models/PlayerOffer';
 import NewPlayerOfferForm from './NewPlayerOfferForm';
 import PlayerOfferResponseList from './PlayerOfferResponseList';
+import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 
 interface PlayerOfferComponentProps {
     playerOffer: PlayerOffer
