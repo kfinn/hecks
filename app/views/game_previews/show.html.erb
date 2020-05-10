@@ -1,0 +1,23 @@
+<h1>Hecks</h1>
+
+<h2>Game status</h2>
+<p>
+    <% if @game.started? %>
+        started
+    <% else %>
+        not yet started
+    <% end %>
+
+    <% if @game.joinable? %>
+        <%= form_with url: game_players_path(game_id: @game.key) do |f| %>
+            <input type="submit" value="Join" />
+        <% end %>
+    <% end %>
+</p>
+
+<h2>Players</h2>
+<ul>
+    <% @game.players.each do |player| %>
+        <li><%= player.name %></li>
+    <% end %>
+</ul>

@@ -3,7 +3,7 @@ class FourPlayerRandomizedBoard
 
     attr_accessor :game
 
-    delegate :adjacencies, to: :game
+    delegate :adjacencies, :harbors, to: :game
 
     Position = Struct.new(:x, :y) do
         def +(other)
@@ -134,15 +134,15 @@ class FourPlayerRandomizedBoard
 
         HARBOR_ORIENTATIONS.each_with_index do |harbor_orientation, index|
             harbor_position = harbor_orientation[:harbor_position]
-            harbor = game.harbors.build(
+            harbor = Harbor.new(
                 x: harbor_position.x,
                 y: harbor_position.y,
                 harbor_offer: harbor_offers[index]
             )
 
             harbor_orientation[:corner_offsets].each do |corner_offset|
-                harbor.corner_harbors.build(
-                    corner: corners_by_position[harbor_position + corner_offset]
+                corners_by_position[harbor_position + corner_offset].build_corner_harbor(
+                    harbor: harbor
                 )
             end
         end

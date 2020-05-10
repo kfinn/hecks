@@ -90,6 +90,7 @@ class Player < ApplicationRecord
         numericality: { only_integer: true, greater_than_or_equal_to: 0 }
     )
     validates :color, presence: true, uniqueness: { scope: :game }, inclusion: { in: Color.all }
+    validate :game_must_be_joinable, on: :create
 
     before_validation :assign_color, on: :create
 
@@ -175,6 +176,10 @@ class Player < ApplicationRecord
     end
 
     private
+
+    def game_must_be_joinable
+        errors[:game] << 'must be joinable' unless game.joinable?
+    end
 
     def assign_color
         used_colors = game.players.map(&:color)

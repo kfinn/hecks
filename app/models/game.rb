@@ -5,7 +5,7 @@ class Game < ApplicationRecord
     has_many :corners, -> { distinct }, through: :adjacencies
     has_many :territories, -> { distinct }, through: :adjacencies
 
-    has_many :harbors
+    has_many :harbors, -> { distinct }, through: :corners
 
     has_many :settlements, -> { distinct }, through: :corners
     has_many :roads, -> { distinct }, through: :borders
@@ -40,7 +40,7 @@ class Game < ApplicationRecord
     end
 
     def joinable?
-        !started?
+        !started? && players.size < 4
     end
 
     def started?

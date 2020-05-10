@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   root to: 'home#get'
   get 'home/get'
 
-  resources :games, only: [:create, :show]
+  resources :games, only: [:create, :show] do
+    resource :game_preview, only: :show
+    resource :players, only: :create
+  end
 
   namespace :api do
     namespace :v1 do

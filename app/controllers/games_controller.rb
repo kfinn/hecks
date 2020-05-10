@@ -1,16 +1,13 @@
 class GamesController < ApplicationController
     def create
-        @user = current_or_guest_user
-        @game = @user.games.create!
-
+        @game = current_or_guest_user.games.create!
         redirect_to game_path(@game.key)
     end
 
     def show
-        @user = current_or_guest_user
-        @game = Game.find_by! key: params[:id]
-        if @game.joinable? && !@game.users.include?(@user)
-            @game.players.create! user: @user
+        @game = current_or_guest_user.games.find_by key: params[:id]
+        if @game.blank?
+            redirect_to game_game_preview_path(game_id: params[:id])
         end
     end
 end
