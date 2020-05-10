@@ -19,6 +19,7 @@ class Player < ApplicationRecord
     has_many :roads
 
     has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
+    has_many :incomplete_road_building_card_plays, through: :current_repeating_turn
 
     has_many :discard_requirements
     has_one :pending_discard_requirement, -> { pending }, class_name: 'DiscardRequirement'
@@ -67,6 +68,7 @@ class Player < ApplicationRecord
         :can_purchase_settlement?,
         :can_rob_player?,
         :can_trade?,
+        :any_incomplete_road_building_card_plays?,
         to: :current_repeating_turn,
         allow_nil: true
     )

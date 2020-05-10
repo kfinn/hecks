@@ -23,6 +23,9 @@ const BORDER_ACTIONS = {
     },
     [BorderAction.CreateRoadPurchase]: async ({ id }: Border) => {
         return await Api.post(`borders/${id}/road_purchase.json`)
+    },
+    [BorderAction.CreateRoadBuildingRoad]: async({ id }: Border) => {
+        return await Api.post(`borders/${id}/road_building_road.json`)
     }
 }
 

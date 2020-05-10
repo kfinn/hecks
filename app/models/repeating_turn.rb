@@ -12,6 +12,20 @@ class RepeatingTurn < Turn
         class_name: 'RobberMoveRequirement'
     )
 
+    has_many(
+        :played_development_cards,
+        class_name: 'DevelopmentCard',
+        inverse_of: :played_during_turn,
+        foreign_key: :played_during_turn_id
+    )
+
+    has_many(
+        :incomplete_road_building_card_plays,
+        -> { incomplete },
+        through: :played_development_cards,
+        source: :road_building_card_play
+    )
+
     has_many :player_offer_agreements, through: :player_offers
 
     validates :roll, presence: { if: :ended? }
@@ -27,6 +41,8 @@ class RepeatingTurn < Turn
             'roll the dice'
         elsif !all_discard_requirements_met?
             'wait for everyone to discard their excess cards'
+        elsif any_incomplete_road_building_card_plays?
+            incomplete_road_building_card_plays.first.turn_description
         else
             'take an action or end the turn'
         end
@@ -90,6 +106,12 @@ class RepeatingTurn < Turn
                 end
             end
 
+            if any_incomplete_road_building_card_plays?
+                game.borders.available_for_road.reachable_by(player).each do |border|
+                    action_collection.border_actions[border] << 'RoadBuildingRoad#create'
+                end
+            end
+
             player.active_development_cards.each do |development_card|
                 development_card.development_card_actions(self).each do |action|
                     action_collection.development_card_actions[development_card] << action
@@ -123,6 +145,7 @@ class RepeatingTurn < Turn
         roll.present? &&
             all_robber_move_requirements_met? &&
             all_discard_requirements_met? &&
+            no_incomplete_road_building_card_plays? &&
             !ended?
     end
     alias can_end_turn? can_take_action?
@@ -156,6 +179,14 @@ class RepeatingTurn < Turn
             player.grain_cards_count >= 1 &&
             player.ore_cards_count >= 1 &&
             player.wool_cards_count >= 1
+    end
+
+    def any_incomplete_road_building_card_plays?
+        incomplete_road_building_card_plays.any?
+    end
+
+    def no_incomplete_road_building_card_plays?
+        !any_incomplete_road_building_card_plays?
     end
 
     def ended?

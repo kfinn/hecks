@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         resource :initial_road, only: :create
         resource :initial_second_road, only: :create
         resource :road_purchase, only: :create
+        resource :road_building_road, only: :create
       end
 
       resources :corners, only: [] do
@@ -26,6 +27,7 @@ Rails.application.routes.draw do
       resources :development_cards, only: [] do
         resource :knight_card_play, only: :create
         resource :monopoly_card_play, only: :create
+        resource :road_building_card_play, only: :create
         resource :year_of_plenty_card_play, only: :create
       end
 

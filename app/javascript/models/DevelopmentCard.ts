@@ -5,6 +5,7 @@ export enum NewDevelopmentCardAction {
 export enum DevelopmentCardAction {
     CreateKnightCardPlay = 'KnightCardPlay#create',
     CreateMonopolyCardPlay = 'MonopolyCardPlay#create',
+    CreateRoadBuildingCardPlay = 'RoadBuildingCardPlay#create',
     CreateYearOfPlentyCardPlay = 'YearOfPlentyCardPlay#create'
 }
 

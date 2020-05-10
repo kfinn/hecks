@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_09_224505) do
+ActiveRecord::Schema.define(version: 2020_05_09_230014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,6 +121,17 @@ ActiveRecord::Schema.define(version: 2020_05_09_224505) do
     t.index ["user_id"], name: "index_players_on_user_id"
   end
 
+  create_table "road_building_card_plays", force: :cascade do |t|
+    t.bigint "development_card_id", null: false
+    t.bigint "road_1_id"
+    t.bigint "road_2_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["development_card_id"], name: "index_road_building_card_plays_on_development_card_id"
+    t.index ["road_1_id"], name: "index_road_building_card_plays_on_road_1_id"
+    t.index ["road_2_id"], name: "index_road_building_card_plays_on_road_2_id"
+  end
+
   create_table "roads", force: :cascade do |t|
     t.bigint "player_id"
     t.bigint "border_id"
@@ -220,6 +231,9 @@ ActiveRecord::Schema.define(version: 2020_05_09_224505) do
   add_foreign_key "players", "games"
   add_foreign_key "players", "rolls", column: "ordering_roll_id"
   add_foreign_key "players", "users"
+  add_foreign_key "road_building_card_plays", "development_cards"
+  add_foreign_key "road_building_card_plays", "roads", column: "road_1_id"
+  add_foreign_key "road_building_card_plays", "roads", column: "road_2_id"
   add_foreign_key "robber_move_requirements", "players", column: "robbed_player_id"
   add_foreign_key "robber_move_requirements", "territories", column: "moved_to_territory_id"
   add_foreign_key "robber_move_requirements", "turns"

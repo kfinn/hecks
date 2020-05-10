@@ -93,9 +93,30 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
     )
 }
 
+function RoadBuildingCardPlayForm({ developmentCard: { id } }: FormProps) {
+    const onClick = () => {
+        const onClickAsync = async () => {
+            try {
+                await Api.post(`development_cards/${id}/road_building_card_play.json`)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        onClickAsync()
+    }
+
+    return (
+        <React.Fragment>
+            {': '}
+            <button onClick={onClick}>Play Road Building</button>
+        </React.Fragment>
+    )
+}
+
 const FORMS_BY_DEVELOPMENT_CARD_ACTION = {
     [DevelopmentCardAction.CreateKnightCardPlay]: KnightCardPlayForm,
     [DevelopmentCardAction.CreateMonopolyCardPlay]: MonopolyCardPlayForm,
+    [DevelopmentCardAction.CreateRoadBuildingCardPlay]: RoadBuildingCardPlayForm,
     [DevelopmentCardAction.CreateYearOfPlentyCardPlay]: YearOfPlentyCardPlayForm
 }
 

@@ -1,17 +1,15 @@
-class RoadPurchase
+class RoadBuildingRoad
     include ActiveModel::Model
     attr_accessor :player, :border
 
-    delegate :game, to: :player
-
-    validate :player_must_be_able_to_purchase_road
+    validate :player_must_have_incomplete_road_building_card_play
     validate :road_must_be_valid
 
     def save!
         ApplicationRecord.transaction do
             raise ActiveRecord::RecordInvalid.new(self) unless valid?
             road.save!
-            update_player!
+            update_road_building_card_play!
         end
     end
 
@@ -19,10 +17,14 @@ class RoadPurchase
         @road ||= Road.new(player: player, border: border)
     end
 
+    def road_building_card_play
+        @road_building_card_play ||= player.incomplete_road_building_card_plays.first
+    end
+
     private
 
-    def player_must_be_able_to_purchase_road
-        errors[:player] << 'cannot purchase road' unless player.can_purchase_road?
+    def player_must_have_incomplete_road_building_card_play
+        errors[:player] << 'cannot build road' unless player.any_incomplete_road_building_card_plays?
     end
 
     def road_must_be_valid
@@ -33,9 +35,8 @@ class RoadPurchase
         end
     end
 
-    def update_player!
-        player.discard_resource Resource::BRICK
-        player.discard_resource Resource::LUMBER
-        player.save!
+    def update_road_building_card_play!
+        road_building_card_play.next_road = road
+        road_building_card_play.save!
     end
 end

@@ -6,15 +6,16 @@ class DevelopmentCard < ApplicationRecord
     belongs_to :purchased_during_turn, class_name: 'Turn', optional: true
     belongs_to :played_during_turn, class_name: 'Turn', optional: true
 
+    has_one :road_building_card_play
+
     scope :available_for_purchase, -> { where player: nil }
     scope :active, -> { where played_during_turn: nil }
 
     delegate(
         :name,
         :knight?,
-        # :victory_point?,
         :monopoly?,
-        # :road_building?,
+        :road_building?,
         :year_of_plenty?,
         to: :development_card_behavior
     )
@@ -29,5 +30,9 @@ class DevelopmentCard < ApplicationRecord
 
     def development_card_actions(turn)
         development_card_behavior.development_card_actions(self, turn)
+    end
+
+    def play!
+        update! played_during_turn: player.current_turn
     end
 end

@@ -38,6 +38,10 @@ class DevelopmentCardBehavior < ActiveHash::Base
         self == MONOPOLY
     end
 
+    def road_building?
+        self == ROAD_BUILDING
+    end
+
     def year_of_plenty?
         self == YEAR_OF_PLENTY
     end
@@ -51,7 +55,7 @@ class DevelopmentCardBehavior < ActiveHash::Base
 
     def can_play?(development_card, turn)
         case self
-        when MONOPOLY, YEAR_OF_PLENTY
+        when MONOPOLY, YEAR_OF_PLENTY, ROAD_BUILDING
             development_card.played_during_turn.blank? &&
                 turn != development_card.purchased_during_turn &&
                 turn.can_play_development_cards?
