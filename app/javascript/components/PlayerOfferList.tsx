@@ -5,26 +5,40 @@ import Api from '../models/Api';
 import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
 import _ from 'lodash';
 import NewPlayerOfferForm from './NewPlayerOfferForm';
-import PlayerOfferAgreementList from './PlayerOfferAgreementList';
+import PlayerOfferResponseList from './PlayerOfferResponseList';
 
 const PLAYER_OFFER_ACTIONS = {
-    [PlayerOfferAction.CreatePlayerOfferAgreement]: async ({ id }: PlayerOffer) => {
-        return await Api.post(`player_offers/${id}/player_offer_agreement.json`)
+    [PlayerOfferAction.CreatePlayerOfferResponse]: async ({ id }: PlayerOffer, agreeing: boolean) => {
+        return await Api.post(
+            `player_offers/${id}/player_offer_response.json`,
+            { playerOfferResponse: { agreeing } }
+        )
     }
 }
 
 function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
     const action = PLAYER_OFFER_ACTIONS[playerOffer.playerOfferActions[0]]
-    const onClick = action ? (() => {
-        const asyncOnClick = async () => {
+    const onClickAgree = action ? (() => {
+        const asyncOnClickAgree = async () => {
             try {
-                await action(playerOffer)
+                await action(playerOffer, true)
             } catch (error) {
                 console.log(error.response)
             }
         }
 
-        asyncOnClick()
+        asyncOnClickAgree()
+    }) : null
+    const onClickReject = action ? (() => {
+        const asyncOnClickReject = async () => {
+            try {
+                await action(playerOffer, false)
+            } catch (error) {
+                console.log(error.response)
+            }
+        }
+
+        asyncOnClickReject()
     }) : null
 
     return (
@@ -110,10 +124,15 @@ function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
                 </ul>
             </div>
             <div>
-                <PlayerOfferAgreementList playerOffer={playerOffer} />
+                <PlayerOfferResponseList playerOffer={playerOffer} />
             </div>
             {
-                action ? (<div><button onClick={onClick}>Agree to trade</button></div>) : null
+                action ? (
+                <div>
+                    <button onClick={onClickAgree}>Agree to trade</button>
+                    <button onClick={onClickReject}>Reject trade</button>
+                </div>
+            ) : null
             }
         </React.Fragment>
     )

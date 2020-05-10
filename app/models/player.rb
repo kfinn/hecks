@@ -24,7 +24,7 @@ class Player < ApplicationRecord
     has_many :discard_requirements
     has_one :pending_discard_requirement, -> { pending }, class_name: 'DiscardRequirement'
 
-    has_many :player_offer_agreements
+    has_many :player_offer_responses
 
     belongs_to_active_hash :color
 
@@ -74,18 +74,7 @@ class Player < ApplicationRecord
     )
 
     delegate(
-        :bank_offer_actions,
-        :border_actions,
-        :corner_actions,
-        :development_card_actions,
-        :dice_actions,
-        :new_development_card_actions,
-        :new_player_offer_actions,
-        :pending_discard_requirement_actions,
-        :player_actions,
-        :player_offer_actions,
-        :player_offer_agreement_actions,
-        :territory_actions,
+        *[*ActionCollection::SUBCOLLECTIONS, *ActionCollection::SINGULAR_SUBCOLLECTIONS],
         to: :actions
     )
 
@@ -147,7 +136,7 @@ class Player < ApplicationRecord
                 @receiving_player_offer_actions = ActionCollection.new
                 game
                     .player_offers
-                    .without_agreement_from_player(self)
+                    .without_response_from_player(self)
                     .where(
                         <<~SQL.squish,
                             brick_cards_count_from_agreeing_player <= ? AND
@@ -163,7 +152,7 @@ class Player < ApplicationRecord
                         wool_cards_count
                     )
                     .each do |acceptable_player_offer|
-                        @receiving_player_offer_actions.player_offer_actions[acceptable_player_offer] << 'PlayerOfferAgreement#create'
+                        @receiving_player_offer_actions.player_offer_actions[acceptable_player_offer] << 'PlayerOfferResponse#create'
                     end
             end
         end

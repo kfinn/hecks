@@ -1,6 +1,6 @@
 class PlayerTrade
     include ActiveModel::Model
-    attr_accessor :player_offer_agreement
+    attr_accessor :player_offer_response
 
     delegate(
         :agreeing_player_has_resources?,
@@ -9,10 +9,11 @@ class PlayerTrade
         :offering_player_has_resources?,
         :offering_player_can_trade?,
         :offering_player,
-        to: :player_offer_agreement
+        to: :player_offer_response
     )
 
-    validates :player_offer_agreement, presence: true
+    validates :player_offer_response, presence: true
+    validate :player_offer_response_must_be_agreeing
     validate :offering_player_must_have_resources
     validate :agreeing_player_must_have_resources
     validate :offering_player_must_be_able_to_trade
@@ -21,7 +22,7 @@ class PlayerTrade
         ApplicationRecord.transaction do
             raise ActiveRecord::RecordInvalid.new(self) unless valid?
             update_players!
-            player_offer_agreement.complete!
+            player_offer_response.complete!
         end
     end
 
@@ -37,6 +38,10 @@ class PlayerTrade
 
     def offering_player_must_be_able_to_trade
         errors[:base] << 'cannot trade' unless offering_player_can_trade?
+    end
+
+    def player_offer_response_must_be_agreeing
+        errors[:player_offer_response] << 'did not agree' unless player_offer_response.agreeing?
     end
 
     def update_players!
@@ -58,6 +63,6 @@ class PlayerTrade
     end
 
     def agreeing_player
-        player_offer_agreement.player
+        player_offer_response.player
     end
 end

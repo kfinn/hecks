@@ -5,7 +5,7 @@ class PlayerOffer < ApplicationRecord
     has_one :player, through: :turn
     has_one :game, through: :turn
 
-    has_many :player_offer_agreements
+    has_many :player_offer_responses
 
     validate :player_must_have_offered_resources
     validate :must_give_some_resources
@@ -24,15 +24,16 @@ class PlayerOffer < ApplicationRecord
         presence: true,
         numericality: { greater_than_or_equal_to: 0 }
     )
+    validate :must_not_offer_and_receive_same_resource
 
     delegate :name, to: :player, prefix: true
 
-    def self.without_agreement_from_player(player)
-        where.not(id: player.player_offer_agreements.select(:player_offer_id))
+    def self.without_response_from_player(player)
+        where.not(id: player.player_offer_responses.select(:player_offer_id))
     end
 
     def self.pending
-        where.not(id: PlayerOfferAgreement.completed.select(:player_offer_id))
+        where.not(id: PlayerOfferResponse.completed.select(:player_offer_id))
     end
 
     def resource_count_from_offering_player(resource)
@@ -86,6 +87,14 @@ class PlayerOffer < ApplicationRecord
         @total_resources_from_agreeing_player ||= Resource.all.map do |resource|
             send(attribute_name_for_resource_from_agreeing_player(resource))
         end.sum
+    end
+
+    def must_not_offer_and_receive_same_resource
+        any_resources_both_given_and_received = Resource.all.any? do |resource|
+            resource_count_from_offering_player(resource) > 0 && resource_count_from_agreeing_player(resource) > 0
+        end
+
+        errors[:base] << 'cannot give and receive same resource' if any_resources_both_given_and_received
     end
 
     def attribute_name_for_resource_from_offering_player(resource)

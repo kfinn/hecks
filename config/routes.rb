@@ -52,10 +52,10 @@ Rails.application.routes.draw do
       end
 
       resources :player_offers, only: [] do
-        resource :player_offer_agreement, only: :create
+        resource :player_offer_response, only: :create
       end
 
-      resources :player_offer_agreements, only: [] do
+      resources :player_offer_responses, only: [] do
         resource :player_trade, only: :create
       end
 

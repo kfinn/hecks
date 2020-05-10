@@ -26,7 +26,7 @@ class RepeatingTurn < Turn
         source: :road_building_card_play
     )
 
-    has_many :player_offer_agreements, through: :player_offers
+    has_many :player_offer_responses, through: :player_offers
 
     validates :roll, presence: { if: :ended? }
 
@@ -101,8 +101,8 @@ class RepeatingTurn < Turn
                 if player.total_resource_cards_count > 0
                     action_collection.new_player_offer_actions << 'PlayerOffer#create'
                 end
-                player_offer_agreements.includes(:player_offer).each do |player_offer_agreement|
-                    action_collection.player_offer_agreement_actions[player_offer_agreement] << 'PlayerTrade#create' if player_offer_agreement.affordable?
+                player_offer_responses.includes(:player_offer).each do |player_offer_response|
+                    action_collection.player_offer_response_actions[player_offer_response] << 'PlayerTrade#create' if player_offer_response.affordable? && player_offer_response.agreeing?
                 end
             end
 

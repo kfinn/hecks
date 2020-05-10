@@ -1,11 +1,11 @@
-class PlayerOfferAgreement < ApplicationRecord
+class PlayerOfferResponse < ApplicationRecord
     include GameChanging
 
     belongs_to :player_offer
     belongs_to :player
     has_one :game, through: :player_offer
 
-    validate :player_must_have_offered_resources, on: :create
+    validate :player_must_have_offered_resources, on: :create, if: :agreeing?
 
     delegate(
         :resource_count_from_offering_player,
@@ -18,6 +18,7 @@ class PlayerOfferAgreement < ApplicationRecord
     delegate :name, to: :player, prefix: true
 
     scope :completed, -> { where.not(completed_at: nil) }
+    scope :agreeing, -> { where(agreeing: true) }
 
     def agreeing_player_has_resources?
         Resource.all.all? do |resource|

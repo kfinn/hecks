@@ -24,7 +24,7 @@ json.bank_offers current_player.bank_offers do |bank_offer|
     json.bank_offer_actions current_player.bank_offer_actions[bank_offer]
 end
 
-json.player_offers game.player_offers.includes(:player).includes(player_offer_agreements: :player) do |player_offer|
+json.player_offers game.player_offers.includes(:player).includes(player_offer_responses: :player) do |player_offer|
     json.(
         player_offer,
         :id,
@@ -41,10 +41,10 @@ json.player_offers game.player_offers.includes(:player).includes(player_offer_ag
         :wool_cards_count_from_agreeing_player
     )
 
-    json.player_offer_agreements player_offer.player_offer_agreements do |player_offer_agreement|
-        json.(player_offer_agreement, :id, :player_name)
+    json.player_offer_responses player_offer.player_offer_responses do |player_offer_response|
+        json.(player_offer_response, :id, :player_name, :agreeing)
 
-        json.player_offer_agreement_actions current_player.player_offer_agreement_actions[player_offer_agreement]
+        json.player_offer_response_actions current_player.player_offer_response_actions[player_offer_response]
     end
 
     json.player_offer_actions current_player.player_offer_actions[player_offer]
