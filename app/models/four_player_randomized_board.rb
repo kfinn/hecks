@@ -133,8 +133,6 @@ class FourPlayerRandomizedBoard
         end
 
         HARBOR_ORIENTATIONS.each_with_index do |harbor_orientation, index|
-            Rails.logger.info harbor_offers[index]
-
             harbor_position = harbor_orientation[:harbor_position]
             harbor = game.harbors.build(
                 x: harbor_position.x,
@@ -142,7 +140,6 @@ class FourPlayerRandomizedBoard
                 harbor_offer: harbor_offers[index]
             )
 
-            Rails.logger.info harbor
             harbor_orientation[:corner_offsets].each do |corner_offset|
                 harbor.corner_harbors.build(
                     corner: corners_by_position[harbor_position + corner_offset]

@@ -14,7 +14,7 @@ export default function BoardSvg({ game }: BoardSvgProps) {
     return (
         <React.Fragment>
             <h2>Board</h2>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-300 -300 600 600">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-235 -245 515 500">
                 {
                     _.map(game.harbors, (harbor) => <HarborSvg key={harbor.id} harbor={harbor} />)
                 }
