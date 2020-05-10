@@ -45,11 +45,6 @@ export default function Game(props: GameProps) {
         return () => { subscription.disconnect() }
     }, [game.id])
 
-    const onRefreshClicked = (event: { preventDefault: () => void }) => {
-        event.preventDefault()
-        refresh()
-    }
-
     const onStartClicked = (event: { preventDefault: () => void }) => {
         event.preventDefault()
 
@@ -66,7 +61,6 @@ export default function Game(props: GameProps) {
     return (
         <div>
             <h1>Game</h1>
-            <a href="#" onClick={onRefreshClicked}>Refresh</a>
             {gameIsStarted(game) ? null : <button onClick={onStartClicked}>Start Game</button>}
             <Status status={game.status} />
             <PlayerList game={game} />
