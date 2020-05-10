@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_10_013530) do
+ActiveRecord::Schema.define(version: 2020_05_10_023844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(version: 2020_05_10_013530) do
     t.integer "y", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "corner_harbors", force: :cascade do |t|
+    t.bigint "corner_id"
+    t.bigint "harbor_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["corner_id", "harbor_id"], name: "index_corner_harbors_on_corner_id_and_harbor_id", unique: true
+    t.index ["corner_id"], name: "index_corner_harbors_on_corner_id", unique: true
+    t.index ["harbor_id"], name: "index_corner_harbors_on_harbor_id"
   end
 
   create_table "corners", force: :cascade do |t|
@@ -70,6 +80,17 @@ ActiveRecord::Schema.define(version: 2020_05_10_013530) do
     t.bigint "robber_territory_id", null: false
     t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
     t.index ["robber_territory_id"], name: "index_games_on_robber_territory_id"
+  end
+
+  create_table "harbors", force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.integer "x", null: false
+    t.integer "y", null: false
+    t.string "harbor_offer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_harbors_on_game_id"
+    t.index ["harbor_offer_id"], name: "index_harbors_on_harbor_offer_id"
   end
 
   create_table "player_offer_responses", force: :cascade do |t|
@@ -218,6 +239,8 @@ ActiveRecord::Schema.define(version: 2020_05_10_013530) do
   add_foreign_key "adjacencies", "corners"
   add_foreign_key "adjacencies", "games"
   add_foreign_key "adjacencies", "territories"
+  add_foreign_key "corner_harbors", "corners"
+  add_foreign_key "corner_harbors", "harbors"
   add_foreign_key "development_cards", "games"
   add_foreign_key "development_cards", "players"
   add_foreign_key "development_cards", "turns", column: "played_during_turn_id"
@@ -226,6 +249,7 @@ ActiveRecord::Schema.define(version: 2020_05_10_013530) do
   add_foreign_key "discard_requirements", "turns"
   add_foreign_key "games", "territories", column: "robber_territory_id"
   add_foreign_key "games", "turns", column: "current_turn_id"
+  add_foreign_key "harbors", "games"
   add_foreign_key "player_offer_responses", "player_offers"
   add_foreign_key "player_offer_responses", "players"
   add_foreign_key "player_offers", "turns"

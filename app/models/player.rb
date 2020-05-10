@@ -18,6 +18,8 @@ class Player < ApplicationRecord
     has_many :settlements
     has_many :roads
 
+    has_many :harbors, through: :settlements
+
     has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
     has_many :incomplete_road_building_card_plays, through: :current_repeating_turn
 

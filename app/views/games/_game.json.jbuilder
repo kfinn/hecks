@@ -100,6 +100,21 @@ json.borders game.borders.includes(road: [:player], corners: []) do |border|
     json.border_actions current_player.border_actions[border]
 end
 
+json.harbors game.harbors.includes(:corners) do |harbor|
+    json.(harbor, :id, :x, :y)
+    json.harbor_offer do
+        json.call(harbor.harbor_offer, :exchange_rate)
+        if harbor.harbor_offer.resource_to_give.present?
+            json.resource_to_give do
+                json.call(harbor.harbor_offer.resource_to_give, :id)
+            end
+        end
+    end
+    json.corners harbor.corners do |corner|
+        json.(corner, :x, :y)
+    end
+end
+
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
     json.(player, :id, :ordering, :total_resource_cards_count, :name)
     json.user do

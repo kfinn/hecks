@@ -9,6 +9,9 @@ class Corner < ApplicationRecord
     has_many :neighboring_settlements, -> { distinct }, through: :neighboring_corners, source: :settlement
     has_one :settlement
 
+    has_one :corner_harbor
+    has_one :harbor, through: :corner_harbor
+
     validates :x, :y, presence: true
 
     def self.available_for_settlement

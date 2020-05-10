@@ -1,18 +1,9 @@
 import React from 'react';
-import { Border, BorderAction } from '../models/Border';
-import { TERRITORY_RADIUS } from './TerritorySvg';
-import { positionToScreenX, positionToScreenY } from '../models/Position';
 import Api from '../models/Api';
+import { Border, BorderAction } from '../models/Border';
 import { colorClassName } from '../models/Color';
 import { cornerCenterX, cornerCenterY } from './CornerSvg';
-
-function borderCenterX(border: Border) {
-    return positionToScreenX(border) * 2 * TERRITORY_RADIUS
-}
-
-function borderCenterY(border: Border) {
-    return positionToScreenY(border) * 2 * TERRITORY_RADIUS
-}
+import ConnectingLineSvg from './ConnectingLineSvg';
 
 const BORDER_ACTIONS = {
     [BorderAction.CreateInitialRoad]: async ({ id }: Border) => {
@@ -53,25 +44,10 @@ export default function BorderSvg({ border }: { border: Border }) {
     }
 
     const [corner1, corner2] = border.corners
-    const corner1CenterX = cornerCenterX(corner1)
-    const corner1CenterY = cornerCenterY(corner1)
-    const corner2CenterX = cornerCenterX(corner2)
-    const corner2CenterY = cornerCenterY(corner2)
-    const dx = corner2CenterX - corner1CenterX
-    const dy = corner2CenterY - corner1CenterY
-    const distance = Math.sqrt((dx * dx) + (dy * dy))
-    const rotationRadians = Math.atan2(dx, dy)
 
-    return <path
-        d={`
-            M${corner1CenterX} ${corner1CenterY}
-            m${Math.sin(rotationRadians) * 10} ${Math.cos(rotationRadians) * 10}
-            l${Math.sin(rotationRadians + (Math.PI / 2)) * 2} ${Math.cos(rotationRadians + (Math.PI / 2)) * 2}
-            l${Math.sin(rotationRadians) * (distance - 20)} ${Math.cos(rotationRadians) * (distance - 20)}
-            l${Math.sin(rotationRadians + (Math.PI / 2)) * (-4)} ${Math.cos(rotationRadians + (Math.PI / 2)) * (-4)}
-            l${Math.sin(rotationRadians)* (-(distance - 20))} ${Math.cos(rotationRadians) * (-(distance - 20))}
-            z
-        `}
+    return <ConnectingLineSvg
+        from={corner1}
+        to={corner2}
         onClick={onClick}
         className={classNames.join(' ')}
     />

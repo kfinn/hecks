@@ -5,15 +5,15 @@ import GrainIcon from '../images/grain.svg';
 import LumberIcon from '../images/lumber.svg';
 import OreIcon from '../images/ore.svg';
 import WoolIcon from '../images/wool.svg';
-import { positionToScreenX, positionToScreenY } from '../models/Position';
-import { TerrainId } from '../models/Terrain';
-import { ProductionTerritory, Territory, territoryIsDesert, TerritoryAction } from '../models/Territory';
 import Api from '../models/Api';
+import { Position, positionToScreenX, positionToScreenY } from '../models/Position';
+import { TerrainId } from '../models/Terrain';
+import { ProductionTerritory, Territory, TerritoryAction, territoryIsDesert } from '../models/Territory';
 
 
 export const TERRITORY_RADIUS = 50
-export const HEX_RADIUS = 42
-const TERRAIN_ICON_RADIUS = HEX_RADIUS * 0.4
+const HEX_RADIUS = 42
+export const TERRAIN_ICON_RADIUS = HEX_RADIUS * 0.4
 
 const PRODUCTION_TERRITORY_ROBBER_OFFSET_X = -HEX_RADIUS * 0.65
 const PRODUCTION_TERRITORY_ROBBER_OFFSET_Y = -HEX_RADIUS * 0.35
@@ -21,15 +21,15 @@ const PRODUCTION_TERRITORY_ROBBER_OFFSET_Y = -HEX_RADIUS * 0.35
 const DESERT_TERRITORY_ROBBER_OFFSET_X = -8
 const DESERT_TERRITORY_ROBBER_OFFSET_Y = -12
 
-function territoryCenterX(territory: Territory) {
-    return positionToScreenX(territory)  * 2 * TERRITORY_RADIUS
+export function territoryCenterX(territory: Position) {
+    return positionToScreenX(territory) * 2 * TERRITORY_RADIUS
 }
 
-function territoryCenterY(territory: Territory) {
+export function territoryCenterY(territory: Position) {
     return positionToScreenY(territory) * 2 * TERRITORY_RADIUS
 }
 
-function territoryPolygonPoints(territory: Territory) {
+function territoryPolygonPoints(territory: Position) {
     const angles = _.map(_.range(6), (piThirds) => piThirds * Math.PI / 3)
     const normalizedPointPairs = _.map(angles, (angle) => {
         return [

@@ -43,6 +43,6 @@ class Terrain < ActiveHash::Base
         for_territories = all.flat_map do |terrain|
             Array.new(terrain.territories_count, terrain)
         end
-        for_territories.sample(for_territories.size)
+        for_territories.shuffle
     end
 end

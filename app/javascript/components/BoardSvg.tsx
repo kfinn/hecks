@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import { Game } from '../models/Game';
-import CornerSvg from './CornerSvg';
-import TerritorySvg from './TerritorySvg';
 import BorderSvg from './BorderSvg';
+import CornerSvg from './CornerSvg';
+import HarborSvg from './HarborSvg';
+import TerritorySvg from './TerritorySvg';
 
 export interface BoardSvgProps {
     game: Game
@@ -13,7 +14,10 @@ export default function BoardSvg({ game }: BoardSvgProps) {
     return (
         <React.Fragment>
             <h2>Board</h2>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-250 -250 500 500">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-300 -300 600 600">
+                {
+                    _.map(game.harbors, (harbor) => <HarborSvg key={harbor.id} harbor={harbor} />)
+                }
                 {
                     _.map(game.territories, (territory) => <TerritorySvg key={territory.id} territory={territory} />)
                 }

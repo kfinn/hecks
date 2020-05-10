@@ -8,6 +8,8 @@ class Settlement < ApplicationRecord
     has_many :neighboring_corners, through: :corner
     has_many :borders, through: :corner
 
+    has_one :harbor, through: :corner
+
     validates :corner, uniqueness: true
     validate :must_not_be_adjacent_to_another_settlement
     validate :game_must_be_started
