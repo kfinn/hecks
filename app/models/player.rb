@@ -32,6 +32,7 @@ class Player < ApplicationRecord
 
     has_many :development_cards
     has_many :active_development_cards, -> { active }, class_name: 'DevelopmentCard'
+    has_many :played_knight_cards, -> { played.knight }, class_name: 'DevelopmentCard'
 
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 
@@ -161,6 +162,14 @@ class Player < ApplicationRecord
 
     def total_resource_cards_count
         Resource.all.map { |resource| resource_cards_count(resource) }.sum
+    end
+
+    def active_development_cards_count
+        active_development_cards.size
+    end
+
+    def played_knight_cards_count
+        played_knight_cards.size
     end
 
     def collect_resource(resource, amount=1)

@@ -116,7 +116,16 @@ json.harbors game.harbors.includes(:corners) do |harbor|
 end
 
 json.players game.players.order(:ordering, :created_at).includes(:ordering_roll, :user) do |player|
-    json.(player, :id, :ordering, :total_resource_cards_count, :name)
+    json.(
+        player,
+        :id,
+        :ordering,
+        :total_resource_cards_count,
+        :name,
+        :active_development_cards_count,
+        :played_knight_cards_count
+    )
+
     json.user do
         json.is_current_user current_player == player
     end

@@ -2,10 +2,10 @@ import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
 import { Game } from '../models/Game';
-import { Player, playerColor, playerName, playerOrderingRollDescription, playerTotalResourceCardsCount, PlayerAction } from '../models/Player';
+import { Player, playerColor, playerName, playerOrderingRollDescription, playerTotalResourceCardsCount, PlayerAction, playerActiveDevelopmentCardsCount, playerPlayedKnightCardsCount } from '../models/Player';
 import { Color } from '../models/Color';
 
-function CurrentUserPlayer({ game, player }: { game: Game, player: Player }) {
+function CurrentUserPlayerDescription({ game, player }: { game: Game, player: Player }) {
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState(playerName(player))
     const [colorId, setColorId] = useState(playerColor(player))
@@ -41,14 +41,28 @@ function CurrentUserPlayer({ game, player }: { game: Game, player: Player }) {
                 }
             </select>
             <input type="submit" value="Save" onClick={onSubmit} />
+            {' '}
             <a href="#" onClick={(e) => { e.preventDefault(); stopEditing() }}>Cancel</a>
         </span>
     } else {
         return <span>
-            <ReadOnlyPlayer player={player}/>
+            <ReadOnlyPlayerDescription player={player}/>
+            {' '}
             <a href="#" onClick={(e) => { e.preventDefault(); setEditing(true) }}>Edit</a>
         </span>
     }
+}
+
+function ReadOnlyPlayerDescription({ player }: { player: Player }) {
+    return (
+        <React.Fragment>
+            {playerName(player)}
+            {' - '}
+            {playerColor(player)}
+            {' - '}
+            {playerOrderingRollDescription(player)}
+        </React.Fragment>
+    )
 }
 
 const PLAYER_ACTIONS = {
@@ -57,13 +71,13 @@ const PLAYER_ACTIONS = {
     }
 }
 
-function ReadOnlyPlayer({ player }: { player: Player }) {
+function PlayerDetails({ player, game }: { player: Player, game: Game }) {
     const action = PLAYER_ACTIONS[player.playerActions[0]]
     const onClickRob = action ? () => {
         const onClickRobAsync = async () => {
             try {
                 await action(player)
-            } catch(error) {
+            } catch (error) {
                 console.log(error.response)
             }
         }
@@ -72,20 +86,24 @@ function ReadOnlyPlayer({ player }: { player: Player }) {
     } : null
 
     return (
-        <span>
-            {playerName(player)}
-            {' - '}
-            {playerColor(player)}
-            {' - '}
-            {playerOrderingRollDescription(player)}
-            {' - '}
-            {playerTotalResourceCardsCount(player)} cards
-            {
-                onClickRob ? (
-                    <button onClick={onClickRob}>Rob this player</button>
-                ) : null
-            }
-        </span>
+        <React.Fragment>
+            <ul>
+                <li>
+                    {playerTotalResourceCardsCount(player)} resource cards
+                </li>
+                <li>
+                    {playerActiveDevelopmentCardsCount(player)} development cards
+                </li>
+                <li>
+                    {playerPlayedKnightCardsCount(player)} knights
+                </li>
+                {
+                    onClickRob ? (
+                        <li><button onClick={onClickRob}>Rob this player</button></li>
+                    ) : null
+                }
+            </ul>
+        </React.Fragment>
     )
 }
 
@@ -103,8 +121,9 @@ export default function PlayerList({ game }: PlayerListProps) {
                     _.map(players, (player) => {
                         return <li key={player.id}>
                             {
-                                player.user.isCurrentUser ? <CurrentUserPlayer game={game} player={player} /> : <ReadOnlyPlayer player={player} />
+                                player.user.isCurrentUser ? <CurrentUserPlayerDescription game={game} player={player} /> : <ReadOnlyPlayerDescription player={player} />
                             }
+                            <PlayerDetails game={game} player={player} />
                         </li>
                     })
                 }

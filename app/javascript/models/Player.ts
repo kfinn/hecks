@@ -14,6 +14,8 @@ export interface Player {
     orderingRoll?: Roll
     color: Color
     totalResourceCardsCount: number
+    activeDevelopmentCardsCount: number
+    playedKnightCardsCount: number
     playerActions: PlayerAction[]
 }
 
@@ -34,4 +36,12 @@ export function playerOrderingRollDescription({ orderingRoll }: Player) {
 
 export function playerTotalResourceCardsCount({ totalResourceCardsCount }: Player) {
     return totalResourceCardsCount
+}
+
+export function playerActiveDevelopmentCardsCount({ activeDevelopmentCardsCount }: Player) {
+    return activeDevelopmentCardsCount
+}
+
+export function playerPlayedKnightCardsCount({ playedKnightCardsCount }: Player) {
+    return playedKnightCardsCount
 }
