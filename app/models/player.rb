@@ -137,22 +137,11 @@ class Player < ApplicationRecord
                 game
                     .player_offers
                     .without_response_from_player(self)
-                    .where(
-                        <<~SQL.squish,
-                            brick_cards_count_from_agreeing_player <= ? AND
-                            grain_cards_count_from_agreeing_player <= ? AND
-                            lumber_cards_count_from_agreeing_player <= ? AND
-                            ore_cards_count_from_agreeing_player <= ? AND
-                            wool_cards_count_from_agreeing_player <= ?
-                        SQL
-                        brick_cards_count,
-                        grain_cards_count,
-                        lumber_cards_count,
-                        ore_cards_count,
-                        wool_cards_count
-                    )
-                    .each do |acceptable_player_offer|
-                        @receiving_player_offer_actions.player_offer_actions[acceptable_player_offer] << 'PlayerOfferResponse#create'
+                    .each do |respondable_player_offer|
+                        if respondable_player_offer.affordable_for_agreeing_player?(self)
+                            @receiving_player_offer_actions.player_offer_actions[respondable_player_offer] << 'PlayerOfferAgreement#create'
+                        end
+                        @receiving_player_offer_actions.player_offer_actions[respondable_player_offer] << 'PlayerOfferRejection#create'
                     end
             end
         end

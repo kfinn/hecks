@@ -7,40 +7,59 @@ import _ from 'lodash';
 import NewPlayerOfferForm from './NewPlayerOfferForm';
 import PlayerOfferResponseList from './PlayerOfferResponseList';
 
-const PLAYER_OFFER_ACTIONS = {
-    [PlayerOfferAction.CreatePlayerOfferResponse]: async ({ id }: PlayerOffer, agreeing: boolean) => {
-        return await Api.post(
-            `player_offers/${id}/player_offer_response.json`,
-            { playerOfferResponse: { agreeing } }
-        )
-    }
+interface PlayerOfferComponentProps {
+    playerOffer: PlayerOffer
 }
 
-function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
-    const action = PLAYER_OFFER_ACTIONS[playerOffer.playerOfferActions[0]]
-    const onClickAgree = action ? (() => {
+function AcceptPlayerOfferButton({ playerOffer: { playerOfferActions, id} }: PlayerOfferComponentProps) {
+    if (!_.includes(playerOfferActions, PlayerOfferAction.CreatePlayerOfferAgreement)) {
+        return null
+    }
+
+    const onClickAgree = () => {
         const asyncOnClickAgree = async () => {
             try {
-                await action(playerOffer, true)
+                await Api.post(
+                    `player_offers/${id}/player_offer_response.json`,
+                    { playerOfferResponse: { agreeing: true } }
+                )
             } catch (error) {
                 console.log(error.response)
             }
         }
 
         asyncOnClickAgree()
-    }) : null
-    const onClickReject = action ? (() => {
-        const asyncOnClickReject = async () => {
+    }
+
+    return <button onClick={onClickAgree}>Agree to trade</button>
+}
+
+function RejectPlayerOfferButton({ playerOffer: { playerOfferActions, id } }: PlayerOfferComponentProps) {
+    console.log(playerOfferActions[0])
+    if (!_.includes(playerOfferActions, PlayerOfferAction.CreatePlayerOfferRejection)) {
+        return null
+    }
+
+    const onClickAgree = () => {
+        const asyncOnClickAgree = async () => {
             try {
-                await action(playerOffer, false)
+                await Api.post(
+                    `player_offers/${id}/player_offer_response.json`,
+                    { playerOfferResponse: { agreeing: false } }
+                )
             } catch (error) {
                 console.log(error.response)
             }
         }
 
-        asyncOnClickReject()
-    }) : null
+        asyncOnClickAgree()
+    }
 
+    return <button onClick={onClickAgree}>Reject trade</button>
+}
+
+
+function PlayerOffer({ playerOffer }: PlayerOfferComponentProps) {
     return (
         <React.Fragment>
             <div>
@@ -126,14 +145,10 @@ function PlayerOffer({ playerOffer }: { playerOffer: PlayerOffer }) {
             <div>
                 <PlayerOfferResponseList playerOffer={playerOffer} />
             </div>
-            {
-                action ? (
-                <div>
-                    <button onClick={onClickAgree}>Agree to trade</button>
-                    <button onClick={onClickReject}>Reject trade</button>
-                </div>
-            ) : null
-            }
+            <div>
+                <AcceptPlayerOfferButton playerOffer={playerOffer} />
+                <RejectPlayerOfferButton playerOffer={playerOffer} />
+            </div>
         </React.Fragment>
     )
 }

@@ -94,8 +94,10 @@ class ActionCollection
             SUBCOLLECTIONS.each do |subcollection_name|
                 merged_subcollection = merged.send(subcollection_name)
                 [self, other].each do |collection|
-                    collection.send(subcollection_name).each do |key, value|
-                        merged_subcollection[key] << value
+                    collection.send(subcollection_name).each do |key, actions|
+                        actions.each do |action|
+                            merged_subcollection[key] << action
+                        end
                     end
                 end
             end

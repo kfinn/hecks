@@ -54,6 +54,12 @@ class PlayerOffer < ApplicationRecord
         end
     end
 
+    def affordable_for_agreeing_player?(agreeing_player)
+        Resource.all.all? do |resource|
+            agreeing_player.resource_cards_count(resource) >= resource_count_from_agreeing_player(resource)
+        end
+    end
+
     def offering_player_can_trade?
         turn.can_trade?
     end

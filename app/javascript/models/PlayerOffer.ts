@@ -5,7 +5,8 @@ export enum NewPlayerOfferAction {
 }
 
 export enum PlayerOfferAction {
-    CreatePlayerOfferResponse = 'PlayerOfferResponse#create'
+    CreatePlayerOfferAgreement = 'PlayerOfferAgreement#create',
+    CreatePlayerOfferRejection = 'PlayerOfferRejection#create'
 }
 
 export interface NewPlayerOffer {

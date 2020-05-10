@@ -21,9 +21,7 @@ class PlayerOfferResponse < ApplicationRecord
     scope :agreeing, -> { where(agreeing: true) }
 
     def agreeing_player_has_resources?
-        Resource.all.all? do |resource|
-            player.resource_cards_count(resource) >= resource_count_from_agreeing_player(resource)
-        end
+        player_offer.affordable_for_agreeing_player?(player)
     end
 
     def offering_player
