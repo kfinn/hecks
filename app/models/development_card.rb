@@ -13,6 +13,10 @@ class DevelopmentCard < ApplicationRecord
     scope :played, -> { where.not played_during_turn: nil }
     scope :knight, -> { where development_card_behavior_id: DevelopmentCardBehavior::KNIGHT.id }
 
+    def self.most_recently_played
+        joins(:played_during_turn).order('turns.created_at': :desc).first
+    end
+
     delegate(
         :name,
         :knight?,

@@ -12,6 +12,8 @@ class Corner < ApplicationRecord
     has_one :corner_harbor
     has_one :harbor, through: :corner_harbor
 
+    has_many :roads, -> { distinct }, through: :borders
+
     validates :x, :y, presence: true
 
     def self.available_for_settlement

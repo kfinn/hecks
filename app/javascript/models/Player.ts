@@ -15,7 +15,9 @@ export interface Player {
     color: Color
     totalResourceCardsCount: number
     activeDevelopmentCardsCount: number
-    playedKnightCardsCount: number
+    longestRoadTraversalLength: number
+    armySize: number
+    score: number
     playerActions: PlayerAction[]
 }
 
@@ -42,6 +44,14 @@ export function playerActiveDevelopmentCardsCount({ activeDevelopmentCardsCount 
     return activeDevelopmentCardsCount
 }
 
-export function playerPlayedKnightCardsCount({ playedKnightCardsCount }: Player) {
-    return playedKnightCardsCount
+export function playerArmySize({ armySize }: Player) {
+    return armySize
+}
+
+export function playerLongestRoadTraversalLength({ longestRoadTraversalLength }: Player) {
+    return longestRoadTraversalLength
+}
+
+export function playerScore({ score }: Player) {
+    return score
 }

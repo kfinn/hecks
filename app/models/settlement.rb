@@ -17,6 +17,9 @@ class Settlement < ApplicationRecord
     delegate :color, to: :player
 
     scope :without_city_upgrade, -> { where(upgraded_to_city_at: nil) }
+    scope :with_city_upgrade, -> { where.not(upgraded_to_city_at: nil) }
+
+    after_create :recalculate_neighboring_opponents_longest_road_traversals!
 
     def must_not_be_adjacent_to_another_settlement
         other_neighboring_settlements = corner.neighboring_settlements - [self]
@@ -39,5 +42,13 @@ class Settlement < ApplicationRecord
 
     def resource_cards_per_production_roll
         city? ? 2 : 1
+    end
+
+    private
+
+    def recalculate_neighboring_opponents_longest_road_traversals!
+        neighboring_players = Player.where(id: Road.where(border: borders).select(:player_id))
+        neighboring_opponents = neighboring_players - [player]
+        neighboring_opponents.each(&:recalculate_longest_road_traversal!)
     end
 end

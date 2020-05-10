@@ -123,7 +123,8 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
         :total_resource_cards_count,
         :name,
         :active_development_cards_count,
-        :played_knight_cards_count
+        :army_size,
+        :longest_road_traversal_length
     )
 
     json.user do
@@ -135,6 +136,8 @@ json.players game.players.order(:ordering, :created_at).includes(:ordering_roll,
         end
     end
     json.color player.color.id
+
+    json.score game.game_scoring.scores_by_player[player]
     json.player_actions current_player.player_actions[player]
 end
 

@@ -46,6 +46,9 @@ class Player < ApplicationRecord
     scope :without_initial_second_road, -> { where(initial_second_road: nil) }
     scope :without_initial_second_setup, -> { without_initial_second_settlement.or(without_initial_second_road) }
 
+    scope :eligible_for_longest_road, -> { where('longest_road_traversal_length >= ?', 5) }
+    scope :eligible_for_largest_army, -> { where('army_size >= ?', 3) }
+
     def self.with_resource_cards
         where("#{Resource.all.map(&:attribute_name).join(' + ')} > ?", 0)
     end
@@ -168,10 +171,6 @@ class Player < ApplicationRecord
         active_development_cards.size
     end
 
-    def played_knight_cards_count
-        played_knight_cards.size
-    end
-
     def collect_resource(resource, amount=1)
         raise 'can only collect a positive number of resource cards' if amount < 1
         current_resource_cards_count = send(resource.attribute_name)
@@ -182,6 +181,22 @@ class Player < ApplicationRecord
         raise 'can only remove a positive number of resource cards' if amount < 1
         current_resource_cards_count = send(resource.attribute_name)
         send(resource.attribute_setter_name, current_resource_cards_count - amount)
+    end
+
+    def recalculate_army_size!
+        army = Army.new(self)
+        update!(
+            army_size: army.size,
+            army_since: army.since
+        )
+    end
+
+    def recalculate_longest_road_traversal!
+        longest_road_traversal = RoadTraversal.longest_for_player(self)
+        update!(
+            longest_road_traversal_length: longest_road_traversal.length,
+            longest_road_traversal_since: longest_road_traversal.since
+        )
     end
 
     private

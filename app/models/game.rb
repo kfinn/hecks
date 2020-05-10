@@ -62,6 +62,10 @@ class Game < ApplicationRecord
         @latest_roll
     end
 
+    def game_scoring
+        @game_scoring ||= GameScoring.new(self)
+    end
+
     private
 
     def broadcast!

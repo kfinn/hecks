@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_10_053731) do
+ActiveRecord::Schema.define(version: 2020_05_10_195738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,10 @@ ActiveRecord::Schema.define(version: 2020_05_10_053731) do
     t.integer "wool_cards_count", default: 0, null: false
     t.string "color_id"
     t.string "name"
+    t.integer "longest_road_traversal_length", default: 0, null: false
+    t.datetime "longest_road_traversal_since", default: -> { "now()" }, null: false
+    t.integer "army_size", default: 0, null: false
+    t.datetime "army_since", default: -> { "now()" }
     t.index ["color_id", "game_id"], name: "index_players_on_color_id_and_game_id", unique: true
     t.index ["game_id"], name: "index_players_on_game_id"
     t.index ["ordering"], name: "index_players_on_ordering"

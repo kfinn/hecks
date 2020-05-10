@@ -13,6 +13,7 @@ class KnightCardPlay
             raise ApplicationRecord::RecordInvalid.new(self) unless valid?
             robber_move_requirement.save!
             update_development_card!
+            player.recalculate_army_size!
         end
     end
 

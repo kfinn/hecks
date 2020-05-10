@@ -15,6 +15,8 @@ class Road < ApplicationRecord
 
     delegate :color, to: :player
 
+    after_create :recalculate_player_longest_road_traversal!
+
     def must_connect_to_road_or_settlement
         if settlements.where(player: player).any?
             return
@@ -28,5 +30,9 @@ class Road < ApplicationRecord
 
     def game_must_be_started
         errors[:game] << 'must be started' unless game.started?
+    end
+
+    def recalculate_player_longest_road_traversal!
+        player.recalculate_longest_road_traversal!
     end
 end

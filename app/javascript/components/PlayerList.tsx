@@ -2,8 +2,9 @@ import _ from 'lodash';
 import React, { useState } from 'react';
 import Api from '../models/Api';
 import { Game } from '../models/Game';
-import { Player, playerColor, playerName, playerOrderingRollDescription, playerTotalResourceCardsCount, PlayerAction, playerActiveDevelopmentCardsCount, playerPlayedKnightCardsCount } from '../models/Player';
+import { Player, playerColor, playerName, playerOrderingRollDescription, playerTotalResourceCardsCount, PlayerAction, playerActiveDevelopmentCardsCount, playerArmySize, playerScore, playerLongestRoadTraversalLength } from '../models/Player';
 import { Color } from '../models/Color';
+import pluralize from 'pluralize';
 
 function CurrentUserPlayerDescription({ game, player }: { game: Game, player: Player }) {
     const [editing, setEditing] = useState(false)
@@ -71,7 +72,13 @@ const PLAYER_ACTIONS = {
     }
 }
 
-function PlayerDetails({ player, game }: { player: Player, game: Game }) {
+function PlayerDetailsEntry({ value, label, suffix }: { value: number, label: string, suffix?: string }) {
+    return <li>
+        {pluralize(label, value, true)} {suffix}
+    </li>
+}
+
+function PlayerDetails({ player }: { player: Player }) {
     const action = PLAYER_ACTIONS[player.playerActions[0]]
     const onClickRob = action ? () => {
         const onClickRobAsync = async () => {
@@ -88,15 +95,11 @@ function PlayerDetails({ player, game }: { player: Player, game: Game }) {
     return (
         <React.Fragment>
             <ul>
-                <li>
-                    {playerTotalResourceCardsCount(player)} resource cards
-                </li>
-                <li>
-                    {playerActiveDevelopmentCardsCount(player)} development cards
-                </li>
-                <li>
-                    {playerPlayedKnightCardsCount(player)} knights
-                </li>
+                <PlayerDetailsEntry value={playerTotalResourceCardsCount(player)} label="resource card" />
+                <PlayerDetailsEntry value={playerActiveDevelopmentCardsCount(player)} label="development card" />
+                <PlayerDetailsEntry value={playerArmySize(player)} label="knight" />
+                <PlayerDetailsEntry value={playerLongestRoadTraversalLength(player)} label="segment" suffix="in longest road" />
+                <PlayerDetailsEntry value={playerScore(player)} label="victory point" />
                 {
                     onClickRob ? (
                         <li><button onClick={onClickRob}>Rob this player</button></li>
@@ -123,7 +126,7 @@ export default function PlayerList({ game }: PlayerListProps) {
                             {
                                 player.user.isCurrentUser ? <CurrentUserPlayerDescription game={game} player={player} /> : <ReadOnlyPlayerDescription player={player} />
                             }
-                            <PlayerDetails game={game} player={player} />
+                            <PlayerDetails player={player} />
                         </li>
                     })
                 }
