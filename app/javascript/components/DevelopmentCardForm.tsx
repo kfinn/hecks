@@ -22,9 +22,9 @@ function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <form>
-            <button className="btn btn-secondary" onClick={onClick}>Play Knight</button>
-        </form>
+        <div className="inline-form">
+            <button className="btn btn-secondary form-control" onClick={onClick}>Play Knight</button>
+        </div>
     )
 }
 
@@ -45,13 +45,13 @@ function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <form>
+        <div className="inline-form">
             <ResourceIdPicker
                 value={resourceId}
                 onChange={setResourceId}
             />
             <button className="btn btn-secondary form-control" onClick={onClick}>Play Monopoly</button>
-        </form>
+        </div>
     )
 }
 
@@ -73,7 +73,7 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <form>
+        <div className="inline-form">
             <ResourceIdPicker
                 value={resource1Id}
                 onChange={setResource1Id}
@@ -85,7 +85,7 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
             />
             {' '}
             <button className="btn btn-secondary form-control" onClick={onClick}>Play Year of Plenty</button>
-        </form>
+        </div>
     )
 }
 
@@ -103,9 +103,9 @@ function RoadBuildingCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <form>
+        <div className="inline-form">
             <button className="btn btn-secondary form-control" onClick={onClick}>Play Road Building</button>
-        </form>
+        </div>
     )
 }
 

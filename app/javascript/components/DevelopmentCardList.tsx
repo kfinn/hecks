@@ -28,26 +28,20 @@ export default function DevelopmentCardList({ game }: { game: Game }) {
     return (
         <React.Fragment>
             <h4>Dev Cards</h4>
-            <div>
+            <ul>
                 {
                     game.developmentCards.length > 0 ? (
-                        <dl>
-                            {
-                                _.map(game.developmentCards, (developmentCard) => (
-                                    <React.Fragment key={developmentCard.id}>
-                                    <dt>
-                                        {developmentCard.name}
-                                    </dt>
-                                    <dd>
-                                        <DevelopmentCardForm developmentCard={developmentCard} />
-                                    </dd>
-                                    </React.Fragment>
-                                ))
-                            }
-                        </dl>
+                        _.map(game.developmentCards, (developmentCard) => (
+                            <li key={developmentCard.id}>
+                                {developmentCard.name}
+                                <div>
+                                    <DevelopmentCardForm developmentCard={developmentCard} />
+                                </div>
+                            </li>
+                        ))
                     ) : 'None'
                 }
-            </div>
+            </ul>
             <button className="btn btn-secondary" onClick={onClick} disabled={disabled}>Purchase Dev Card</button>
         </React.Fragment>
     )
