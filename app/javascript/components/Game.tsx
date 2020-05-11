@@ -64,10 +64,10 @@ export default function Game(props: GameProps) {
             <Status status={game.status} />
             {gameIsStarted(game) ? null : <button className="btn btn-success" onClick={onStartClicked}>Start Game</button>}
             <div className="row">
-                <div className="col-md-9 order-md-2">
+                <div className="col-md-7 col-lg-7 col-xl-9 order-md-2">
                     <BoardSvg game={game} />
                 </div>
-                <div className="col-md-3 order-md-1">
+                <div className="col-md-5 col-lg-5 col-xl-3 order-md-1">
                     <div className="mb-3"><PendingDiscardRequirement game={game} /></div>
                     <div className="mb-3"><Dice game={game} /></div>
                     <div className="mb-3"><Hand hand={game.hand} /></div>
