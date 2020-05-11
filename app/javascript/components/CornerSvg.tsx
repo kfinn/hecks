@@ -69,7 +69,7 @@ export default function CornerSvg({ corner }: { corner: Corner }) {
         return <circle
             cx={cornerCenterX(corner)}
             cy={cornerCenterY(corner)}
-            r="5"
+            r="4"
             {...sharedProps}
         />
     }

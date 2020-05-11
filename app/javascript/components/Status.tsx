@@ -3,7 +3,7 @@ import { Status } from '../models/Status';
 
 export default function Status({ status: { actor, description} }: { status: Status }) {
     return <React.Fragment>
-        <h2>Status</h2>
+        <h4>Status</h4>
         <p>Waiting for {actor} to {description}</p>
     </React.Fragment>
 }

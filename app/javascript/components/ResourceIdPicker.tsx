@@ -7,12 +7,13 @@ export interface ResourceIdPickerProps {
     onChange: (value: ResourceId) => void
     disabled?: boolean
     options?: ResourceId[]
+    className?: string
 }
 
-export default function ResourceIdPicker({ value, onChange, disabled, options }: ResourceIdPickerProps) {
+export default function ResourceIdPicker({ value, onChange, disabled, options, className }: ResourceIdPickerProps) {
     return (
         <select
-            className="resource-id-picker"
+            className={className || "form-control"}
             value={value}
             disabled={disabled || false}
             onChange={({ target: { value } }) => onChange(value as ResourceId)}

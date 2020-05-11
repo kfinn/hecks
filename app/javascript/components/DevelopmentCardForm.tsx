@@ -10,7 +10,9 @@ interface FormProps {
 }
 
 function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
-    const onClick = () => {
+    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
+        preventDefault()
+
         const onClickAsync = async () => {
             try {
                 await Api.post(`development_cards/${id}/knight_card_play.json`)
@@ -22,16 +24,16 @@ function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <React.Fragment>
-            {': '}
-            <button onClick={onClick}>Play Knight</button>
-        </React.Fragment>
+        <form>
+            <button className="btn btn-secondary" onClick={onClick}>Play Knight</button>
+        </form>
     )
 }
 
 function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
     const [resourceId, setResourceId] = useState(_.values(ResourceId)[0])
-    const onClick = () => {
+    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
+        // preventDefault()
         const onClickAsync = async () => {
             try {
                 await Api.post(
@@ -46,22 +48,21 @@ function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <React.Fragment>
-            {': '}
+        <form>
             <ResourceIdPicker
                 value={resourceId}
                 onChange={setResourceId}
             />
-            {' '}
-            <button onClick={onClick}>Play Monopoly</button>
-        </React.Fragment>
+            <button className="btn btn-secondary form-control" onClick={onClick}>Play Monopoly</button>
+        </form>
     )
 }
 
 function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
     const [resource1Id, setResource1Id] = useState(_.values(ResourceId)[0])
     const [resource2Id, setResource2Id] = useState(_.values(ResourceId)[0])
-    const onClick = () => {
+    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
+        preventDefault()
         const onClickAsync = async () => {
             try {
                 await Api.post(
@@ -76,8 +77,7 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <React.Fragment>
-            {': '}
+        <form>
             <ResourceIdPicker
                 value={resource1Id}
                 onChange={setResource1Id}
@@ -88,13 +88,14 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
                 onChange={setResource2Id}
             />
             {' '}
-            <button onClick={onClick}>Play Year of Plenty</button>
-        </React.Fragment>
+            <button className="btn btn-secondary form-control" onClick={onClick}>Play Year of Plenty</button>
+        </form>
     )
 }
 
 function RoadBuildingCardPlayForm({ developmentCard: { id } }: FormProps) {
-    const onClick = () => {
+    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
+        preventDefault()
         const onClickAsync = async () => {
             try {
                 await Api.post(`development_cards/${id}/road_building_card_play.json`)
@@ -106,10 +107,9 @@ function RoadBuildingCardPlayForm({ developmentCard: { id } }: FormProps) {
     }
 
     return (
-        <React.Fragment>
-            {': '}
-            <button onClick={onClick}>Play Road Building</button>
-        </React.Fragment>
+        <form>
+            <button className="btn btn-secondary form-control" onClick={onClick}>Play Road Building</button>
+        </form>
     )
 }
 

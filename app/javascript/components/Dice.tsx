@@ -34,11 +34,11 @@ export default function Dice({ game }: { game: Game }) {
 
     return (
         <React.Fragment>
-        <h2>Dice</h2>
+        <h4>Dice</h4>
         <p>({die1Value}, {die2Value})</p>
         {
             _.map(actions, ({ action, name, onClick }) => (
-                <button key={action} onClick={() => { onClick(game) }}>{name}</button>
+                <button className="btn btn-primary" key={action} onClick={() => { onClick(game) }}>{name}</button>
             ))
         }
         </React.Fragment>

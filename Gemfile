@@ -5,6 +5,7 @@ ruby '2.7.1'
 
 gem 'active_hash'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootstrap', '~> 4.4', '>= 4.4.1'
 gem 'devise'
 gem 'devise-guests'
 gem 'jbuilder', '~> 2.7'

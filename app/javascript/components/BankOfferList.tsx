@@ -35,9 +35,10 @@ function BankOffer({ game, bankOffer }: { game: Game, bankOffer: BankOffer }) {
                 onChange={setResourceToReceiveId}
                 disabled={disabled}
                 options={resourceIdOptions}
+                className="resource-id-picker"
             />
             {' '}&times; 1{' '}
-            <button onClick={onClick} disabled={disabled}>Trade</button>
+            <button className="btn btn-sm btn-secondary" onClick={onClick} disabled={disabled}>Trade</button>
         </React.Fragment>
     )
 }
@@ -45,16 +46,14 @@ function BankOffer({ game, bankOffer }: { game: Game, bankOffer: BankOffer }) {
 export default function BankOfferList({ game }: { game: Game }) {
     return (
         <React.Fragment>
-            <h2>Bank Offers</h2>
-            <ul>
-                {
-                    _.map(game.bankOffers, (bankOffer) => (
-                        <li key={bankOffer.resourceToGive.id}>
-                            <BankOffer game={game} bankOffer={bankOffer} />
-                        </li>
-                    ))
-                }
-            </ul>
+            <h4>Bank Offers</h4>
+            {
+                _.map(game.bankOffers, (bankOffer) => (
+                    <div className="mb-1" key={bankOffer.resourceToGive.id}>
+                        <BankOffer game={game} bankOffer={bankOffer} /><br />
+                    </div>
+                ))
+            }
         </React.Fragment>
     )
 }

@@ -13,42 +13,32 @@ $pasture-highlight: lightgreen;
 
 .territory.desert {
     stroke: $desert-highlight;
+    fill: rgba($desert-highlight, 0.15);
 }
 
 .territory.fields {
     stroke: $fields-highlight;
+    fill: rgba($fields-highlight, 0.15);
 }
 
 .territory.forest {
     stroke: $forest-highlight;
+    fill: rgba($forest-highlight, 0.15);
 }
 
 .territory.hills {
     stroke: $hills-highlight;
+    fill: rgba( $hills-highlight, 0.15);
 }
 
 .territory.mountains {
     stroke: $mountains-highlight;
+    fill: rgba($mountains-highlight, 0.15);
 }
 
 .territory.pasture {
     stroke: $pasture-highlight;
-}
-
-.terrain-icon.fields {
-    fill: $fields-highlight;
-}
-.terrain-icon.forest {
-    fill: $forest-highlight;
-}
-.terrain-icon.hills {
-    fill: $hills-highlight;
-}
-.terrain-icon.mountains {
-    fill: $mountains-highlight;
-}
-.terrain-icon.pasture {
-    fill: $pasture-highlight;
+    fill: rgba($pasture-highlight, 0.15);
 }
 
 .high-frequency {
@@ -57,28 +47,60 @@ $pasture-highlight: lightgreen;
 }
 
 .corner, .border {
-    stroke: black;
-    fill: black;
+    stroke: lightgray;
+    fill: lightgray;
 }
 
-.corner.with-settlement, .border.with-road {
-    fill: white;
+.player-name {
+    font-weight: bold;
+    line-height: 200%;
 }
 
 .corner.blue, .border.blue {
+    stroke: black;
     fill: blue;
 }
 
+.card.blue {
+    background-color: blue;
+    .card-title {
+        color: white;
+    }
+}
+
 .corner.white, .border.white {
+    stroke: black;
     fill: white;
 }
 
+.card.white {
+    background-color: white;
+}
+
 .corner.red, .border.red {
+    stroke: black;
     fill: red;
 }
 
+.card.red {
+    background-color: red;
+    .card-title {
+        color: white;
+    }
+
+}
+
 .corner.orange, .border.orange {
+    stroke: black;
     fill: orange;
+}
+
+.card.orange {
+    background-color: orange;
+    .card-title {
+        color: white;
+    }
+
 }
 
 .has-action {
@@ -88,13 +110,17 @@ $pasture-highlight: lightgreen;
 .hand-icon {
     height: 1em;
     width: 1em;
-    vertical-align: bottom;
+    vertical-align: text-bottom;
 }
 
 .resource-id-picker {
-    width: 7em;
+    width: 4em;
 }
 
 .robber {
     fill: gray;
+}
+
+.board {
+    width: 100%;
 }

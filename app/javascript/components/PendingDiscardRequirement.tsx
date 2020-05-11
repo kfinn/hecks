@@ -54,7 +54,7 @@ export default function PendingDiscardRequirement({ game }: { game: Game }) {
 
     return (
         <React.Fragment>
-            <h2>Discard Requirement</h2>
+            <h4>Discard Requirement</h4>
             <p>You must discard {discardRequirement.resourceCardsCount} cards</p>
             <ul>
                 <li>

@@ -182,11 +182,13 @@ export default function NewPlayerOfferForm({ game }: { game: Game }) {
                                 </li>
                             </ul>
                         </div>
-                        <button onClick={onClick} disabled={!valid}>Create Player Offer</button>
-                        <button onClick={() => setEditing(false)}>Cancel</button>
+                        <div className="btn-group" role="group">
+                            <button className="btn btn-primary" onClick={onClick} disabled={!valid}>Create Player Offer</button>
+                            <button className="btn btn-secondary" onClick={() => setEditing(false)}>Cancel</button>
+                        </div>
                     </React.Fragment>
                 ) : (
-                        <button onClick={() => setEditing(true)}>New Player Offer</button>
+                        <button className="btn btn-secondary" onClick={() => setEditing(true)}>New Player Offer</button>
                     )
             }
         </React.Fragment>

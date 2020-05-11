@@ -31,7 +31,7 @@ function AcceptPlayerOfferButton({ playerOffer: { playerOfferActions, id} }: Pla
         asyncOnClickAgree()
     }
 
-    return <button onClick={onClickAgree}>Agree to trade</button>
+    return <button className="btn btn-primary" onClick={onClickAgree}>Accept</button>
 }
 
 function RejectPlayerOfferButton({ playerOffer: { playerOfferActions, id } }: PlayerOfferComponentProps) {
@@ -55,7 +55,7 @@ function RejectPlayerOfferButton({ playerOffer: { playerOfferActions, id } }: Pl
         asyncOnClickAgree()
     }
 
-    return <button onClick={onClickAgree}>Reject trade</button>
+    return <button className="btn btn-danger" onClick={onClickAgree}>Reject</button>
 }
 
 
@@ -63,89 +63,85 @@ function PlayerOffer({ playerOffer }: PlayerOfferComponentProps) {
     return (
         <React.Fragment>
             <div>
-                <h3>{playerOffer.playerName} offers to give...</h3>
-                <ul>
-                    {
-                        playerOffer.brickCardsCountFromOfferingPlayer > 0 ? (
-                            <li>
-                                <BrickIcon /> &times; {playerOffer.brickCardsCountFromOfferingPlayer}
-                            </li>
-                        ) : null
-                    }
-                    {
-                        playerOffer.grainCardsCountFromOfferingPlayer > 0 ? (
-                            <li>
-                                <GrainIcon /> &times; {playerOffer.grainCardsCountFromOfferingPlayer}
-                            </li>
-                        ) : null
-                    }
-                    {
-                        playerOffer.lumberCardsCountFromOfferingPlayer > 0 ? (
-                            <li>
-                                <LumberIcon /> &times; {playerOffer.lumberCardsCountFromOfferingPlayer}
-                            </li>
-                        ) : null
-                    }
-                    {
-                        playerOffer.oreCardsCountFromOfferingPlayer > 0 ? (
-                            <li>
-                                <OreIcon /> &times; {playerOffer.oreCardsCountFromOfferingPlayer}
-                            </li>
-                        ) : null
-                    }
-                    {
-                        playerOffer.woolCardsCountFromOfferingPlayer > 0 ? (
-                            <li>
-                                <WoolIcon /> &times; {playerOffer.woolCardsCountFromOfferingPlayer}
-                            </li>
-                        ) : null
-                    }
-                </ul>
+                <h5>{playerOffer.playerName} offers to give:</h5>
+                {
+                    playerOffer.brickCardsCountFromOfferingPlayer > 0 ? (
+                        <div>
+                            <BrickIcon /> &times; {playerOffer.brickCardsCountFromOfferingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.grainCardsCountFromOfferingPlayer > 0 ? (
+                        <div>
+                            <GrainIcon /> &times; {playerOffer.grainCardsCountFromOfferingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.lumberCardsCountFromOfferingPlayer > 0 ? (
+                        <div>
+                            <LumberIcon /> &times; {playerOffer.lumberCardsCountFromOfferingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.oreCardsCountFromOfferingPlayer > 0 ? (
+                        <div>
+                            <OreIcon /> &times; {playerOffer.oreCardsCountFromOfferingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.woolCardsCountFromOfferingPlayer > 0 ? (
+                        <div>
+                            <WoolIcon /> &times; {playerOffer.woolCardsCountFromOfferingPlayer}
+                        </div>
+                    ) : null
+                }
             </div>
             <div>
-                <h3>{playerOffer.playerName} wants to receive...</h3>
-                <ul>
+                <h5>{playerOffer.playerName} wants to receive:</h5>
                     {
                         playerOffer.brickCardsCountFromAgreeingPlayer > 0 ? (
-                            <li>
+                            <div>
                                 <BrickIcon /> &times; {playerOffer.brickCardsCountFromAgreeingPlayer}
-                            </li>
+                            </div>
                         ) : null
                     }
                     {
                         playerOffer.grainCardsCountFromAgreeingPlayer > 0 ? (
-                            <li>
+                            <div>
                                 <GrainIcon /> &times; {playerOffer.grainCardsCountFromAgreeingPlayer}
-                            </li>
+                            </div>
                         ) : null
                     }
                     {
                         playerOffer.lumberCardsCountFromAgreeingPlayer > 0 ? (
-                            <li>
+                            <div>
                                 <LumberIcon /> &times; {playerOffer.lumberCardsCountFromAgreeingPlayer}
-                            </li>
+                            </div>
                         ) : null
                     }
                     {
                         playerOffer.oreCardsCountFromAgreeingPlayer > 0 ? (
-                            <li>
+                            <div>
                                 <OreIcon /> &times; {playerOffer.oreCardsCountFromAgreeingPlayer}
-                            </li>
+                            </div>
                         ) : null
                     }
                     {
                         playerOffer.woolCardsCountFromAgreeingPlayer > 0 ? (
-                            <li>
+                            <div>
                                 <WoolIcon /> &times; {playerOffer.woolCardsCountFromAgreeingPlayer}
-                            </li>
+                            </div>
                         ) : null
                     }
-                </ul>
             </div>
             <div>
                 <PlayerOfferResponseList playerOffer={playerOffer} />
             </div>
-            <div>
+            <div className="btn-group" role="group">
                 <AcceptPlayerOfferButton playerOffer={playerOffer} />
                 <RejectPlayerOfferButton playerOffer={playerOffer} />
             </div>
@@ -154,13 +150,17 @@ function PlayerOffer({ playerOffer }: PlayerOfferComponentProps) {
 }
 
 export default function PlayerOfferList({ game }: { game: Game }) {
+    if (game.playerOffers.length == 0 && game.newPlayerOfferActions.length == 0) {
+        return null;
+    }
+
     return (
         <React.Fragment>
-            <h2>Player Offers</h2>
+            <h4>Player Offers</h4>
             <ul>
                 {
                     _.map(game.playerOffers, (playerOffer) => (
-                        <li key={playerOffer.id}>
+                        <li key={playerOffer.id} className="mb-4">
                             <PlayerOffer playerOffer={playerOffer} />
                         </li>
                     ))

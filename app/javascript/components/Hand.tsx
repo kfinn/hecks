@@ -5,14 +5,12 @@ import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceI
 export default function Hand({ hand }: { hand: Hand }) {
     return (
         <React.Fragment>
-            <h2>Hand</h2>
-            <ul>
-                <li><BrickIcon /> {hand.brickCardsCount}</li>
-                <li><GrainIcon /> {hand.grainCardsCount}</li>
-                <li><LumberIcon /> {hand.lumberCardsCount}</li>
-                <li><OreIcon /> {hand.oreCardsCount}</li>
-                <li><WoolIcon /> {hand.woolCardsCount}</li>
-            </ul>
+            <h4>Hand</h4>
+            <BrickIcon />&nbsp;&times;&nbsp;{hand.brickCardsCount}<br />
+            <GrainIcon />&nbsp;&times;&nbsp;{hand.grainCardsCount}<br />
+            <LumberIcon />&nbsp;&times;&nbsp;{hand.lumberCardsCount}<br />
+            <OreIcon />&nbsp;&times;&nbsp;{hand.oreCardsCount}<br />
+            <WoolIcon />&nbsp;&times;&nbsp;{hand.woolCardsCount}<br />
         </React.Fragment>
     )
 }

@@ -61,21 +61,26 @@ export default function Game(props: GameProps) {
 
     return (
         <div>
-            <h1>Game</h1>
-            {gameIsStarted(game) ? null : <button onClick={onStartClicked}>Start Game</button>}
             <Status status={game.status} />
+            {gameIsStarted(game) ? null : <button className="btn btn-success" onClick={onStartClicked}>Start Game</button>}
+            <div className="row">
+                <div className="col-md-9 order-md-2">
+                    <BoardSvg game={game} />
+                </div>
+                <div className="col-md-3 order-md-1">
+                    <div className="mb-3"><PendingDiscardRequirement game={game} /></div>
+                    <div className="mb-3"><Dice game={game} /></div>
+                    <div className="mb-3"><Hand hand={game.hand} /></div>
+                    <div className="mb-3"><DevelopmentCardList game={game} /></div>
+                    <div className="mb-3"><PlayerOfferList game={game} /></div>
+                    <div className="mb-3"><BankOfferList game={game} /></div>
+                </div>
+            </div>
             <PlayerList game={game} />
-            <PendingDiscardRequirement game={game} />
-            <Dice game={game} />
-            <BoardSvg game={game} />
-            <Hand hand={game.hand} />
-            <DevelopmentCardList game={game} />
-            <PlayerOfferList game={game} />
-            <BankOfferList game={game} />
-            <h2>Prices</h2>
+            <h4>Prices</h4>
             <ul>
                 <li>
-                    <h3>Road</h3>
+                    <h4>Road</h4>
                     <ul>
                         <li>
                             <BrickIcon /> &times; 1
@@ -86,7 +91,7 @@ export default function Game(props: GameProps) {
                     </ul>
                 </li>
                 <li>
-                    <h3>Settlement</h3>
+                    <h4>Settlement</h4>
                     <ul>
                         <li>
                             <BrickIcon /> &times; 1
@@ -103,7 +108,7 @@ export default function Game(props: GameProps) {
                     </ul>
                 </li>
                 <li>
-                    <h3>City</h3>
+                    <h4>City</h4>
                     <ul>
                         <li>
                             <GrainIcon /> &times; 2
@@ -114,7 +119,7 @@ export default function Game(props: GameProps) {
                     </ul>
                 </li>
                 <li>
-                    <h3>Development Card</h3>
+                    <h4>Dev Card</h4>
                     <ul>
                         <li>
                             <GrainIcon /> &times; 1
@@ -128,7 +133,7 @@ export default function Game(props: GameProps) {
                     </ul>
                 </li>
             </ul>
-            <h2>Attribution</h2>
+            <h4>Attribution</h4>
             <ul>
                 <li>Brick icon: Created by Ben Davis from the Noun Project</li>
                 <li>Grain icon: Created by Adrien Coquet from the Noun Project</li>

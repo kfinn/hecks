@@ -31,7 +31,7 @@ function PlayerOfferResponse({ playerOfferResponse }: { playerOfferResponse: Pla
             {playerOfferResponse.agreeing ? 'agreed to' : 'rejected'}
             {' the offer '}
             {
-                action ? (<button onClick={onClick}>Trade with {playerOfferResponse.playerName}</button>) : null
+                action ? (<button className="btn btn-primary" onClick={onClick}>Trade with {playerOfferResponse.playerName}</button>) : null
             }
         </React.Fragment>
     )
@@ -40,19 +40,15 @@ function PlayerOfferResponse({ playerOfferResponse }: { playerOfferResponse: Pla
 export default function PlayerOfferResponseList({ playerOffer }: { playerOffer: PlayerOffer }) {
     return (
         <React.Fragment>
-            <h3>Responses...</h3>
+            <h5>Responses:</h5>
             {
                 playerOffer.playerOfferResponses.length > 0 ? (
-                    <ul>
-                        {
-                            _.map(playerOffer.playerOfferResponses, (playerOfferResponse) => (
-                                <li key={playerOfferResponse.id}>
-                                    <PlayerOfferResponse playerOfferResponse={playerOfferResponse} />
-                                </li>
-                            ))
-                        }
-                    </ul>
-                ) : 'No one'
+                    _.map(playerOffer.playerOfferResponses, (playerOfferResponse) => (
+                        <div key={playerOfferResponse.id}>
+                            <PlayerOfferResponse playerOfferResponse={playerOfferResponse} />
+                        </div>
+                    ))
+                ) : (<div>None</div>)
             }
         </React.Fragment>
     )
