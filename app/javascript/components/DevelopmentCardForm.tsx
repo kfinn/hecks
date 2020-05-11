@@ -90,8 +90,7 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
 }
 
 function RoadBuildingCardPlayForm({ developmentCard: { id } }: FormProps) {
-    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
-        preventDefault()
+    const onClick = () => {
         const onClickAsync = async () => {
             try {
                 await Api.post(`development_cards/${id}/road_building_card_play.json`)

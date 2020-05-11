@@ -1,10 +1,10 @@
 import _ from 'lodash';
+import pluralize from 'pluralize';
 import React, { useState } from 'react';
 import Api from '../models/Api';
-import { Game } from '../models/Game';
-import { Player, playerColor, playerName, playerOrderingRollDescription, playerTotalResourceCardsCount, PlayerAction, playerActiveDevelopmentCardsCount, playerArmySize, playerScore, playerLongestRoadTraversalLength } from '../models/Player';
 import { Color } from '../models/Color';
-import pluralize from 'pluralize';
+import { Game } from '../models/Game';
+import { Player, PlayerAction, playerActiveDevelopmentCardsCount, playerArmySize, playerColor, playerLongestRoadTraversalLength, playerName, playerScore, playerTotalResourceCardsCount } from '../models/Player';
 
 function CurrentUserPlayerDescription({ game, player }: { game: Game, player: Player }) {
     const [editing, setEditing] = useState(false)
@@ -100,7 +100,7 @@ function PlayerDetails({ player }: { player: Player }) {
         <React.Fragment>
             <dl className="list-group list-group-flush">
                 <PlayerDetailsEntry value={playerScore(player)} label="victory point" />
-                <PlayerDetailsEntry value={playerLongestRoadTraversalLength(player)} label="roads" suffix="(longest)" />
+                <li className="list-group-item">longest road: {playerLongestRoadTraversalLength(player)}</li>
                 <PlayerDetailsEntry value={playerArmySize(player)} label="knight" />
                 <PlayerDetailsEntry value={playerActiveDevelopmentCardsCount(player)} label="dev card" />
                 <PlayerDetailsEntry value={playerTotalResourceCardsCount(player)} label="card" />
