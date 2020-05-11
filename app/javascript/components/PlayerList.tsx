@@ -99,11 +99,11 @@ function PlayerDetails({ player }: { player: Player }) {
     return (
         <React.Fragment>
             <dl className="list-group list-group-flush">
-                <PlayerDetailsEntry value={playerTotalResourceCardsCount(player)} label="card" />
-                <PlayerDetailsEntry value={playerActiveDevelopmentCardsCount(player)} label="dev card" />
-                <PlayerDetailsEntry value={playerArmySize(player)} label="knight" />
-                <PlayerDetailsEntry value={playerLongestRoadTraversalLength(player)} label="roads" suffix="(longest)" />
                 <PlayerDetailsEntry value={playerScore(player)} label="victory point" />
+                <PlayerDetailsEntry value={playerLongestRoadTraversalLength(player)} label="roads" suffix="(longest)" />
+                <PlayerDetailsEntry value={playerArmySize(player)} label="knight" />
+                <PlayerDetailsEntry value={playerActiveDevelopmentCardsCount(player)} label="dev card" />
+                <PlayerDetailsEntry value={playerTotalResourceCardsCount(player)} label="card" />
                 {
                     onClickRob ? (
                         <button className="list-group-item list-group-item-action list-group-item-danger" onClick={onClickRob}>

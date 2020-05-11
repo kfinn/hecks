@@ -10,9 +10,7 @@ interface FormProps {
 }
 
 function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
-    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
-        preventDefault()
-
+    const onClick = () => {
         const onClickAsync = async () => {
             try {
                 await Api.post(`development_cards/${id}/knight_card_play.json`)
