@@ -32,8 +32,7 @@ function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
 
 function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
     const [resourceId, setResourceId] = useState(_.values(ResourceId)[0])
-    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
-        // preventDefault()
+    const onClick = () => {
         const onClickAsync = async () => {
             try {
                 await Api.post(
@@ -61,8 +60,7 @@ function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
 function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
     const [resource1Id, setResource1Id] = useState(_.values(ResourceId)[0])
     const [resource2Id, setResource2Id] = useState(_.values(ResourceId)[0])
-    const onClick = ({ preventDefault }: { preventDefault: () => void }) => {
-        preventDefault()
+    const onClick = () => {
         const onClickAsync = async () => {
             try {
                 await Api.post(

@@ -102,7 +102,7 @@ function PlayerDetails({ player }: { player: Player }) {
                 <PlayerDetailsEntry value={playerTotalResourceCardsCount(player)} label="card" />
                 <PlayerDetailsEntry value={playerActiveDevelopmentCardsCount(player)} label="dev card" />
                 <PlayerDetailsEntry value={playerArmySize(player)} label="knight" />
-                <PlayerDetailsEntry value={playerLongestRoadTraversalLength(player)} label="segment" suffix="(in longest road)" />
+                <PlayerDetailsEntry value={playerLongestRoadTraversalLength(player)} label="roads" suffix="(longest)" />
                 <PlayerDetailsEntry value={playerScore(player)} label="victory point" />
                 {
                     onClickRob ? (
