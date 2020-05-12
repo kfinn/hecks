@@ -12,6 +12,7 @@ class Road < ApplicationRecord
     validates :border, uniqueness: true
     validate :must_connect_to_road_or_settlement
     validate :game_must_be_started
+    validate :player_must_not_have_too_many_roads
 
     delegate :color, to: :player
 
@@ -30,6 +31,10 @@ class Road < ApplicationRecord
 
     def game_must_be_started
         errors[:game] << 'must be started' unless game.started?
+    end
+
+    def player_must_not_have_too_many_roads
+        errors[:base] << 'no roads left' if (player.roads - [self]).size >= 15
     end
 
     def recalculate_player_longest_road_traversal!

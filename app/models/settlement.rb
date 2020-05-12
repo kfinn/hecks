@@ -13,6 +13,8 @@ class Settlement < ApplicationRecord
     validates :corner, uniqueness: true
     validate :must_not_be_adjacent_to_another_settlement
     validate :game_must_be_started
+    validate :player_must_not_have_too_many_settlements, if: :settlement?
+    validate :player_must_not_have_too_many_cities, if: :city?
 
     delegate :color, to: :player
 
@@ -30,6 +32,18 @@ class Settlement < ApplicationRecord
 
     def game_must_be_started
         errors[:game] << 'must be started' unless game.started?
+    end
+
+    def player_must_not_have_too_many_settlements
+        errors[:base] << 'no settlements left' if (player.settlements.without_city_upgrade - [self]).size >= 5
+    end
+
+    def player_must_not_have_too_many_cities
+        errors[:base] << 'no cities left' if (player.settlements.with_city_upgrade - [self]).size >= 5
+    end
+
+    def settlement?
+        upgraded_to_city_at.blank?
     end
 
     def city?

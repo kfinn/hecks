@@ -159,26 +159,30 @@ class RepeatingTurn < Turn
             player.brick_cards_count >= 1 &&
             player.grain_cards_count >= 1 &&
             player.lumber_cards_count >= 1 &&
-            player.wool_cards_count >= 1
+            player.wool_cards_count >= 1 &&
+            player.settlements.without_city_upgrade.size < 5
     end
 
     def can_purchase_road?
         can_purchase? &&
             player.brick_cards_count >= 1 &&
             player.lumber_cards_count >= 1
+            player.roads.size < 15
     end
 
     def can_purchase_city_upgrade?
         can_purchase? &&
             player.grain_cards_count >= 2 &&
             player.ore_cards_count >= 3
+            player.settlements.with_city_upgrade.size < 4
     end
 
     def can_purchase_development_card?
         can_purchase? &&
             player.grain_cards_count >= 1 &&
             player.ore_cards_count >= 1 &&
-            player.wool_cards_count >= 1
+            player.wool_cards_count >= 1 &&
+            game.development_cards.next_available.present?
     end
 
     def any_incomplete_road_building_card_plays?
