@@ -117,7 +117,7 @@ export default function PendingDiscardRequirement({ game }: { game: Game }) {
                     />
                 </li>
             </ul>
-            <button disabled={!valid} onClick={onClick}>Discard</button>
+            <button className="btn btn-danger" disabled={!valid} onClick={onClick}>Discard</button>
         </React.Fragment>
     )
 }
