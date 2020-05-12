@@ -31,11 +31,11 @@ function BankOffer({ game, bankOffer }: { game: Game, bankOffer: BankOffer }) {
             { bankOffer.resourceToGiveCountRequired }
             {' '}&rarr;{' '}
             <ResourceIdPicker
+                id={`${bankOffer.resourceToGive.id}-bank-offer-resource-id-picker`}
                 value={resourceToReceiveId}
                 onChange={setResourceToReceiveId}
                 disabled={disabled}
                 options={resourceIdOptions}
-                className="resource-id-picker"
             />
             {' '}&times; 1{' '}
             <button className="btn btn-sm btn-secondary" onClick={onClick} disabled={disabled}>Trade</button>

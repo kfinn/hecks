@@ -154,6 +154,9 @@ end
 
 json.development_cards current_player.active_development_cards do |development_card|
     json.(development_card, :id, :name)
+    json.development_card_behavior do
+        json.(development_card.development_card_behavior, :id, :description)
+    end
 
     json.development_card_actions current_player.development_card_actions[development_card]
 end

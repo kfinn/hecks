@@ -47,8 +47,10 @@ function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
     return (
         <div className="inline-form">
             <ResourceIdPicker
+                id="monopoly-card-play-resource-id-picker"
                 value={resourceId}
                 onChange={setResourceId}
+                className="form-control mb-1"
             />
             <button className="btn btn-secondary form-control" onClick={onClick}>Play Monopoly</button>
         </div>
@@ -75,13 +77,17 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
     return (
         <div className="inline-form">
             <ResourceIdPicker
+                id="year-of-plenty-card-play-resource-1-id-picker"
                 value={resource1Id}
                 onChange={setResource1Id}
+                className="form-control mb-1"
             />
             {' '}
             <ResourceIdPicker
+                id="year-of-plenty-card-play-resource-2-id-picker"
                 value={resource2Id}
                 onChange={setResource2Id}
+                className="form-control mb-1"
             />
             {' '}
             <button className="btn btn-secondary form-control" onClick={onClick}>Play Year of Plenty</button>

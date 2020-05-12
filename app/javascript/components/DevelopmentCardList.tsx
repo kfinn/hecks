@@ -1,7 +1,7 @@
 import React from 'react';
 import { Game } from '../models/Game';
 import _ from 'lodash';
-import { NewDevelopmentCardAction } from '../models/DevelopmentCard';
+import { NewDevelopmentCardAction, developmentCardDescription } from '../models/DevelopmentCard';
 import Api from '../models/Api';
 import DevelopmentCardForm from './DevelopmentCardForm';
 
@@ -28,20 +28,25 @@ export default function DevelopmentCardList({ game }: { game: Game }) {
     return (
         <React.Fragment>
             <h4>Dev Cards</h4>
-            <ul>
+            <dl>
                 {
                     game.developmentCards.length > 0 ? (
                         _.map(game.developmentCards, (developmentCard) => (
-                            <li key={developmentCard.id}>
-                                {developmentCard.name}
-                                <div>
-                                    <DevelopmentCardForm developmentCard={developmentCard} />
-                                </div>
-                            </li>
+                            <React.Fragment key={developmentCard.id}>
+                                <dt>{developmentCard.name}</dt>
+                                <dd>
+                                    <p>
+                                        {developmentCardDescription(developmentCard)}
+                                    </p>
+                                    <div>
+                                        <DevelopmentCardForm developmentCard={developmentCard} />
+                                    </div>
+                                </dd>
+                            </React.Fragment>
                         ))
                     ) : 'None'
                 }
-            </ul>
+            </dl>
             <button className="btn btn-secondary" onClick={onClick} disabled={disabled}>Purchase Dev Card</button>
         </React.Fragment>
     )

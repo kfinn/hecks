@@ -9,8 +9,19 @@ export enum DevelopmentCardAction {
     CreateYearOfPlentyCardPlay = 'YearOfPlentyCardPlay#create'
 }
 
+interface DevelopmentCardBehavior {
+    id: string
+    description: string
+}
+
 export interface DevelopmentCard {
     id: number
     name: string
+    developmentCardBehavior: DevelopmentCardBehavior
     developmentCardActions: DevelopmentCardAction[]
+}
+
+export function developmentCardDescription(developmentCard: DevelopmentCard) {
+    console.log(developmentCard.developmentCardBehavior)
+    return developmentCard.developmentCardBehavior.description
 }
