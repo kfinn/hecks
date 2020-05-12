@@ -35,21 +35,21 @@ function CurrentUserPlayerDescription({ game, player }: { game: Game, player: Pl
     if (editing) {
         return <span>
             <form>
-                <input type="text" className="form-control" onChange={({ target: { value } }) => setName(value)} value={name} />
-                <select value={colorId} className="form-control" onChange={({ target: { value } }) => setColorId(value as Color)}>
+                <input type="text" className="form-control mb-1" onChange={({ target: { value } }) => setName(value)} value={name} />
+                <select value={colorId} className="form-control mb-1" onChange={({ target: { value } }) => setColorId(value as Color)}>
                     {
                         _.map(Object.keys(Color), (colorName) => (
                             <option key={Color[colorName]} value={Color[colorName]}>{colorName}</option>
                         ))
                     }
                 </select>
-                <input type="submit" className="form-control btn btn-light" value="Save" onClick={onSubmit} />
+                <input type="submit" className="form-control mb-1 btn btn-light" value="Save" onClick={onSubmit} />
                 <button className="form-control btn btn-light" onClick={stopEditing}>Cancel</button>
             </form>
         </span>
     } else {
         return <span>
-            <ReadOnlyPlayerDescription player={player}/>
+            <ReadOnlyPlayerDescription player={player}/> (you)
             {' '}
             <button className="btn btn-link btn-sm text-muted" onClick={() => { setEditing(true) }}>Edit</button>
         </span>
