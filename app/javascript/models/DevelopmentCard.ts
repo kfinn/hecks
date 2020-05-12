@@ -22,6 +22,5 @@ export interface DevelopmentCard {
 }
 
 export function developmentCardDescription(developmentCard: DevelopmentCard) {
-    console.log(developmentCard.developmentCardBehavior)
     return developmentCard.developmentCardBehavior.description
 }

@@ -13,6 +13,7 @@ import PendingDiscardRequirement from './PendingDiscardRequirement';
 import PlayerOfferList from './PlayerOfferList';
 import DevelopmentCardList from './DevelopmentCardList';
 import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
+import NotificationsPermissionsRequest from './NotificationsPermissionsRequest';
 
 interface GameProps {
     game: Game
@@ -43,7 +44,7 @@ export default function Game(props: GameProps) {
             }
         )
 
-        return () => { subscription.disconnect() }
+        return () => { console.log(subscription); subscription.disconnect() }
     }, [game.id])
 
     const onStartClicked = (event: { preventDefault: () => void }) => {
@@ -62,6 +63,7 @@ export default function Game(props: GameProps) {
     return (
         <div>
             <Status status={game.status} />
+            <NotificationsPermissionsRequest />
             {gameIsStarted(game) ? null : <button className="btn btn-success" onClick={onStartClicked}>Start Game</button>}
             <div className="row">
                 <div className="col-md-7 col-lg-7 col-xl-9 order-md-2">

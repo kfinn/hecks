@@ -6,12 +6,15 @@ json.status do
     if game.current_turn
         if game.current_turn.player == current_player
             json.actor 'you'
+            json.actor_is_current_player true
         else
             json.actor game.current_turn.player.name
+            json.actor_is_current_player false
         end
         json.description  game.current_turn.description
     else
         json.actor 'someone'
+        json.actor_is_current_player true
         json.description 'start the game'
     end
 end

@@ -15,7 +15,7 @@ function KnightCardPlayForm({ developmentCard: { id } }: FormProps) {
             try {
                 await Api.post(`development_cards/${id}/knight_card_play.json`)
             } catch (error) {
-                console.log(error)
+                console.log(error.response)
             }
         }
         onClickAsync()
@@ -38,7 +38,7 @@ function MonopolyCardPlayForm({ developmentCard: { id } }: FormProps) {
                     { monopolyCardPlay: { resourceId } }
                 )
             } catch (error) {
-                console.log(error)
+                console.log(error.response)
             }
         }
         onClickAsync()
@@ -68,7 +68,7 @@ function YearOfPlentyCardPlayForm({ developmentCard: { id } }: FormProps) {
                     { yearOfPlentyCardPlay: { resource_1Id: resource1Id, resource_2Id: resource2Id } }
                 )
             } catch (error) {
-                console.log(error)
+                console.log(error.response)
             }
         }
         onClickAsync()
@@ -101,7 +101,7 @@ function RoadBuildingCardPlayForm({ developmentCard: { id } }: FormProps) {
             try {
                 await Api.post(`development_cards/${id}/road_building_card_play.json`)
             } catch (error) {
-                console.log(error)
+                console.log(error.response)
             }
         }
         onClickAsync()

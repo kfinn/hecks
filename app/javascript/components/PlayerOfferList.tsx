@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Api from '../models/Api';
 import { Game } from '../models/Game';
 import { PlayerOffer, PlayerOfferAction } from '../models/PlayerOffer';
@@ -35,7 +35,6 @@ function AcceptPlayerOfferButton({ playerOffer: { playerOfferActions, id} }: Pla
 }
 
 function RejectPlayerOfferButton({ playerOffer: { playerOfferActions, id } }: PlayerOfferComponentProps) {
-    console.log(playerOfferActions[0])
     if (!_.includes(playerOfferActions, PlayerOfferAction.CreatePlayerOfferRejection)) {
         return null
     }
@@ -150,6 +149,43 @@ function PlayerOffer({ playerOffer }: PlayerOfferComponentProps) {
 }
 
 export default function PlayerOfferList({ game }: { game: Game }) {
+    const anyPlayerOfferActions = _.some(game.playerOffers, ({ playerOfferActions }) => playerOfferActions.length > 0)
+
+    useEffect(
+        () => {
+            if (anyPlayerOfferActions && document.hidden) {
+                const notification = new Notification(
+                    "New trade offer in Hecks",
+                    {
+                        body: `You have a new offer to review`
+                    }
+                )
+                return () => notification.close()
+            }
+            return () => { }
+        },
+        [anyPlayerOfferActions]
+    )
+
+    const playerOfferResponses = _.flatMap(game.playerOffers, ({ playerOfferResponses }) => playerOfferResponses)
+    const anyPlayerOfferResponses = _.some(playerOfferResponses, ({ playerOfferResponseActions }) => playerOfferResponseActions.length > 0)
+
+    useEffect(
+        () => {
+            if (anyPlayerOfferResponses && document.hidden) {
+                const notification = new Notification(
+                    "New trade offer response in Hecks",
+                    {
+                        body: `Someone has accepted your offer`
+                    }
+                )
+                return () => notification.close()
+            }
+            return () => { }
+        },
+        [anyPlayerOfferResponses]
+    )
+
     if (game.playerOffers.length == 0 && game.newPlayerOfferActions.length == 0) {
         return null;
     }

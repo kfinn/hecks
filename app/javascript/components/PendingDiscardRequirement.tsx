@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
-import { Game } from '../models/Game';
-import { DiscardRequirement } from '../models/DiscardRequirement';
-import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
-import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
 import Api from '../models/Api';
-import ResourceQuantityPicker from './ResourceQuantityPicker';
+import { DiscardRequirement } from '../models/DiscardRequirement';
+import { Game } from '../models/Game';
 import { ResourceId } from '../models/Resource';
+import ResourceQuantityPicker from './ResourceQuantityPicker';
 
 export default function PendingDiscardRequirement({ game }: { game: Game }) {
-    if (!game.pendingDiscardRequirement) {
-        return null
-    }
+    const hasPendingDiscardRequirement = !!game.pendingDiscardRequirement
+    useEffect(() => {
+        if (hasPendingDiscardRequirement && document.hidden) {
+                const notification = new Notification(
+                    "Time to discard in Hecks",
+                    {
+                        body: 'You had too many cards when someone rolled a seven.'
+                    }
+                )
+                return () => notification.close()
+            }
+            return () => { }
+        },
+        [hasPendingDiscardRequirement]
+    )
 
     const discardRequirement = game.pendingDiscardRequirement as DiscardRequirement
 
@@ -19,6 +29,10 @@ export default function PendingDiscardRequirement({ game }: { game: Game }) {
     const [lumberCardsCount, setLumberCardsCount] = useState(0)
     const [oreCardsCount, setOreCardsCount] = useState(0)
     const [woolCardsCount, setWoolCardsCount] = useState(0)
+
+    if (!hasPendingDiscardRequirement) {
+        return null
+    }
 
     const totalCardsCount =
         brickCardsCount +
@@ -44,6 +58,11 @@ export default function PendingDiscardRequirement({ game }: { game: Game }) {
                         }
                     }
                 )
+                setBrickCardsCount(0)
+                setGrainCardsCount(0)
+                setLumberCardsCount(0)
+                setOreCardsCount(0)
+                setWoolCardsCount(0)
             } catch (error) {
                 console.log(error.response)
             }
