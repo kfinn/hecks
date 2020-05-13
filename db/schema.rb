@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_10_195738) do
+ActiveRecord::Schema.define(version: 2020_05_13_230101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,8 +78,10 @@ ActiveRecord::Schema.define(version: 2020_05_10_195738) do
     t.datetime "started_at"
     t.bigint "current_turn_id"
     t.bigint "robber_territory_id", null: false
+    t.bigint "winner_id"
     t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
     t.index ["robber_territory_id"], name: "index_games_on_robber_territory_id"
+    t.index ["winner_id"], name: "index_games_on_winner_id"
   end
 
   create_table "harbors", force: :cascade do |t|
@@ -249,6 +251,7 @@ ActiveRecord::Schema.define(version: 2020_05_10_195738) do
   add_foreign_key "development_cards", "turns", column: "purchased_during_turn_id"
   add_foreign_key "discard_requirements", "players"
   add_foreign_key "discard_requirements", "turns"
+  add_foreign_key "games", "players", column: "winner_id"
   add_foreign_key "games", "territories", column: "robber_territory_id"
   add_foreign_key "games", "turns", column: "current_turn_id"
   add_foreign_key "player_offer_responses", "player_offers"

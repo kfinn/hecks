@@ -41,4 +41,17 @@ class GameScoring
         end
         @player_with_longest_road
     end
+
+    def secret_scores_by_player
+        @secret_scores_by_player ||= players.each_with_object({}) do |player, acc|
+            acc[player] = scores_by_player[player] + player.victory_point_cards.size
+        end
+    end
+
+    def winner
+        unless instance_variable_defined?(:@winner)
+            @winner = secret_scores_by_player.select { |player, score| score >= 10 }.first&.first
+        end
+        @winner
+    end
 end

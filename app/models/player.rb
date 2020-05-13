@@ -33,6 +33,7 @@ class Player < ApplicationRecord
     has_many :development_cards
     has_many :active_development_cards, -> { active }, class_name: 'DevelopmentCard'
     has_many :played_knight_cards, -> { played.knight }, class_name: 'DevelopmentCard'
+    has_many :victory_point_cards, -> { victory_point }, class_name: 'DevelopmentCard'
 
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 

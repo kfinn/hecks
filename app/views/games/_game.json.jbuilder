@@ -12,6 +12,9 @@ json.status do
             json.actor_is_current_player false
         end
         json.description  game.current_turn.description
+    elsif game.winner
+        json.winner game.winner.name
+        json.winner_is_current_player game.winner == current_player
     else
         json.actor 'someone'
         json.actor_is_current_player true

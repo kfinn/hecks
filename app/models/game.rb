@@ -27,6 +27,8 @@ class Game < ApplicationRecord
     has_many :player_offers, -> { pending }, through: :current_turn
     has_many :player_offer_responses, through: :player_offers
 
+    belongs_to :winner, optional: true, class_name: 'Player'
+
     before_validation :generate!, on: :create
 
     after_save :changed!
@@ -52,7 +54,11 @@ class Game < ApplicationRecord
     end
 
     def end_turn!
-        update! current_turn: current_turn.build_next_turn
+        if game_scoring.winner.present?
+            update! winner: game_scoring.winner, current_turn: nil
+        else
+            update! current_turn: current_turn.build_next_turn
+        end
     end
 
     def latest_roll
