@@ -166,14 +166,14 @@ class RepeatingTurn < Turn
     def can_purchase_road?
         can_purchase? &&
             player.brick_cards_count >= 1 &&
-            player.lumber_cards_count >= 1
+            player.lumber_cards_count >= 1 &&
             player.roads.size < 15
     end
 
     def can_purchase_city_upgrade?
         can_purchase? &&
             player.grain_cards_count >= 2 &&
-            player.ore_cards_count >= 3
+            player.ore_cards_count >= 3 &&
             player.settlements.with_city_upgrade.size < 4
     end
 
