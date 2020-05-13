@@ -45,4 +45,12 @@ class Terrain < ActiveHash::Base
         end
         for_territories.shuffle
     end
+
+    def production?
+        resource.present?
+    end
+
+    def desert?
+        self == DESERT
+    end
 end

@@ -68,4 +68,12 @@ class ProductionNumber < ActiveHash::Base
         end
         for_territories.shuffle
     end
+
+    def high_frequency?
+        frequency == 5
+    end
+
+    def low_frequency?
+        frequency == 1
+    end
 end

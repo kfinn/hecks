@@ -11,7 +11,7 @@ class FourPlayerRandomizedBoard
         end
     end
 
-    CORNER_OFFSETS = {
+    TERRITORY_CORNER_OFFSETS = {
         north: Position.new(0, -3),
         northeast: Position.new(2, -1),
         southeast: Position.new(2, 1),
@@ -20,24 +20,37 @@ class FourPlayerRandomizedBoard
         northwest: Position.new(-2, -1)
     }
 
-    def generate!
-        next_production_number_index = 0
+    TERRITORY_BORDER_OFFSETS = {
+        northwest: Position.new(-1, -2),
+        northeast: Position.new(1, -2),
+        east: Position.new(2, 0),
+        southeast: Position.new(1, 2),
+        southwest: Position.new(-1, 2),
+        west: Position.new(-2, 0)
+    }
 
+    TERRITORY_NEIGHBOR_OFFSETS = {
+        northwest: Position.new(-2, -4),
+        northeast: Position.new(2, -4),
+        east: Position.new(4, 0),
+        southeast: Position.new(2, 4),
+        southwest: Position.new(-2, 4),
+        west: Position.new(-4, 0)
+    }
+
+    def generate!
         territories.each_with_index do |territory, index|
             territory.terrain = terrains[index]
             if territory.terrain == Terrain::DESERT
                 game.robber_territory = territory
-            else
-                territory.production_number = production_numbers[next_production_number_index]
-                next_production_number_index += 1
             end
 
             territory_position = Position.new(territory.x, territory.y)
             x = territory.x
             y = territory.y
 
-            northwest_border = borders_by_position[Position.new(x - 1, y - 2)]
-            north_corner = corners_by_position[territory_position + CORNER_OFFSETS[:north]]
+            northwest_border = borders_by_position[territory_position + TERRITORY_BORDER_OFFSETS[:northwest]]
+            north_corner = corners_by_position[territory_position + TERRITORY_CORNER_OFFSETS[:north]]
 
             adjacencies.build(
                 territory: territory,
@@ -45,7 +58,7 @@ class FourPlayerRandomizedBoard
                 north_corner: north_corner
             )
 
-            northeast_border = borders_by_position[Position.new(x + 1, y - 2)]
+            northeast_border = borders_by_position[territory_position + TERRITORY_BORDER_OFFSETS[:northeast]]
 
             adjacencies.build(
                 territory: territory,
@@ -53,7 +66,7 @@ class FourPlayerRandomizedBoard
                 north_corner: north_corner
             )
 
-            northeast_corner = corners_by_position[territory_position + CORNER_OFFSETS[:northeast]]
+            northeast_corner = corners_by_position[territory_position + TERRITORY_CORNER_OFFSETS[:northeast]]
 
             adjacencies.build(
                 territory: territory,
@@ -61,7 +74,7 @@ class FourPlayerRandomizedBoard
                 northeast_corner: northeast_corner
             )
 
-            east_border = borders_by_position[Position.new(x + 2, y)]
+            east_border = borders_by_position[territory_position + TERRITORY_BORDER_OFFSETS[:east]]
 
             adjacencies.build(
                 territory: territory,
@@ -69,7 +82,7 @@ class FourPlayerRandomizedBoard
                 northeast_corner: northeast_corner
             )
 
-            southeast_corner = corners_by_position[territory_position + CORNER_OFFSETS[:southeast]]
+            southeast_corner = corners_by_position[territory_position + TERRITORY_CORNER_OFFSETS[:southeast]]
 
             adjacencies.build(
                 territory: territory,
@@ -77,7 +90,7 @@ class FourPlayerRandomizedBoard
                 southeast_corner: southeast_corner
             )
 
-            southeast_border = borders_by_position[Position.new(x + 1, y + 2)]
+            southeast_border = borders_by_position[territory_position + TERRITORY_BORDER_OFFSETS[:southeast]]
 
             adjacencies.build(
                 territory: territory,
@@ -85,7 +98,7 @@ class FourPlayerRandomizedBoard
                 southeast_corner: southeast_corner
             )
 
-            south_corner = corners_by_position[territory_position + CORNER_OFFSETS[:south]]
+            south_corner = corners_by_position[territory_position + TERRITORY_CORNER_OFFSETS[:south]]
 
             adjacencies.build(
                 territory: territory,
@@ -93,7 +106,7 @@ class FourPlayerRandomizedBoard
                 south_corner: south_corner
             )
 
-            southwest_border = borders_by_position[Position.new(x - 1, y + 2)]
+            southwest_border = borders_by_position[territory_position + TERRITORY_BORDER_OFFSETS[:southwest]]
 
             adjacencies.build(
                 territory: territory,
@@ -101,7 +114,7 @@ class FourPlayerRandomizedBoard
                 south_corner: south_corner
             )
 
-            southwest_corner = corners_by_position[territory_position + CORNER_OFFSETS[:southwest]]
+            southwest_corner = corners_by_position[territory_position + TERRITORY_CORNER_OFFSETS[:southwest]]
 
             adjacencies.build(
                 territory: territory,
@@ -109,7 +122,7 @@ class FourPlayerRandomizedBoard
                 southwest_corner: southwest_corner
             )
 
-            west_border = borders_by_position[Position.new(x - 2, y)]
+            west_border = borders_by_position[territory_position + TERRITORY_BORDER_OFFSETS[:west]]
 
             adjacencies.build(
                 territory: territory,
@@ -117,7 +130,7 @@ class FourPlayerRandomizedBoard
                 southwest_corner: southwest_corner
             )
 
-            northwest_corner = corners_by_position[territory_position + CORNER_OFFSETS[:northwest]]
+            northwest_corner = corners_by_position[territory_position + TERRITORY_CORNER_OFFSETS[:northwest]]
 
             adjacencies.build(
                 territory: territory,
@@ -130,6 +143,36 @@ class FourPlayerRandomizedBoard
                 northwest_border: northwest_border,
                 northwest_corner: northwest_corner
             )
+        end
+
+        high_frequency_production_numbers.each do |production_number|
+            available_territories = territories.select do |territory|
+                territory.terrain.production? &&
+                    territory.production_number.blank? &&
+                    TERRITORY_NEIGHBOR_OFFSETS.values.none? do |neighbor_offset|
+                        territories_by_position[Position.new(territory.x, territory.y) + neighbor_offset]&.production_number&.high_frequency?
+                    end
+            end
+            available_territories.sample.production_number = production_number
+        end
+
+        low_frequency_production_numbers.each do |production_number|
+            available_territories = territories.select do |territory|
+                territory.terrain.production? &&
+                    territory.production_number.blank? &&
+                    TERRITORY_NEIGHBOR_OFFSETS.values.none? do |neighbor_offset|
+                        neighbor = territories_by_position[Position.new(territory.x, territory.y) + neighbor_offset]
+                        neighbor&.production_number&.low_frequency? || (neighbor&.terrain&.desert?)
+                    end
+            end
+            available_territories.sample.production_number = production_number
+        end
+
+        mid_frequency_production_numbers.each do |production_number|
+            available_territories = territories.select do |territory|
+                territory.terrain.production? && territory.production_number.blank?
+            end
+            available_territories.sample.production_number = production_number
         end
 
         HARBOR_ORIENTATIONS.each_with_index do |harbor_orientation, index|
@@ -162,74 +205,92 @@ class FourPlayerRandomizedBoard
         {
             harbor_position: Position.new(-6, -12),
             corner_offsets: [
-                CORNER_OFFSETS[:south],
-                CORNER_OFFSETS[:southeast]
+                TERRITORY_CORNER_OFFSETS[:south],
+                TERRITORY_CORNER_OFFSETS[:southeast]
             ]
         },
         {
             harbor_position: Position.new(2, -12),
             corner_offsets: [
-                CORNER_OFFSETS[:southwest],
-                CORNER_OFFSETS[:south]
+                TERRITORY_CORNER_OFFSETS[:southwest],
+                TERRITORY_CORNER_OFFSETS[:south]
             ]
         },
         {
             harbor_position: Position.new(8, -8),
             corner_offsets: [
-                CORNER_OFFSETS[:southwest],
-                CORNER_OFFSETS[:south]
+                TERRITORY_CORNER_OFFSETS[:southwest],
+                TERRITORY_CORNER_OFFSETS[:south]
             ]
         },
         {
             harbor_position: Position.new(-10, -4),
             corner_offsets: [
-                CORNER_OFFSETS[:northeast],
-                CORNER_OFFSETS[:southeast]
+                TERRITORY_CORNER_OFFSETS[:northeast],
+                TERRITORY_CORNER_OFFSETS[:southeast]
             ]
         },
         {
             harbor_position: Position.new(12, 0),
             corner_offsets: [
-                CORNER_OFFSETS[:northwest],
-                CORNER_OFFSETS[:southwest]
+                TERRITORY_CORNER_OFFSETS[:northwest],
+                TERRITORY_CORNER_OFFSETS[:southwest]
             ]
         },
         {
             harbor_position: Position.new(-10, 4),
             corner_offsets: [
-                CORNER_OFFSETS[:northeast],
-                CORNER_OFFSETS[:southeast]
+                TERRITORY_CORNER_OFFSETS[:northeast],
+                TERRITORY_CORNER_OFFSETS[:southeast]
             ]
         },
         {
             harbor_position: Position.new(8, 8),
             corner_offsets: [
-                CORNER_OFFSETS[:north],
-                CORNER_OFFSETS[:northwest]
+                TERRITORY_CORNER_OFFSETS[:north],
+                TERRITORY_CORNER_OFFSETS[:northwest]
             ]
         },
         {
             harbor_position: Position.new(-6, 12),
             corner_offsets: [
-                CORNER_OFFSETS[:north],
-                CORNER_OFFSETS[:northeast]
+                TERRITORY_CORNER_OFFSETS[:north],
+                TERRITORY_CORNER_OFFSETS[:northeast]
             ]
         },
         {
             harbor_position: Position.new(2, 12),
             corner_offsets: [
-                CORNER_OFFSETS[:north],
-                CORNER_OFFSETS[:northwest]
+                TERRITORY_CORNER_OFFSETS[:north],
+                TERRITORY_CORNER_OFFSETS[:northwest]
             ]
         }
     ]
 
     def territories
-        @territories ||= TERRITORY_POSITIONS.map { |position| Territory.new(x: position.x, y: position.y) }
+        territories_by_position.values
+    end
+
+    def territories_by_position
+        @territories_by_position ||= TERRITORY_POSITIONS.each_with_object({}) do |position, acc|
+            acc[position] = Territory.new(x: position.x, y: position.y)
+        end
     end
 
     def terrains
         @terrains ||= Terrain.shuffled
+    end
+
+    def high_frequency_production_numbers
+        @high_frequency_production_numbers ||= production_numbers.select(&:high_frequency?)
+    end
+
+    def low_frequency_production_numbers
+        @low_frequency_production_numbers ||= production_numbers.select(&:low_frequency?)
+    end
+
+    def mid_frequency_production_numbers
+        @mid_frequency_production_numbers ||= production_numbers.reject(&:high_frequency?).reject(&:low_frequency?)
     end
 
     def production_numbers
