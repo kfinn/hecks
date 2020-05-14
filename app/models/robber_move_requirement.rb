@@ -7,8 +7,12 @@ class RobberMoveRequirement < ApplicationRecord
 
     delegate :player, to: :turn
 
+    def neighboring_players
+        @neighboring_players ||= moved_to_territory&.players&.where&.not(id: player.id) || Player.none
+    end
+
     def robbable_players
-        @robbable_players ||= (moved_to_territory&.players&.with_resource_cards&.where&.not(id: player.id)) || []
+        @robbable_players ||= neighboring_players.with_resource_cards
     end
 
     def has_robbable_players?
@@ -31,6 +35,6 @@ class RobberMoveRequirement < ApplicationRecord
 
     def robbed_player_must_occupy_moved_to_territory
         return unless robbed_player.present?
-        errors[:robbed_player] << 'cannot rob this player' unless robbable_players.include? robbed_player
+        errors[:robbed_player] << 'cannot rob this player' unless neighboring_players.include? robbed_player
     end
 end
