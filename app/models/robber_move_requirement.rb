@@ -8,7 +8,7 @@ class RobberMoveRequirement < ApplicationRecord
     delegate :player, to: :turn
 
     def robbable_players
-        @robbable_players ||= (moved_to_territory&.players&.where&.not(id: player.id)) || []
+        @robbable_players ||= (moved_to_territory&.players&.with_resource_cards&.where&.not(id: player.id)) || []
     end
 
     def has_robbable_players?
