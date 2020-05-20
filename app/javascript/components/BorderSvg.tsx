@@ -2,7 +2,6 @@ import React from 'react';
 import Api from '../models/Api';
 import { Border, BorderAction } from '../models/Border';
 import { colorClassName } from '../models/Color';
-import { cornerCenterX, cornerCenterY } from './CornerSvg';
 import ConnectingLineSvg from './ConnectingLineSvg';
 
 const BORDER_ACTIONS = {

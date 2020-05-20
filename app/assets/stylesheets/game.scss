@@ -8,37 +8,62 @@ $pasture-highlight: lightgreen;
 .territory {
     stroke-width: 4px;
     stroke-linejoin: round;
-    fill: white;
+}
+
+@keyframes pulsing-territory {
+    from {
+    }
+    to {
+        fill: lightgray;
+    }
 }
 
 .territory.desert {
     stroke: $desert-highlight;
     fill: rgba($desert-highlight, 0.15);
+    .has-action & {
+        animation: pulsing-territory 1s infinite linear alternate;
+    }
 }
 
 .territory.fields {
     stroke: $fields-highlight;
     fill: rgba($fields-highlight, 0.15);
+    .has-action & {
+        animation: pulsing-territory 1s infinite linear alternate;
+    }
 }
 
 .territory.forest {
     stroke: $forest-highlight;
     fill: rgba($forest-highlight, 0.15);
+    .has-action & {
+        animation: pulsing-territory 1s infinite linear alternate;
+    }
 }
 
 .territory.hills {
     stroke: $hills-highlight;
     fill: rgba( $hills-highlight, 0.15);
+    .has-action & {
+        animation: pulsing-territory 1s infinite linear alternate;
+    }
 }
 
 .territory.mountains {
     stroke: $mountains-highlight;
     fill: rgba($mountains-highlight, 0.15);
+    .has-action & {
+        animation: pulsing-territory 1s infinite linear alternate;
+    }
 }
 
 .territory.pasture {
     stroke: $pasture-highlight;
     fill: rgba($pasture-highlight, 0.15);
+    .has-action & {
+        animation: pulsing-territory 1s infinite linear alternate;
+    }
 }
 
 .high-frequency {
@@ -103,9 +128,26 @@ $pasture-highlight: lightgreen;
 
 }
 
+@keyframes pulsing {
+    from {
+        fill: lightgray;
+        stroke: lightgray;
+    }
+
+    to {
+        fill: darkgray;
+        stroke: black;
+    }
+}
+
 .has-action {
     cursor: pointer;
 }
+
+.border.has-action, .corner.has-action {
+    animation: pulsing 1s infinite linear alternate;
+}
+
 
 .hand-icon {
     height: 1em;
