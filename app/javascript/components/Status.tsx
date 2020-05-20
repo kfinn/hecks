@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { Status, TurnStatus, WinnerStatus } from '../models/Status';
+import useSafeNotification from './useSafeNotification';
 
 function WinnerStatusNotification({ status: { winner, winnerIsCurrentPlayer} }: { status: WinnerStatus }) {
+    const SafeNotification = useSafeNotification()
     useEffect(
         () => {
-            if (document.hidden) {
+            if (document.hidden && SafeNotification) {
                 const title = `${winnerIsCurrentPlayer ? 'You' : winner} won in Hecks`
                 const body = winnerIsCurrentPlayer ? 'Congratulations!' : "Better luck next time."
-                const notification = new Notification(
+                const notification = new SafeNotification(
                     title,
                     { body }
                 )
@@ -25,10 +27,11 @@ function WinnerStatusNotification({ status: { winner, winnerIsCurrentPlayer} }: 
 }
 
 function TurnStatusNotification({ status: { actor, actorIsCurrentPlayer, description } }: { status: TurnStatus }) {
+    const SafeNotification = useSafeNotification()
     useEffect(
         () => {
-            if (actorIsCurrentPlayer && document.hidden) {
-                const notification = new Notification(
+            if (actorIsCurrentPlayer && document.hidden && SafeNotification) {
+                const notification = new SafeNotification(
                     "Your turn in Hecks",
                     {
                         body: `It's your turn to ${description}`

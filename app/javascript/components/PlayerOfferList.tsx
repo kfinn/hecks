@@ -6,12 +6,13 @@ import { PlayerOffer, PlayerOfferAction } from '../models/PlayerOffer';
 import NewPlayerOfferForm from './NewPlayerOfferForm';
 import PlayerOfferResponseList from './PlayerOfferResponseList';
 import { BrickIcon, GrainIcon, LumberIcon, OreIcon, WoolIcon } from './ResourceIcon';
+import useSafeNotification from './useSafeNotification';
 
 interface PlayerOfferComponentProps {
     playerOffer: PlayerOffer
 }
 
-function AcceptPlayerOfferButton({ playerOffer: { playerOfferActions, id} }: PlayerOfferComponentProps) {
+function AcceptPlayerOfferButton({ playerOffer: { playerOfferActions, id } }: PlayerOfferComponentProps) {
     if (!_.includes(playerOfferActions, PlayerOfferAction.CreatePlayerOfferAgreement)) {
         return null
     }
@@ -101,41 +102,41 @@ function PlayerOffer({ playerOffer }: PlayerOfferComponentProps) {
             </div>
             <div>
                 <h5>{playerOffer.playerName} wants to receive:</h5>
-                    {
-                        playerOffer.brickCardsCountFromAgreeingPlayer > 0 ? (
-                            <div>
-                                <BrickIcon /> &times; {playerOffer.brickCardsCountFromAgreeingPlayer}
-                            </div>
-                        ) : null
-                    }
-                    {
-                        playerOffer.grainCardsCountFromAgreeingPlayer > 0 ? (
-                            <div>
-                                <GrainIcon /> &times; {playerOffer.grainCardsCountFromAgreeingPlayer}
-                            </div>
-                        ) : null
-                    }
-                    {
-                        playerOffer.lumberCardsCountFromAgreeingPlayer > 0 ? (
-                            <div>
-                                <LumberIcon /> &times; {playerOffer.lumberCardsCountFromAgreeingPlayer}
-                            </div>
-                        ) : null
-                    }
-                    {
-                        playerOffer.oreCardsCountFromAgreeingPlayer > 0 ? (
-                            <div>
-                                <OreIcon /> &times; {playerOffer.oreCardsCountFromAgreeingPlayer}
-                            </div>
-                        ) : null
-                    }
-                    {
-                        playerOffer.woolCardsCountFromAgreeingPlayer > 0 ? (
-                            <div>
-                                <WoolIcon /> &times; {playerOffer.woolCardsCountFromAgreeingPlayer}
-                            </div>
-                        ) : null
-                    }
+                {
+                    playerOffer.brickCardsCountFromAgreeingPlayer > 0 ? (
+                        <div>
+                            <BrickIcon /> &times; {playerOffer.brickCardsCountFromAgreeingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.grainCardsCountFromAgreeingPlayer > 0 ? (
+                        <div>
+                            <GrainIcon /> &times; {playerOffer.grainCardsCountFromAgreeingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.lumberCardsCountFromAgreeingPlayer > 0 ? (
+                        <div>
+                            <LumberIcon /> &times; {playerOffer.lumberCardsCountFromAgreeingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.oreCardsCountFromAgreeingPlayer > 0 ? (
+                        <div>
+                            <OreIcon /> &times; {playerOffer.oreCardsCountFromAgreeingPlayer}
+                        </div>
+                    ) : null
+                }
+                {
+                    playerOffer.woolCardsCountFromAgreeingPlayer > 0 ? (
+                        <div>
+                            <WoolIcon /> &times; {playerOffer.woolCardsCountFromAgreeingPlayer}
+                        </div>
+                    ) : null
+                }
             </div>
             <div>
                 <PlayerOfferResponseList playerOffer={playerOffer} />
@@ -151,10 +152,12 @@ function PlayerOffer({ playerOffer }: PlayerOfferComponentProps) {
 export default function PlayerOfferList({ game }: { game: Game }) {
     const anyPlayerOfferActions = _.some(game.playerOffers, ({ playerOfferActions }) => playerOfferActions.length > 0)
 
+    const SafeNotification = useSafeNotification()
+
     useEffect(
         () => {
-            if (anyPlayerOfferActions && document.hidden) {
-                const notification = new Notification(
+            if (anyPlayerOfferActions && document.hidden && SafeNotification) {
+                const notification = new SafeNotification(
                     "New trade offer in Hecks",
                     {
                         body: `You have a new offer to review`
@@ -172,8 +175,8 @@ export default function PlayerOfferList({ game }: { game: Game }) {
 
     useEffect(
         () => {
-            if (anyPlayerOfferResponses && document.hidden) {
-                const notification = new Notification(
+            if (anyPlayerOfferResponses && document.hidden && SafeNotification) {
+                const notification = new SafeNotification(
                     "New trade offer response in Hecks",
                     {
                         body: `Someone has accepted your offer`

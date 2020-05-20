@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
+import useSafeNotification from './useSafeNotification';
 
 export default function NotificationsPermissionsRequest() {
-    const [notificationPermission, setNotificationPermission] = useState(Notification.permission)
+    const SafeNotification = useSafeNotification()
+    if (!SafeNotification) {
+        return null;
+    }
+
+    const [notificationPermission, setNotificationPermission] = useState(SafeNotification.permission)
 
     if (notificationPermission != 'granted') {
         const onClick = () => {
             const asyncOnClick = async () => {
-                try {
-                    setNotificationPermission(await Notification.requestPermission())
-                } catch {
-                    Notification.requestPermission(setNotificationPermission)
-                }
+                setNotificationPermission(await SafeNotification.requestPermission(setNotificationPermission))
             }
             asyncOnClick()
         }

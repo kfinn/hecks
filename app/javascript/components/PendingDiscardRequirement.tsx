@@ -4,21 +4,24 @@ import { DiscardRequirement } from '../models/DiscardRequirement';
 import { Game } from '../models/Game';
 import { ResourceId } from '../models/Resource';
 import ResourceQuantityPicker from './ResourceQuantityPicker';
+import useSafeNotification from './useSafeNotification';
 
 export default function PendingDiscardRequirement({ game }: { game: Game }) {
+    const SafeNotification = useSafeNotification()
+
     const hasPendingDiscardRequirement = !!game.pendingDiscardRequirement
     useEffect(() => {
-        if (hasPendingDiscardRequirement && document.hidden) {
-                const notification = new Notification(
-                    "Time to discard in Hecks",
-                    {
-                        body: 'You had too many cards when someone rolled a seven.'
-                    }
-                )
-                return () => notification.close()
-            }
-            return () => { }
-        },
+        if (hasPendingDiscardRequirement && document.hidden && SafeNotification) {
+            const notification = new SafeNotification(
+                "Time to discard in Hecks",
+                {
+                    body: 'You had too many cards when someone rolled a seven.'
+                }
+            )
+            return () => notification.close()
+        }
+        return () => { }
+    },
         [hasPendingDiscardRequirement]
     )
 
