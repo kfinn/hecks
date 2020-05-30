@@ -16,7 +16,8 @@ const DIE_FACES_BY_VALUE = {
 const DICE_ACTIONS = {
     [DiceAction.CreateProductionRoll]: {
         action: DiceAction.CreateProductionRoll,
-        name: 'Roll',
+        name: 'Roll Dice',
+        buttonVariant: 'primary',
         onClick: async ({ id }: Game) => {
             return await Api.post(`games/${id}/production_rolls.json`)
         }
@@ -24,6 +25,7 @@ const DICE_ACTIONS = {
     [DiceAction.EndTurn]: {
         action: DiceAction.EndTurn,
         name: 'End Turn',
+        buttonVariant: 'danger',
         onClick: async({ id }: Game) => {
             return await Api.post(`games/${id}/repeating_turn_ends.json`)
         }
@@ -32,20 +34,30 @@ const DICE_ACTIONS = {
 
 export default function Dice({ game }: { game: Game }) {
     const { latestRoll, diceActions } = game.dice
-    const actions = _.compact(_.map(diceActions, (action) => DICE_ACTIONS[action]))
 
     return (
         <React.Fragment>
             {
                 latestRoll ? (
                     <div className="dice">{DIE_FACES_BY_VALUE[latestRoll.die1Value]}{DIE_FACES_BY_VALUE[latestRoll.die2Value]}</div>
-                ) : null
+                ) : (
+                    <div className="dice">{DIE_FACES_BY_VALUE[1]}{DIE_FACES_BY_VALUE[1]}</div>
+                )
             }
-        {
-            _.map(actions, ({ action, name, onClick }) => (
-                <button className="btn btn-primary" key={action} onClick={() => { onClick(game) }}>{name}</button>
-            ))
-        }
+            <div className="btn-group" role="group">
+                {
+                    _.map(_.values(DICE_ACTIONS), ({ action, name, buttonVariant, onClick }) => (
+                        <button
+                            className={`btn btn-${buttonVariant}`}
+                            key={action}
+                            onClick={() => { onClick(game) }}
+                            disabled={!_.includes(diceActions, action)}
+                        >
+                            {name}
+                        </button>
+                    ))
+                }
+            </div>
         </React.Fragment>
     )
 }
