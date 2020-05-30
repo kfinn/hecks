@@ -10,6 +10,6 @@ class Army
     end
 
     def since
-        @since ||= player.played_knight_cards.most_recently_played
+        @since ||= player.played_knight_cards.most_recently_played_at
     end
 end

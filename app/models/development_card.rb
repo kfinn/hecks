@@ -14,8 +14,8 @@ class DevelopmentCard < ApplicationRecord
     scope :knight, -> { where development_card_behavior_id: DevelopmentCardBehavior::KNIGHT.id }
     scope :victory_point, -> { where development_card_behavior_id: DevelopmentCardBehavior::VICTORY_POINT.id }
 
-    def self.most_recently_played
-        joins(:played_during_turn).order('turns.created_at': :desc).first
+    def self.most_recently_played_at
+        joins(:played_during_turn).maximum('turns.created_at')
     end
 
     delegate(
