@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_13_230101) do
+ActiveRecord::Schema.define(version: 2020_06_05_033603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 2020_05_13_230101) do
     t.bigint "current_turn_id"
     t.bigint "robber_territory_id", null: false
     t.bigint "winner_id"
+    t.string "board_config_id", default: "small", null: false
     t.index ["current_turn_id"], name: "index_games_on_current_turn_id"
     t.index ["robber_territory_id"], name: "index_games_on_robber_territory_id"
     t.index ["winner_id"], name: "index_games_on_winner_id"

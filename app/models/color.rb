@@ -2,21 +2,12 @@ class Color < ActiveHash::Base
     include ActiveHash::Enum
     enum_accessor :name
     self.data = [
-        {
-            id: 'blue',
-            name: 'blue'
-        },
-        {
-            id: 'white',
-            name: 'white'
-        },
-        {
-            id: 'red',
-            name: 'red'
-        },
-        {
-            id: 'orange',
-            name: 'orange'
-        }
+        { id: 'blue' },
+        { id: 'white' },
+        { id: 'red' },
+        { id: 'orange' },
+        { id: 'teal' },
+        { id: 'brown' },
+        { id: 'pink' }
     ]
 end

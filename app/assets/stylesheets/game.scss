@@ -125,7 +125,42 @@ $pasture-highlight: lightgreen;
     .card-title {
         color: white;
     }
+}
 
+.corner.brown, .border.brown {
+    stroke: black;
+    fill: chocolate;
+}
+
+.card.brown {
+    background-color: chocolate;
+    .card-title {
+        color: white;
+    }
+}
+
+.corner.pink, .border.pink {
+    stroke: black;
+    fill: pink;
+}
+
+.card.pink {
+    background-color: pink;
+    .card-title {
+        color: black;
+    }
+}
+
+.corner.teal, .border.teal {
+    stroke: black;
+    fill: teal;
+}
+
+.card.teal {
+    background-color: teal;
+    .card-title {
+        color: white;
+    }
 }
 
 @keyframes pulsing {

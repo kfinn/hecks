@@ -1,11 +1,11 @@
 class HarborOffer < ActiveHash::Base
     include ActiveHash::Enum
     enum_accessor :id
+
     self.data = [
         {
             id: 'generic_offer',
-            exchange_rate: 3,
-            count: 4
+            exchange_rate: 3
         },
         {
             id: 'brick_offer',
@@ -28,13 +28,6 @@ class HarborOffer < ActiveHash::Base
             resource_to_give: Resource::WOOL,
         }
     ]
-    field :count, default: 1
-    field :exchange_rate, default: 2
 
-    def self.shuffled
-        for_harbors = all.flat_map do |harbor_offer|
-            Array.new(harbor_offer.count, harbor_offer)
-        end
-        for_harbors.shuffle
-    end
+    field :exchange_rate, default: 2
 end

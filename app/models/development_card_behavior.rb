@@ -6,7 +6,6 @@ class DevelopmentCardBehavior < ActiveHash::Base
         {
             id: 'knight',
             name: 'Knight',
-            count: 14,
             description: <<~TXT.squish
                 Move the robber. Steal 1 resource card from the owner of an adjacent settlement or city.
             TXT
@@ -14,7 +13,6 @@ class DevelopmentCardBehavior < ActiveHash::Base
         {
             id: 'victory_point',
             name: 'Victory Point',
-            count: 5,
             description: <<~TXT.squish
                 1 Victory Point!
             TXT
@@ -22,7 +20,6 @@ class DevelopmentCardBehavior < ActiveHash::Base
         {
             id: 'monopoly',
             name: 'Monopoly',
-            count: 2,
             description: <<~TXT.squish
                 When you play this card, choose 1 type of resource. All other players must give you all their resource cards of that type.
             TXT
@@ -30,7 +27,6 @@ class DevelopmentCardBehavior < ActiveHash::Base
         {
             id: 'road_building',
             name: 'Road Building',
-            count: 2,
             description: <<~TXT.squish
                 Place 2 new roads as if you had just built them.
             TXT
@@ -38,7 +34,6 @@ class DevelopmentCardBehavior < ActiveHash::Base
         {
             id: 'year_of_plenty',
             name: 'Year of Plenty',
-            count: 2,
             description: <<~TXT.squish
                 Take and 2 resources from the bank. Add them to your hand. They can be 2 of the same resource or 2 different resources.
             TXT
@@ -59,13 +54,6 @@ class DevelopmentCardBehavior < ActiveHash::Base
 
     def year_of_plenty?
         self == YEAR_OF_PLENTY
-    end
-
-    def self.shuffled_deck
-        for_deck = all.flat_map do |development_card_behavior|
-            Array.new(development_card_behavior.count, development_card_behavior)
-        end
-        for_deck.shuffle
     end
 
     def can_play?(development_card, turn)

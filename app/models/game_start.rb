@@ -17,7 +17,7 @@ class GameStart
     private
 
     def must_have_enough_players
-        errors[:game] << 'not enough players' unless players.size >= 2
+        errors[:game] << 'not enough players' unless players.size >= game.min_players && players.size <= game.max_players
     end
 
     def update_players!

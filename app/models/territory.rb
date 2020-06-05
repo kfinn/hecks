@@ -27,4 +27,8 @@ class Territory < ApplicationRecord
     def has_robber?
         self == game.robber_territory
     end
+
+    def position
+        Position.new(x, y)
+    end
 end

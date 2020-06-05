@@ -1,4 +1,6 @@
 class Game < ApplicationRecord
+    belongs_to_active_hash :board_config
+
     has_many :adjacencies
 
     has_many :borders, -> { distinct }, through: :adjacencies
@@ -33,10 +35,12 @@ class Game < ApplicationRecord
 
     after_save :changed!
 
+    delegate :min_players, :max_players, to: :board_config
+
     def generate!
         self.key = 3.words.join('-')
-        FourPlayerRandomizedBoard.new(game: self).generate!
-        DevelopmentCardBehavior.shuffled_deck.each_with_index do |development_card_behavior, index|
+        RandomizedBoard.new(game: self).generate!
+        board_config.shuffled_development_card_behaviors.each_with_index do |development_card_behavior, index|
             development_cards.build(development_card_behavior: development_card_behavior, ordering: index)
         end
     end
