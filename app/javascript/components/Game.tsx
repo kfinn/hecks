@@ -70,7 +70,7 @@ export default function Game(props: GameProps) {
                     <BoardSvg game={game} />
                 </div>
                 <div className="col-md-5 col-lg-5 col-xl-3 order-md-1">
-                    <div className="mb-3"><Dice game={game} /></div>
+                    {gameIsStarted(game) ? <div className="mb-3"><Dice game={game} /></div> : null}
                     <div className="mb-3"><PendingDiscardRequirement game={game} /></div>
                     <div className="mb-3"><Hand hand={game.hand} /></div>
                     <div className="mb-3"><DevelopmentCardList game={game} /></div>
