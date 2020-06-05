@@ -62,7 +62,7 @@ class BoardConfig < ActiveHash::Base
             }
         }, {
             id: 'large',
-            min_players: 2,
+            min_players: 3,
             max_players: 6,
             territory_positions: [
                 Position.new(-4, -12), Position.new(0, -12), Position.new(4, -12),

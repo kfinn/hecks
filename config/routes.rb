@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   get 'game_starts/create'
   devise_for :users
-  root to: 'home#get'
-  get 'home/get'
+  root to: 'home#show'
+  get 'home/show'
 
   resources :games, only: [:create, :show] do
     resource :game_preview, only: :show

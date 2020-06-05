@@ -31,6 +31,8 @@ class Game < ApplicationRecord
 
     belongs_to :winner, optional: true, class_name: 'Player'
 
+    validates :board_config, presence: true, inclusion: { in: BoardConfig.all }
+
     before_validation :generate!, on: :create
 
     after_save :changed!

@@ -15,9 +15,7 @@
   <body>
     <nav class="navbar">
       <%= link_to 'Hecks', root_path, class: 'navbar-brand' %>
-      <%= form_with url: games_path, class: 'form-inline' do |f| %>
-        <button class="btn btn-outline-success" type="submit">New Game</button>
-      <% end %>
+      <%= react_component 'CreateGameButton' %>
     </nav>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
