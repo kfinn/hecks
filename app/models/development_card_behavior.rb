@@ -35,7 +35,7 @@ class DevelopmentCardBehavior < ActiveHash::Base
             id: 'year_of_plenty',
             name: 'Year of Plenty',
             description: <<~TXT.squish
-                Take and 2 resources from the bank. Add them to your hand. They can be 2 of the same resource or 2 different resources.
+                Take any 2 resources from the bank. Add them to your hand. They can be 2 of the same resource or 2 different resources.
             TXT
         }
     ]
