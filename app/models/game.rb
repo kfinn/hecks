@@ -48,8 +48,9 @@ class Game < ApplicationRecord
     end
 
     def joinable?
-        !started? && players.size < 4
+        !started? && players.size < max_players
     end
+
 
     def started?
         started_at.present?
