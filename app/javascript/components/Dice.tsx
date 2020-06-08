@@ -15,25 +15,31 @@ const DIE_FACES_BY_VALUE = {
 
 const DICE_ACTIONS = {
     [DiceAction.CreateProductionRoll]: {
-        action: DiceAction.CreateProductionRoll,
         name: 'Roll Dice',
         buttonVariant: 'primary',
         onClick: async ({ id }: Game) => {
             return await Api.post(`games/${id}/production_rolls.json`)
         }
     },
-    [DiceAction.EndTurn]: {
-        action: DiceAction.EndTurn,
+    [DiceAction.EndRepeatingTurn]: {
         name: 'End Turn',
         buttonVariant: 'danger',
         onClick: async({ id }: Game) => {
             return await Api.post(`games/${id}/repeating_turn_ends.json`)
+        }
+    },
+    [DiceAction.EndSpecialBuildPhaseTurn]: {
+        name: 'End Turn',
+        buttonVariant: 'danger',
+        onClick: async ({ id }: Game) => {
+            return await Api.post(`games/${id}/special_build_phase_turn_ends.json`)
         }
     }
 }
 
 export default function Dice({ game }: { game: Game }) {
     const { latestRoll, diceActions } = game.dice
+    const canRollDice = _.includes(diceActions, DiceAction.CreateProductionRoll.toString())
 
     return (
         <React.Fragment>
@@ -45,6 +51,16 @@ export default function Dice({ game }: { game: Game }) {
                 )
             }
             <div className="btn-group" role="group">
+                <button
+                    className="btn btn-primary"
+                    onClick={() => { Api.post(`games/${id}/production_rolls.json`) }}
+                    disabled={!canRollDice}
+                >
+                    Roll Dice
+                </button>
+                <button
+                    className="btn btn-danger"
+                    onClick={() => { DICE_ACTIONS[]}}
                 {
                     _.map(_.values(DICE_ACTIONS), ({ action, name, buttonVariant, onClick }) => (
                         <button

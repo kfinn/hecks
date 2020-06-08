@@ -7,6 +7,7 @@ class BoardConfig < ActiveHash::Base
             id: 'small',
             min_players: 2,
             max_players: 4,
+            allows_special_build_phase: false,
             territory_positions: [
                 Position.new(-4, -8), Position.new(0, -8), Position.new(4, -8),
                 Position.new(-6, -4), Position.new(-2, -4), Position.new(2, -4), Position.new(6, -4),
@@ -64,6 +65,7 @@ class BoardConfig < ActiveHash::Base
             id: 'large',
             min_players: 3,
             max_players: 6,
+            allows_special_build_phase: true,
             territory_positions: [
                 Position.new(-4, -12), Position.new(0, -12), Position.new(4, -12),
                 Position.new(-6, -8), Position.new(-2, -8), Position.new(2, -8), Position.new(6, -8),

@@ -28,6 +28,13 @@ class RepeatingTurn < Turn
 
     has_many :player_offer_responses, through: :player_offers
 
+    has_many(
+        :incomplete_special_build_phases,
+        -> { incomplete },
+        inverse_of: :turn,
+        foreign_key: :turn_id
+    )
+
     validates :roll, presence: { if: :ended? }
 
     delegate :can_rob_player?, to: :latest_robber_move_requirement, allow_nil: true
@@ -142,7 +149,8 @@ class RepeatingTurn < Turn
     end
 
     def can_take_action?
-        roll.present? &&
+        current? &&
+            roll.present? &&
             all_robber_move_requirements_met? &&
             all_discard_requirements_met? &&
             no_incomplete_road_building_card_plays? &&
@@ -198,6 +206,16 @@ class RepeatingTurn < Turn
     end
 
     def build_next_turn
+        if next_incomplete_special_build_phase.present?
+            SpecialBuildPhaseTurn.new(
+                game: game,
+                special_build_phase: next_incomplete_special_build_phase
+            )
+        end
         RepeatingTurn.new(game: game, player: player.next_player)
+    end
+
+    def next_incomplete_special_build_phase
+        @next_incomplete_special_build_phase ||= incomplete_special_build_phases.next_for_repeating_turn(self)
     end
 end

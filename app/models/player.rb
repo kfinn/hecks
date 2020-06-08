@@ -130,7 +130,7 @@ class Player < ApplicationRecord
 
     def actions
         @actions ||= [
-            current_turn&.actions, pending_discard_requirement&.actions, receiving_player_offer_actions
+            current_turn&.actions, pending_discard_requirement&.actions, receiving_player_offer_actions, special_build_phase_actions
         ].compact.reduce(ActionCollection.none) do |actions, acc|
             acc.merge(actions)
         end
@@ -154,6 +154,24 @@ class Player < ApplicationRecord
             end
         end
         @receiving_player_offer_actions
+    end
+
+    def special_build_phase_actions
+        unless instance_variable_defined?(:@special_build_phase_actions)
+            @special_build_phase_actions =
+                if !game.allows_special_build_phase?
+                    ActionCollection.none
+                elsif current_turn.present?
+                    ActionCollection.none
+                elsif game.current_turn&.special_build_phase_players&.include? self
+                    ActionCollection.none
+                else
+                    ActionCollection.new.tap do |action_collection|
+                        action_collection.special_build_phase_actions << 'SpecialBuildPhase#create'
+                    end
+                end
+        end
+        @special_build_phase_actions
     end
 
     def bank_offers
