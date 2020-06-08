@@ -11,7 +11,7 @@ export default function PendingDiscardRequirement({ game }: { game: Game }) {
 
     const hasPendingDiscardRequirement = !!game.pendingDiscardRequirement
     useEffect(() => {
-        if (hasPendingDiscardRequirement && document.hidden && SafeNotification) {
+        if (hasPendingDiscardRequirement && SafeNotification) {
             const notification = new SafeNotification(
                 "Time to discard in Hecks",
                 {

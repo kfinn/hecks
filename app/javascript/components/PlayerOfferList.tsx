@@ -156,7 +156,7 @@ export default function PlayerOfferList({ game }: { game: Game }) {
 
     useEffect(
         () => {
-            if (anyPlayerOfferActions && document.hidden && SafeNotification) {
+            if (anyPlayerOfferActions && SafeNotification) {
                 const notification = new SafeNotification(
                     "New trade offer in Hecks",
                     {
@@ -175,7 +175,7 @@ export default function PlayerOfferList({ game }: { game: Game }) {
 
     useEffect(
         () => {
-            if (anyPlayerOfferResponses && document.hidden && SafeNotification) {
+            if (anyPlayerOfferResponses && SafeNotification) {
                 const notification = new SafeNotification(
                     "New trade offer response in Hecks",
                     {

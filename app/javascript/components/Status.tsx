@@ -6,7 +6,7 @@ function WinnerStatusNotification({ status: { winner, winnerIsCurrentPlayer} }: 
     const SafeNotification = useSafeNotification()
     useEffect(
         () => {
-            if (document.hidden && SafeNotification) {
+            if (SafeNotification) {
                 const title = `${winnerIsCurrentPlayer ? 'You' : winner} won in Hecks`
                 const body = winnerIsCurrentPlayer ? 'Congratulations!' : "Better luck next time."
                 const notification = new SafeNotification(
@@ -30,7 +30,7 @@ function TurnStatusNotification({ status: { actor, actorIsCurrentPlayer, descrip
     const SafeNotification = useSafeNotification()
     useEffect(
         () => {
-            if (actorIsCurrentPlayer && document.hidden && SafeNotification) {
+            if (actorIsCurrentPlayer && SafeNotification) {
                 const notification = new SafeNotification(
                     "Your turn in Hecks",
                     {
