@@ -11,9 +11,19 @@ import { NewPlayerOfferAction, PlayerOffer } from './PlayerOffer';
 import { Status } from './Status';
 import { Territory } from './Territory';
 
+export enum TurnAction {
+    EndRepeatingTurn = 'RepeatingTurnEnds#create',
+    EndSpecialBuildPhaseTurn = 'SpecialBuildPhaseTurnEnds#create'
+}
+
+export enum SpecialBuildPhaseAction {
+    CreateSpecialBuildPhase = 'SpecialBuildPhase#create'
+}
+
 export interface Game {
     id: number
     startedAt: string
+    allowsSpecialBuildPhase: boolean
     status: Status
     bankOffers: BankOffer[]
     playerOffers: PlayerOffer[]
@@ -28,6 +38,8 @@ export interface Game {
     newDevelopmentCardActions: NewDevelopmentCardAction[]
     dice: Dice
     pendingDiscardRequirement?: DiscardRequirement
+    specialBuildPhaseActions: SpecialBuildPhaseAction[]
+    turnActions: TurnAction[]
 }
 
 export function gameIsStarted({ startedAt }: Game) {

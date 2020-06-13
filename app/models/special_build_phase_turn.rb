@@ -1,7 +1,7 @@
 class SpecialBuildPhaseTurn < Turn
     belongs_to :special_build_phase
 
-    before_validate :initialize_player, on: :create
+    before_validation :initialize_player, on: :create
     validate :player_must_match_special_build_phase_player
 
     has_one :turn, through: :special_build_phase
@@ -16,7 +16,7 @@ class SpecialBuildPhaseTurn < Turn
         return ActionCollection.none unless current?
 
         ActionCollection.new.tap do |action_collection|
-            action_collection.dice_actions << 'SpecialBuildPhaseTurnEnds#create'
+            action_collection.turn_actions << 'SpecialBuildPhaseTurnEnds#create'
 
             if can_purchase_settlement?
                 game.corners.available_for_settlement.reachable_by(player).each do |corner|

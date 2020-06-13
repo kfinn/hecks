@@ -48,6 +48,8 @@ Rails.application.routes.draw do
         resources :player_offers, only: :create
         resources :production_rolls, only: :create
         resources :repeating_turn_ends, only: :create
+        resources :special_build_phases, only: :create
+        resources :special_build_phase_turn_ends, only: :create
       end
 
       resources :players, only: [] do

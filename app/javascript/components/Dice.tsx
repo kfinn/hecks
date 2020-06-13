@@ -1,6 +1,6 @@
 import React from 'react';
 import { DiceAction } from '../models/Dice';
-import { Game } from '../models/Game';
+import { Game, SpecialBuildPhaseAction, TurnAction } from '../models/Game';
 import Api from '../models/Api';
 import _ from 'lodash';
 
@@ -13,33 +13,24 @@ const DIE_FACES_BY_VALUE = {
     6: '⚅'
 }
 
-const DICE_ACTIONS = {
-    [DiceAction.CreateProductionRoll]: {
-        name: 'Roll Dice',
-        buttonVariant: 'primary',
-        onClick: async ({ id }: Game) => {
-            return await Api.post(`games/${id}/production_rolls.json`)
-        }
-    },
-    [DiceAction.EndRepeatingTurn]: {
-        name: 'End Turn',
-        buttonVariant: 'danger',
-        onClick: async({ id }: Game) => {
-            return await Api.post(`games/${id}/repeating_turn_ends.json`)
-        }
-    },
-    [DiceAction.EndSpecialBuildPhaseTurn]: {
-        name: 'End Turn',
-        buttonVariant: 'danger',
-        onClick: async ({ id }: Game) => {
-            return await Api.post(`games/${id}/special_build_phase_turn_ends.json`)
-        }
-    }
+const END_TURN_ACTION_PATHS = {
+    [TurnAction.EndRepeatingTurn]: ({ id }) => `games/${id}/repeating_turn_ends.json`,
+    [TurnAction.EndSpecialBuildPhaseTurn]: ({ id }) => `game/${id}/special_build_phase_turn_ends/json`
 }
 
 export default function Dice({ game }: { game: Game }) {
-    const { latestRoll, diceActions } = game.dice
-    const canRollDice = _.includes(diceActions, DiceAction.CreateProductionRoll.toString())
+    const {
+        id,
+        allowsSpecialBuildPhase,
+        dice: { latestRoll, diceActions },
+        specialBuildPhaseActions,
+        turnActions
+     } = game
+
+     const canRollDice = _.includes(diceActions, DiceAction.CreateProductionRoll.toString())
+     const canCreateSpecialBuildPhase = _.includes(specialBuildPhaseActions, SpecialBuildPhaseAction.CreateSpecialBuildPhase.toString())
+     const canEndTurn = _.some(_.keys(END_TURN_ACTION_PATHS), key => _.includes(turnActions, key))
+    const endTurnPath = canEndTurn ? END_TURN_ACTION_PATHS[turnActions[0]](game) : null
 
     return (
         <React.Fragment>
@@ -58,21 +49,24 @@ export default function Dice({ game }: { game: Game }) {
                 >
                     Roll Dice
                 </button>
+                {
+                    allowsSpecialBuildPhase && (
+                        <button
+                            className="btn btn-success"
+                            onClick={() => { Api.post(`games/${id}/special_build_phases.json`) }}
+                            disabled={!canCreateSpecialBuildPhase}
+                        >
+                            Build After This Turn
+                        </button>
+                    )
+                }
                 <button
                     className="btn btn-danger"
-                    onClick={() => { DICE_ACTIONS[]}}
-                {
-                    _.map(_.values(DICE_ACTIONS), ({ action, name, buttonVariant, onClick }) => (
-                        <button
-                            className={`btn btn-${buttonVariant}`}
-                            key={action}
-                            onClick={() => { onClick(game) }}
-                            disabled={!_.includes(diceActions, action)}
-                        >
-                            {name}
-                        </button>
-                    ))
-                }
+                    onClick={() => { Api.post(endTurnPath) }}
+                    disabled={!canEndTurn}
+                >
+                    End Turn
+                </button>
             </div>
         </React.Fragment>
     )

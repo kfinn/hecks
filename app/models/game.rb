@@ -37,7 +37,9 @@ class Game < ApplicationRecord
 
     after_save :changed!
 
-    delegate :min_players, :max_players, :allows_special_build_phase, to: :board_config
+    # delegate :min_players, :max_players, :allows_special_build_phase, to: :board_config
+    delegate :min_players, :max_players, to: :board_config
+    def allows_special_build_phase; true; end
 
     def generate!
         self.key = 3.words.join('-')

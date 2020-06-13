@@ -31,6 +31,7 @@ class RepeatingTurn < Turn
     has_many(
         :incomplete_special_build_phases,
         -> { incomplete },
+        class_name: 'SpecialBuildPhase',
         inverse_of: :turn,
         foreign_key: :turn_id
     )
@@ -76,7 +77,7 @@ class RepeatingTurn < Turn
             end
 
             if can_end_turn?
-                action_collection.dice_actions << 'RepeatingTurnEnds#create'
+                action_collection.turn_actions << 'RepeatingTurnEnds#create'
             end
 
             if can_purchase_settlement?

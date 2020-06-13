@@ -7,6 +7,6 @@ class CreateSpecialBuildPhases < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_idnex :special_build_phases, [:player, :turn], unique: true
+    add_index :special_build_phases, [:player_id, :turn_id], unique: true
   end
 end
