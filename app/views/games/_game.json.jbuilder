@@ -1,4 +1,5 @@
-json.(game, :id, :started_at, :allows_special_build_phase)
+json.(game, :id, :started_at)
+json.allows_special_build_phase game.allows_special_build_phase?
 
 current_player = game.players.find_by!(user: current_or_guest_user)
 

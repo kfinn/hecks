@@ -15,7 +15,7 @@ const DIE_FACES_BY_VALUE = {
 
 const END_TURN_ACTION_PATHS = {
     [TurnAction.EndRepeatingTurn]: ({ id }) => `games/${id}/repeating_turn_ends.json`,
-    [TurnAction.EndSpecialBuildPhaseTurn]: ({ id }) => `game/${id}/special_build_phase_turn_ends/json`
+    [TurnAction.EndSpecialBuildPhaseTurn]: ({ id }) => `games/${id}/special_build_phase_turn_ends.json`
 }
 
 export default function Dice({ game }: { game: Game }) {

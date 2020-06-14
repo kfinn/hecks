@@ -39,6 +39,7 @@ class RepeatingTurn < Turn
     validates :roll, presence: { if: :ended? }
 
     delegate :can_rob_player?, to: :latest_robber_move_requirement, allow_nil: true
+    delegate :allows_special_build_phase?, to: :game
 
     def description
         if needs_robber_move?
@@ -208,7 +209,7 @@ class RepeatingTurn < Turn
 
     def build_next_turn
         if next_incomplete_special_build_phase.present?
-            SpecialBuildPhaseTurn.new(
+            return SpecialBuildPhaseTurn.new(
                 game: game,
                 special_build_phase: next_incomplete_special_build_phase
             )

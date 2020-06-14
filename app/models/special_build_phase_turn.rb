@@ -6,7 +6,7 @@ class SpecialBuildPhaseTurn < Turn
 
     has_one :turn, through: :special_build_phase
 
-    delegate :next_incomplete_special_build_phase, to: :turn
+    delegate :build_next_turn, to: :turn
 
     def description
         'build something or end the turn'
@@ -77,14 +77,8 @@ class SpecialBuildPhaseTurn < Turn
             game.development_cards.next_available.present?
     end
 
-    def build_next_turn
-        if next_incomplete_special_build_phase.present?
-            SpecialBuildPhaseTurn.new(
-                game: game,
-                special_build_phase: next_incomplete_special_build_phase
-            )
-        end
-        RepeatingTurn.new(game: game, player: player.next_player)
+    def ended?
+        ended_at.present?
     end
 
     private

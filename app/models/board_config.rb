@@ -126,6 +126,8 @@ class BoardConfig < ActiveHash::Base
         }
     ]
 
+    alias allows_special_build_phase? allows_special_build_phase
+
     def shuffled_terrains
         terrains = terrain_counts_by_terrain.flat_map do |terrain, count|
             Array.new(count, terrain)

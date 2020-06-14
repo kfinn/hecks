@@ -21,8 +21,9 @@ class Player < ApplicationRecord
     has_many :harbors, through: :settlements
 
     has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
-    has_one :current_special_build_phase_turn, -> { current }, class_name: 'SpecialBuildPhaseTurn'
     has_many :incomplete_road_building_card_plays, through: :current_repeating_turn
+
+    has_one :current_special_build_phase_turn, -> { current }, class_name: 'SpecialBuildPhaseTurn'
 
     has_many :discard_requirements
     has_one :pending_discard_requirement, -> { pending }, class_name: 'DiscardRequirement'
@@ -79,7 +80,7 @@ class Player < ApplicationRecord
         :can_rob_player?,
         :can_trade?,
         :any_incomplete_road_building_card_plays?,
-        to: :current_repeating_turn,
+        to: :current_turn,
         allow_nil: true
     )
 
@@ -165,9 +166,9 @@ class Player < ApplicationRecord
     def non_current_player_special_build_phase_actions
         unless instance_variable_defined?(:@non_current_player_special_build_phase_actions)
             @non_current_player_special_build_phase_actions =
-                if !game.allows_special_build_phase
+                if current_turn.present?
                     ActionCollection.none
-                elsif current_turn.present?
+                elsif !game.current_turn&.allows_special_build_phase?
                     ActionCollection.none
                 elsif game.current_turn&.special_build_phase_players&.include? self
                     ActionCollection.none
