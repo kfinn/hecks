@@ -32,8 +32,8 @@ class Turn < ApplicationRecord
     def can_purchase_city_upgrade?
         false
     end
-    def can_purchase_development_card?
 
+    def can_purchase_development_card?
         false
     end
 
