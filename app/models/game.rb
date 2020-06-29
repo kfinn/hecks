@@ -51,7 +51,6 @@ class Game < ApplicationRecord
         !started? && players.size < max_players
     end
 
-
     def started?
         started_at.present?
     end

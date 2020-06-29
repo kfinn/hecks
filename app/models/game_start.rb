@@ -3,6 +3,7 @@ class GameStart
     attr_accessor :game
 
     validate :must_have_enough_players
+    validate :game_must_not_be_started
 
     delegate :players, to: :game
 
@@ -15,6 +16,10 @@ class GameStart
     end
 
     private
+
+    def game_must_not_be_started
+        errors[:game] << 'already started' if game.started?
+    end
 
     def must_have_enough_players
         errors[:game] << 'not enough players' unless players.size >= game.min_players && players.size <= game.max_players
