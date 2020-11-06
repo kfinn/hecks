@@ -25,11 +25,11 @@ export default function Dice({ game }: { game: Game }) {
         dice: { latestRoll, diceActions },
         specialBuildPhaseActions,
         turnActions
-     } = game
+    } = game
 
-     const canRollDice = _.includes(diceActions, DiceAction.CreateProductionRoll.toString())
-     const canCreateSpecialBuildPhase = _.includes(specialBuildPhaseActions, SpecialBuildPhaseAction.CreateSpecialBuildPhase.toString())
-     const canEndTurn = _.some(_.keys(END_TURN_ACTION_PATHS), key => _.includes(turnActions, key))
+    const canRollDice = _.includes(diceActions, DiceAction.CreateProductionRoll.toString())
+    const canCreateSpecialBuildPhase = _.includes(specialBuildPhaseActions, SpecialBuildPhaseAction.CreateSpecialBuildPhase.toString())
+    const canEndTurn = _.some(_.keys(END_TURN_ACTION_PATHS), key => _.includes(turnActions, key))
     const endTurnPath = canEndTurn ? END_TURN_ACTION_PATHS[turnActions[0]](game) : null
 
     return (
@@ -38,8 +38,8 @@ export default function Dice({ game }: { game: Game }) {
                 latestRoll ? (
                     <div className="dice">{DIE_FACES_BY_VALUE[latestRoll.die1Value]}{DIE_FACES_BY_VALUE[latestRoll.die2Value]}</div>
                 ) : (
-                    <div className="dice">{DIE_FACES_BY_VALUE[1]}{DIE_FACES_BY_VALUE[1]}</div>
-                )
+                        <div className="dice">{DIE_FACES_BY_VALUE[1]}{DIE_FACES_BY_VALUE[1]}</div>
+                    )
             }
             <div className="btn-group" role="group">
                 <button
