@@ -1,4 +1,5 @@
 json.(game, :id, :started_at)
+json.allows_special_build_phase game.allows_special_build_phase?
 
 current_player = game.players.find_by!(user: current_or_guest_user)
 
@@ -167,7 +168,7 @@ json.development_cards current_player.active_development_cards do |development_c
     json.development_card_actions current_player.development_card_actions[development_card]
 end
 
-json.(current_player, :new_development_card_actions)
+json.(current_player, :new_development_card_actions, :turn_actions, :special_build_phase_actions)
 
 json.dice do
     if game.latest_roll

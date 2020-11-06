@@ -1,8 +1,7 @@
 import { Roll } from "./Roll";
 
 export enum DiceAction {
-    CreateProductionRoll = 'ProductionRoll#create',
-    EndTurn = 'RepeatingTurnEnds#create'
+    CreateProductionRoll = 'ProductionRoll#create'
 }
 
 export interface Dice {

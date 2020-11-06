@@ -32,12 +32,13 @@ class Game < ApplicationRecord
     belongs_to :winner, optional: true, class_name: 'Player'
 
     validates :board_config, presence: true, inclusion: { in: BoardConfig.all }
+    validates :current_turn, presence: { if: :started? }
 
     before_validation :generate!, on: :create
 
     after_save :changed!
 
-    delegate :min_players, :max_players, to: :board_config
+    delegate :min_players, :max_players, :allows_special_build_phase?, to: :board_config
 
     def generate!
         self.key = 3.words.join('-')

@@ -23,6 +23,8 @@ class Player < ApplicationRecord
     has_one :current_repeating_turn, -> { current }, class_name: 'RepeatingTurn'
     has_many :incomplete_road_building_card_plays, through: :current_repeating_turn
 
+    has_one :current_special_build_phase_turn, -> { current }, class_name: 'SpecialBuildPhaseTurn'
+
     has_many :discard_requirements
     has_one :pending_discard_requirement, -> { pending }, class_name: 'DiscardRequirement'
 
@@ -34,6 +36,8 @@ class Player < ApplicationRecord
     has_many :active_development_cards, -> { active }, class_name: 'DevelopmentCard'
     has_many :played_knight_cards, -> { played.knight }, class_name: 'DevelopmentCard'
     has_many :victory_point_cards, -> { victory_point }, class_name: 'DevelopmentCard'
+
+    has_many :special_build_phases
 
     delegate :value, to: :ordering_roll, prefix: true, allow_nil: true
 
@@ -76,7 +80,7 @@ class Player < ApplicationRecord
         :can_rob_player?,
         :can_trade?,
         :any_incomplete_road_building_card_plays?,
-        to: :current_repeating_turn,
+        to: :current_turn,
         allow_nil: true
     )
 
@@ -130,7 +134,10 @@ class Player < ApplicationRecord
 
     def actions
         @actions ||= [
-            current_turn&.actions, pending_discard_requirement&.actions, receiving_player_offer_actions
+            current_turn&.actions,
+            pending_discard_requirement&.actions,
+            receiving_player_offer_actions,
+            non_current_player_special_build_phase_actions
         ].compact.reduce(ActionCollection.none) do |actions, acc|
             acc.merge(actions)
         end
@@ -154,6 +161,24 @@ class Player < ApplicationRecord
             end
         end
         @receiving_player_offer_actions
+    end
+
+    def non_current_player_special_build_phase_actions
+        unless instance_variable_defined?(:@non_current_player_special_build_phase_actions)
+            @non_current_player_special_build_phase_actions =
+                if current_turn.present?
+                    ActionCollection.none
+                elsif !game.current_turn&.allows_special_build_phase?
+                    ActionCollection.none
+                elsif game.current_turn&.can_player_create_special_build_phase? self
+                    ActionCollection.new.tap do |action_collection|
+                        action_collection.special_build_phase_actions << 'SpecialBuildPhase#create'
+                    end
+                else
+                    ActionCollection.none
+                end
+        end
+        @non_current_player_special_build_phase_actions
     end
 
     def bank_offers
@@ -198,6 +223,10 @@ class Player < ApplicationRecord
             longest_road_traversal_length: longest_road_traversal.length,
             longest_road_traversal_since: longest_road_traversal.since
         )
+    end
+
+    def can_end_special_build_phase_turn?
+        current_special_build_phase_turn.present?
     end
 
     private

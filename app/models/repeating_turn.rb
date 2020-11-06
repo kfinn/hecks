@@ -28,9 +28,23 @@ class RepeatingTurn < Turn
 
     has_many :player_offer_responses, through: :player_offers
 
+    has_many(
+        :incomplete_special_build_phases,
+        -> { incomplete },
+        class_name: 'SpecialBuildPhase',
+        inverse_of: :turn,
+        foreign_key: :turn_id
+    )
+
+    has_many(
+        :special_build_phase_turns,
+        through: :special_build_phases
+    )
+
     validates :roll, presence: { if: :ended? }
 
     delegate :can_rob_player?, to: :latest_robber_move_requirement, allow_nil: true
+    delegate :allows_special_build_phase?, to: :game
 
     def description
         if needs_robber_move?
@@ -69,7 +83,7 @@ class RepeatingTurn < Turn
             end
 
             if can_end_turn?
-                action_collection.dice_actions << 'RepeatingTurnEnds#create'
+                action_collection.turn_actions << 'RepeatingTurnEnds#create'
             end
 
             if can_purchase_settlement?
@@ -142,7 +156,8 @@ class RepeatingTurn < Turn
     end
 
     def can_take_action?
-        roll.present? &&
+        current? &&
+            roll.present? &&
             all_robber_move_requirements_met? &&
             all_discard_requirements_met? &&
             no_incomplete_road_building_card_plays? &&
@@ -198,6 +213,24 @@ class RepeatingTurn < Turn
     end
 
     def build_next_turn
+        if next_incomplete_special_build_phase.present?
+            return SpecialBuildPhaseTurn.new(
+                game: game,
+                special_build_phase: next_incomplete_special_build_phase
+            )
+        end
         RepeatingTurn.new(game: game, player: player.next_player)
+    end
+
+    def next_incomplete_special_build_phase
+        @next_incomplete_special_build_phase ||= incomplete_special_build_phases.next_for_repeating_turn(self)
+    end
+
+    def can_player_create_special_build_phase?(player)
+        special_build_phase_players.exclude? player
+    end
+
+    def build_special_build_phase(player:)
+        special_build_phases.build(player: player)
     end
 end
