@@ -3,7 +3,7 @@ class Api::V1::SpecialBuildPhasesController < Api::ApiController
     game = current_or_guest_user.games.find(params[:game_id])
     player = current_or_guest_user.players.find_by!(game: game)
 
-    special_build_phase = player.special_build_phases.build(turn: game.current_turn)
+    special_build_phase = game.current_turn.build_special_build_phase(player: player)
 
     if special_build_phase.valid?
         special_build_phase.save!

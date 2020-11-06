@@ -6,7 +6,11 @@ class SpecialBuildPhaseTurn < Turn
 
     has_one :turn, through: :special_build_phase
 
-    delegate :build_next_turn, to: :turn
+    delegate :build_next_turn, :build_special_build_phase, to: :turn
+
+    def allows_special_build_phase?
+        true
+    end
 
     def description
         'build something or end the turn'
@@ -79,6 +83,13 @@ class SpecialBuildPhaseTurn < Turn
 
     def ended?
         ended_at.present?
+    end
+
+    def can_player_create_special_build_phase?(player)
+        (
+            self.player.ordering < player.ordering ||
+            player.ordering < turn.player.ordering
+        ) && turn.special_build_phase_players.exclude?(player)
     end
 
     private

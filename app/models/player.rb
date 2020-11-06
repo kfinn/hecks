@@ -170,12 +170,12 @@ class Player < ApplicationRecord
                     ActionCollection.none
                 elsif !game.current_turn&.allows_special_build_phase?
                     ActionCollection.none
-                elsif game.current_turn&.special_build_phase_players&.include? self
-                    ActionCollection.none
-                else
+                elsif game.current_turn&.can_player_create_special_build_phase? self
                     ActionCollection.new.tap do |action_collection|
                         action_collection.special_build_phase_actions << 'SpecialBuildPhase#create'
                     end
+                else
+                    ActionCollection.none
                 end
         end
         @non_current_player_special_build_phase_actions

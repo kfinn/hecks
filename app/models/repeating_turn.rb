@@ -36,6 +36,11 @@ class RepeatingTurn < Turn
         foreign_key: :turn_id
     )
 
+    has_many(
+        :special_build_phase_turns,
+        through: :special_build_phases
+    )
+
     validates :roll, presence: { if: :ended? }
 
     delegate :can_rob_player?, to: :latest_robber_move_requirement, allow_nil: true
@@ -219,5 +224,13 @@ class RepeatingTurn < Turn
 
     def next_incomplete_special_build_phase
         @next_incomplete_special_build_phase ||= incomplete_special_build_phases.next_for_repeating_turn(self)
+    end
+
+    def can_player_create_special_build_phase?(player)
+        special_build_phase_players.exclude? player
+    end
+
+    def build_special_build_phase(player:)
+        special_build_phases.build(player: player)
     end
 end
