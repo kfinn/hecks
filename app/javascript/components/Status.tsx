@@ -1,8 +1,19 @@
+import { useWindowSize } from '@react-hook/window-size';
 import React, { useEffect } from 'react';
+import ReactConfetti from 'react-confetti';
 import { Status, TurnStatus, WinnerStatus } from '../models/Status';
 import useSafeNotification from './useSafeNotification';
 
-function WinnerStatusNotification({ status: { winner, winnerIsCurrentPlayer} }: { status: WinnerStatus }) {
+function WinnerStatusNotification({ status }: { status: WinnerStatus }) {
+    const {
+        winner,
+        winnerIsCurrentPlayer,
+        winnerSettlementScore,
+        winnerLargestArmyScore,
+        winnerLongestRoadScore,
+        winnerVictoryPointCardScore
+    } = status
+
     const SafeNotification = useSafeNotification()
     useEffect(
         () => {
@@ -20,9 +31,38 @@ function WinnerStatusNotification({ status: { winner, winnerIsCurrentPlayer} }: 
         [winnerIsCurrentPlayer]
     )
 
+    const [width, height] = useWindowSize()
+
     return <React.Fragment>
         <h4>Status</h4>
-        <p>{winnerIsCurrentPlayer ? 'You' : winner} won!</p>
+        <p>
+            {
+                winnerIsCurrentPlayer ? 'You won! Congratulations!' : `${winner} won! Better luck next time.`
+            }
+        </p>
+        <table>
+        <tr>
+            <td>Points from settlements:&nbsp;</td>
+            <td>{winnerSettlementScore}</td>
+        </tr>
+        <tr>
+            <td>Points from largest army:&nbsp;</td>
+            <td>{winnerLargestArmyScore}</td>
+        </tr>
+        <tr>
+            <td>Points from longest road:&nbsp;</td>
+            <td>{winnerLongestRoadScore}</td>
+        </tr>
+        <tr>
+            <td>Points from development cards:&nbsp;</td>
+            <td>{winnerVictoryPointCardScore}</td>
+        </tr>
+        <tr>
+            <td>Total points:&nbsp;</td>
+                <td>{winnerSettlementScore + winnerLargestArmyScore + winnerLongestRoadScore + winnerVictoryPointCardScore}</td>
+        </tr>
+        </table>
+        <ReactConfetti width={width} height={height} />
     </React.Fragment>
 }
 

@@ -44,7 +44,13 @@ class GameScoring
 
     def secret_scores_by_player
         @secret_scores_by_player ||= players.each_with_object({}) do |player, acc|
-            acc[player] = scores_by_player[player] + player.victory_point_cards.size
+            acc[player] = scores_by_player[player] + victory_point_card_scores_by_player[player]
+        end
+    end
+
+    def victory_point_card_scores_by_player
+        @victory_point_card_scores_by_player ||= players.each_with_object({}) do |player, acc|
+            acc[player] = player.victory_point_cards.size
         end
     end
 
@@ -53,5 +59,21 @@ class GameScoring
             @winner = secret_scores_by_player.select { |player, score| score >= 10 }.first&.first
         end
         @winner
+    end
+
+    def winner_settlement_score
+        settlement_scores_by_player[winner]
+    end
+
+    def winner_largest_army_score
+        winner == player_with_largest_army ? 2 : 0
+    end
+
+    def winner_longest_road_score
+        winner == player_with_longest_road ? 2 : 0
+    end
+
+    def winner_victory_point_card_score
+        victory_point_card_scores_by_player[winner]
     end
 end

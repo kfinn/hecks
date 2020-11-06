@@ -16,6 +16,10 @@ json.status do
     elsif game.winner
         json.winner game.winner.name
         json.winner_is_current_player game.winner == current_player
+        json.winner_settlement_score game.game_scoring.winner_settlement_score
+        json.winner_largest_army_score game.game_scoring.winner_largest_army_score
+        json.winner_longest_road_score game.game_scoring.winner_longest_road_score
+        json.winner_victory_point_card_score game.game_scoring.winner_victory_point_card_score
     else
         json.actor 'someone'
         json.actor_is_current_player true

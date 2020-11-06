@@ -32,7 +32,7 @@ class Game < ApplicationRecord
     belongs_to :winner, optional: true, class_name: 'Player'
 
     validates :board_config, presence: true, inclusion: { in: BoardConfig.all }
-    validates :current_turn, presence: { if: :started? }
+    validates :current_turn, presence: { if: :ongoing? }
 
     before_validation :generate!, on: :create
 
@@ -54,6 +54,14 @@ class Game < ApplicationRecord
 
     def started?
         started_at.present?
+    end
+
+    def ended?
+        winner.present?
+    end
+
+    def ongoing?
+        started? && !ended?
     end
 
     def changed!
