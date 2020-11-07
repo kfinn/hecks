@@ -2,10 +2,10 @@ class DevelopmentCardPurchase
     include ActiveModel::Model
     attr_accessor :player
 
-    delegate :game, :current_repeating_turn, to: :player
+    delegate :game, :current_turn, to: :player
     delegate :development_cards, to: :game
 
-    validates :current_repeating_turn, presence: true
+    validates :current_turn, presence: true
     validate :player_must_be_able_to_purchase_development_card
     validate :game_must_have_available_development_card
 
@@ -37,7 +37,7 @@ class DevelopmentCardPurchase
     def update_next_development_card!
         game.development_cards.next_available.update!(
             player: player,
-            purchased_during_turn: current_repeating_turn
+            purchased_during_turn: current_turn
         )
     end
 end
